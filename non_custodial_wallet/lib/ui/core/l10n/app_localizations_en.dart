@@ -66,6 +66,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mnemonicCopied => 'Mnemonic copied to clipboard';
 
   @override
+  String get copiedToClipboard => 'Address copied to clipboard';
+
+  @override
+  String get copyTooltip => 'Copy Address';
+
+  @override
   String error(String message) {
     return 'Error: $message';
   }

@@ -17,6 +17,8 @@
   "loading": "Loading...",
   "copyMnemonic": "Copy Phrase",
   "mnemonicCopied": "Mnemonic copied to clipboard",
+  "copiedToClipboard": "Address copied to clipboard",
+  "copyTooltip": "Copy Address",
   "error": "Error: {message}",
   "@error": {
     "placeholders": {

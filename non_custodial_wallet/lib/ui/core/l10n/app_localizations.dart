@@ -206,6 +206,18 @@ abstract class AppLocalizations {
   /// **'Mnemonic copied to clipboard'**
   String get mnemonicCopied;
 
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Address copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @copyTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Address'**
+  String get copyTooltip;
+
   /// No description provided for @error.
   ///
   /// In en, this message translates to:

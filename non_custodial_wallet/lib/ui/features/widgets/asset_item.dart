@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/extensions/context_extension.dart';
 
@@ -74,10 +75,34 @@ class AssetItem extends StatelessWidget {
             context.l10n.addressLabel,
             style: GoogleFonts.poppins(color: Colors.white30, fontSize: 10),
           ),
-          Text(
-            address,
-            style: GoogleFonts.poppins(color: Colors.white60, fontSize: 11),
-            overflow: TextOverflow.ellipsis,
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  address,
+                  style: GoogleFonts.poppins(
+                    color: Colors.white60,
+                    fontSize: 11,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: address));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(context.l10n.copiedToClipboard),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.copy, color: Colors.white60, size: 16),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                tooltip: context.l10n.copyTooltip,
+              ),
+            ],
           ),
         ],
       ),

@@ -66,6 +66,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mnemonicCopied => 'Frase mnemónica copiada al portapapeles';
 
   @override
+  String get copiedToClipboard => 'Dirección copiada al portapapeles';
+
+  @override
+  String get copyTooltip => 'Copiar dirección';
+
+  @override
   String error(String message) {
     return 'Error: $message';
   }

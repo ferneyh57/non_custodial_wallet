@@ -17,6 +17,8 @@
   "loading": "Cargando...",
   "copyMnemonic": "Copiar Frase",
   "mnemonicCopied": "Frase mnemónica copiada al portapapeles",
+  "copiedToClipboard": "Dirección copiada al portapapeles",
+  "copyTooltip": "Copiar dirección",
   "error": "Error: {message}",
   "@error": {
     "placeholders": {
