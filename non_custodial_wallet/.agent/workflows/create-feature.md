@@ -44,4 +44,15 @@ This workflow guides you through creating a new feature following the 3-layer ar
    *   **States**: Immutable states using `Freezed`.
 
 6. **Register Dependencies**
-   Ensure all new classes are properly registered in your dependency injection container or provided via `MultiProvider` in `main.dart`.
+   Ensure all new classes are properly registered in `lib/injection_container.dart`.
+
+7. **Register Routing**
+   If the feature has its own screen:
+   *   Add a static constant to `lib/ui/app_routes.dart`.
+   *   Register the route in `lib/ui/router.dart`.
+
+8. **Add Localization**
+    *   Add any new user-facing strings to `lib/l10n/app_en.arb` and `lib/l10n/app_es.arb`.
+    *   Run `flutter gen-l10n` to update the generated classes.
+    *   Use the `context.l10n` extension in your screens/widgets.
+    *   **Rule**: Avoid using the `!` (bang) operator unless absolutely necessary.

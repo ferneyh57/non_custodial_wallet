@@ -55,7 +55,27 @@ class FeatureComponent extends StatelessWidget {
 }
 ```
 
-### Best Practices
+### Navigation & Routing
+*   **Centralized Routes**: Always use `AppRoutes` static constants for route paths.
+*   **Declarative Navigation**: Prefer `context.go(AppRoutes.feature)` for deep linking/navigation or `context.push(AppRoutes.feature)` for pushing to the stack.
+*   **External Logic**: Redirections and authorization should be handled in `lib/ui/router.dart` via `redirect` logic whenever possible.
+
+*   **External Logic**: Redirections and authorization should be handled in `lib/ui/router.dart` via `redirect` logic whenever possible.
+ 
+### Localization (i18n)
+*   **No Hardcoded Strings**: All user-facing text must be moved to `lib/l10n/app_en.arb` (and other languages like `app_es.arb`).
+*   **Usage**: Access localized strings using the `context.l10n` extension.
+*   **Generation**: Run `flutter gen-l10n` after adding new keys to ARB files.
+*   **Example**:
+    ```dart
+    // Use the context extension for cleaner access
+    return Text(context.l10n.welcomeMessage);
+    ```
+
+### Safety & Best Practices
+*   **Bang Operator (!)**: > [!CAUTION]
+    > **Avoid the Bang Operator (`!`)**: Be extremely careful with forced unwrapping. Only use it when a value is guaranteed to be non-null by contract or logic. Prefer null-coalescing (`??`), null-safe calls (`?.`), or explicit null checks with proper error handling.
+
 *   **Flow-Based Folders**: Group all UI components of a feature/flow in `lib/ui/features/<flow>/`.
 *   **Stateless Componentization**: Prefer many small `StatelessWidget` over large `build` methods or helper functions.
 *   **Immutability**: Use `Freezed` for all Bloc/Cubit states.

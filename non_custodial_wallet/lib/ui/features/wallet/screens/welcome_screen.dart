@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/extensions/context_extension.dart';
 import '../../../app_routes.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -31,7 +32,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Trust Wallet Clone',
+                  context.l10n.appName,
                   style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -40,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Your non-custodial gateway to BTC, ETH, and USDC.',
+                  context.l10n.welcomeSubtitle,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                     fontSize: 16,
@@ -62,7 +63,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'CREATE A NEW WALLET',
+                      context.l10n.createWalletButton,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -76,7 +77,7 @@ class WelcomeScreen extends StatelessWidget {
                     context.push(AppRoutes.import);
                   },
                   child: Text(
-                    'I already have a wallet',
+                    context.l10n.importWalletButton,
                     style: GoogleFonts.poppins(
                       color: Colors.blueAccent,
                       fontWeight: FontWeight.w600,

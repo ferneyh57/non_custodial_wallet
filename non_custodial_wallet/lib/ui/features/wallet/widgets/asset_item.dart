@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/extensions/context_extension.dart';
 
 class AssetItem extends StatelessWidget {
   final IconData icon;
@@ -70,7 +71,7 @@ class AssetItem extends StatelessWidget {
           const Divider(color: Colors.white10),
           const SizedBox(height: 5),
           Text(
-            'Address:',
+            context.l10n.addressLabel,
             style: GoogleFonts.poppins(color: Colors.white30, fontSize: 10),
           ),
           Text(

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import '../cubits/wallet_cubit.dart';
 import '../cubits/wallet_state.dart';
 import '../widgets/balance_card.dart';
 import '../widgets/asset_item.dart';
-import '../../../app_routes.dart';
+import '../../../../core/extensions/context_extension.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,20 +18,18 @@ class HomeScreen extends StatelessWidget {
           backgroundColor: const Color(0xFF0F2027),
           appBar: AppBar(
             title: Text(
-              'My Wallet',
+              context.l10n.homeTitle,
               style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
             backgroundColor: Colors.transparent,
             elevation: 0,
             actions: [
               IconButton(
-                onPressed: () async {
-                  await context.read<WalletCubit>().logout();
-                  if (context.mounted) {
-                    context.go(AppRoutes.splash);
-                  }
+                onPressed: () {
+                  context.read<WalletCubit>().logout();
                 },
                 icon: const Icon(Icons.logout, color: Colors.white70),
+                tooltip: context.l10n.logoutTooltip,
               ),
             ],
           ),

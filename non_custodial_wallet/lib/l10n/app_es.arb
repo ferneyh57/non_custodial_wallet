@@ -1,0 +1,26 @@
+{
+  "appName": "Clon de Trust Wallet",
+  "welcomeSubtitle": "Tu puerta de entrada no-custodial a BTC, ETH y USDC.",
+  "createWalletButton": "CREAR UNA NUEVA BILLETERA",
+  "importWalletButton": "Ya tengo una billetera",
+  "homeTitle": "Mi Billetera",
+  "logoutTooltip": "Cerrar sesión",
+  "secretPhraseTitle": "Frase Secreta",
+  "secretPhraseInstructions": "Escribe o copia estas palabras en el orden correcto y guárdalas en un lugar seguro.",
+  "doneButton": "HECHO",
+  "importWalletTitle": "Importar Billetera",
+  "importWalletInstructions": "Ingresa tu frase mnemónica de 12 o 24 palabras.",
+  "mnemonicHint": "palabra1 palabra2 ...",
+  "importButton": "IMPORTAR",
+  "addressLabel": "Dirección:",
+  "totalBalanceLabel": "Saldo Total",
+  "loading": "Cargando...",
+  "error": "Error: {message}",
+  "@error": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  }
+}

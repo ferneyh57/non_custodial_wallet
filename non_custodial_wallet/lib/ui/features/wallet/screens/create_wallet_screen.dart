@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../cubits/wallet_cubit.dart';
 import '../cubits/wallet_state.dart';
+import '../../../../core/extensions/context_extension.dart';
 import '../../../app_routes.dart';
 
 class CreateWalletScreen extends StatefulWidget {
@@ -29,59 +30,57 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
         return Scaffold(
           backgroundColor: const Color(0xFF0F2027),
           appBar: AppBar(
-            title: Text('Secret Phrase', style: GoogleFonts.poppins()),
+            title: Text(
+              context.l10n.secretPhraseTitle,
+              style: GoogleFonts.poppins(),
+            ),
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
           body: Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 Text(
-                  'Write down or copy these words in the right order and save them somewhere safe.',
+                  context.l10n.secretPhraseInstructions,
                   style: GoogleFonts.poppins(
                     color: Colors.white70,
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 if (state.isLoading)
                   const CircularProgressIndicator()
                 else if (state.wallet?.mnemonic != null)
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Colors.white12),
-                    ),
-                    child: Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: state.wallet!.mnemonic
-                          .split(' ')
-                          .asMap()
-                          .entries
-                          .map((entry) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white10,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                '${entry.key + 1}. ${entry.value}',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            );
-                          })
-                          .toList(),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.white12),
+                      ),
+                      child: Wrap(
+                        spacing: 8.0,
+                        runSpacing: 8.0,
+                        children: List.generate(
+                          state.wallet!.mnemonic.split(' ').length,
+                          (index) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              '${index + 1}. ${state.wallet!.mnemonic.split(' ')[index]}',
+                              style: GoogleFonts.poppins(color: Colors.white70),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   )
                 else if (state.errorMessage != null)
@@ -89,6 +88,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     state.errorMessage!,
                     style: const TextStyle(color: Colors.red),
                   ),
+                const SizedBox(height: 20),
                 const Spacer(),
                 SizedBox(
                   width: double.infinity,
@@ -109,7 +109,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                       ),
                     ),
                     child: Text(
-                      'DONE',
+                      context.l10n.doneButton,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

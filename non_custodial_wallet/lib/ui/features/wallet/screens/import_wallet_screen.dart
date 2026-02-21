@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../cubits/wallet_cubit.dart';
 import '../cubits/wallet_state.dart';
+import '../../../../core/extensions/context_extension.dart';
 import '../../../app_routes.dart';
 
 class ImportWalletScreen extends StatefulWidget {
@@ -33,16 +34,19 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
         return Scaffold(
           backgroundColor: const Color(0xFF0F2027),
           appBar: AppBar(
-            title: Text('Import Wallet', style: GoogleFonts.poppins()),
+            title: Text(
+              context.l10n.importWalletTitle,
+              style: GoogleFonts.poppins(),
+            ),
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
           body: Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 Text(
-                  'Enter your 12 or 24 word mnemonic phrase.',
+                  context.l10n.importWalletInstructions,
                   style: GoogleFonts.poppins(
                     color: Colors.white70,
                     fontSize: 14,
@@ -54,12 +58,12 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                   maxLines: 4,
                   style: GoogleFonts.poppins(color: Colors.white),
                   decoration: InputDecoration(
-                    hintText: 'word1 word2 ...',
+                    hintText: context.l10n.mnemonicHint,
                     hintStyle: const TextStyle(color: Colors.white30),
                     filled: true,
-                    fillColor: Colors.white.withValues(alpha: 0.05),
+                    fillColor: Colors.white.withOpacity(0.05),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: Colors.white12),
                     ),
                   ),
@@ -84,7 +88,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                         ),
                       ),
                       child: Text(
-                        'IMPORT',
+                        context.l10n.importButton,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/extensions/context_extension.dart';
 import '../cubits/wallet_state.dart';
 
 class BalanceCard extends StatelessWidget {
@@ -29,7 +30,7 @@ class BalanceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Total Balance',
+            context.l10n.totalBalanceLabel,
             style: GoogleFonts.poppins(color: Colors.white70, fontSize: 16),
           ),
           const SizedBox(height: 5),
