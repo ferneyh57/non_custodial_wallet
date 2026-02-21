@@ -3,9 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/wallet/wallet_cubit.dart';
 import '../../cubits/wallet/wallet_state.dart';
+import '../../cubits/market/market_cubit.dart';
+import '../../cubits/market/market_state.dart';
 import '../../widgets/balance_card.dart';
 import '../../widgets/asset_item.dart';
+import '../../../../domain/entities/market/coin_entity.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/constants/app_constants.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -36,34 +40,66 @@ class HomeScreen extends StatelessWidget {
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  BalanceCard(state: state),
-                  const SizedBox(height: 30),
-                  AssetItem(
-                    icon: Icons.currency_bitcoin,
-                    name: 'Bitcoin',
-                    symbol: 'BTC',
-                    address: state.wallet?.btcAddress ?? 'Loading...',
-                    color: Colors.orange,
-                  ),
-                  const SizedBox(height: 15),
-                  AssetItem(
-                    icon: Icons.account_balance_wallet,
-                    name: 'Ethereum',
-                    symbol: 'ETH',
-                    address: state.wallet?.ethAddress ?? 'Loading...',
-                    color: Colors.blue,
-                  ),
-                  const SizedBox(height: 15),
-                  AssetItem(
-                    icon: Icons.monetization_on,
-                    name: 'USD Coin',
-                    symbol: 'USDC',
-                    address: state.wallet?.ethAddress ?? 'Loading...',
-                    color: Colors.blueAccent,
-                  ),
-                ],
+              child: BlocBuilder<MarketCubit, MarketState>(
+                builder: (context, marketState) {
+                  CoinEntity? btc;
+                  CoinEntity? eth;
+                  CoinEntity? usdc;
+
+                  try {
+                    btc = marketState.coins.firstWhere(
+                      (c) =>
+                          c.symbol.toLowerCase() ==
+                          AppConstants.bitcoinSymbol.toLowerCase(),
+                    );
+                    eth = marketState.coins.firstWhere(
+                      (c) =>
+                          c.symbol.toLowerCase() ==
+                          AppConstants.ethereumSymbol.toLowerCase(),
+                    );
+                    usdc = marketState.coins.firstWhere(
+                      (c) =>
+                          c.symbol.toLowerCase() ==
+                          AppConstants.usdCoinSymbol.toLowerCase(),
+                    );
+                  } catch (_) {}
+
+                  return Column(
+                    children: [
+                      BalanceCard(state: state, marketState: marketState),
+                      const SizedBox(height: 30),
+                      AssetItem(
+                        icon: Icons.currency_bitcoin,
+                        name: AppConstants.bitcoinName,
+                        symbol: AppConstants.bitcoinSymbol,
+                        address: state.wallet?.btcAddress ?? 'Loading...',
+                        color: Colors.orange,
+                        imageUrl: btc?.image,
+                        price: btc?.currentPrice,
+                      ),
+                      const SizedBox(height: 15),
+                      AssetItem(
+                        icon: Icons.account_balance_wallet,
+                        name: AppConstants.ethereumName,
+                        symbol: AppConstants.ethereumSymbol,
+                        address: state.wallet?.ethAddress ?? 'Loading...',
+                        color: Colors.blue,
+                        imageUrl: eth?.image,
+                        price: eth?.currentPrice,
+                      ),
+                      const SizedBox(height: 15),
+                      AssetItem(
+                        icon: Icons.monetization_on,
+                        name: AppConstants.usdCoinName,
+                        symbol: AppConstants.usdCoinSymbol,
+                        address: state.wallet?.ethAddress ?? 'Loading...',
+                        color: Colors.blueAccent,
+                        imageUrl: usdc?.image,
+                        price: usdc?.currentPrice,
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),

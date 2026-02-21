@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../../core/extensions/context_extension.dart';
+import '../../core/mixins/block_explorer_mixin.dart';
 
-class AssetItem extends StatelessWidget {
+class AssetItem extends StatelessWidget with BlockExplorerMixin {
   final IconData icon;
   final String name;
   final String symbol;
   final String address;
   final Color color;
+  final String? imageUrl;
+  final double? price;
 
   const AssetItem({
     super.key,
@@ -17,6 +21,8 @@ class AssetItem extends StatelessWidget {
     required this.symbol,
     required this.address,
     required this.color,
+    this.imageUrl,
+    this.price,
   });
 
   @override
@@ -35,7 +41,10 @@ class AssetItem extends StatelessWidget {
             children: [
               CircleAvatar(
                 backgroundColor: color.withValues(alpha: 0.2),
-                child: Icon(icon, color: color),
+                backgroundImage: imageUrl != null
+                    ? NetworkImage(imageUrl!)
+                    : null,
+                child: imageUrl == null ? Icon(icon, color: color) : null,
               ),
               const SizedBox(width: 15),
               Expanded(
@@ -52,19 +61,33 @@ class AssetItem extends StatelessWidget {
                     Text(
                       symbol,
                       style: GoogleFonts.poppins(
-                        color: Colors.white70,
+                        color: Colors.white,
                         fontSize: 12,
                       ),
                     ),
                   ],
                 ),
               ),
-              Text(
-                '0.00',
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '0.00',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (price != null)
+                    Text(
+                      NumberFormat.currency(symbol: '\$').format(price),
+                      style: GoogleFonts.poppins(
+                        color: Colors.white70,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                ],
               ),
             ],
           ),
@@ -73,18 +96,23 @@ class AssetItem extends StatelessWidget {
           const SizedBox(height: 5),
           Text(
             context.l10n.addressLabel,
-            style: GoogleFonts.poppins(color: Colors.white30, fontSize: 10),
+            style: GoogleFonts.poppins(color: Colors.white60, fontSize: 10),
           ),
           Row(
             children: [
               Expanded(
-                child: Text(
-                  address,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white60,
-                    fontSize: 11,
+                child: GestureDetector(
+                  onTap: () => openBlockExplorer(context, address, symbol),
+                  child: Text(
+                    address,
+                    style: GoogleFonts.poppins(
+                      color: Colors.blueAccent,
+                      fontSize: 11,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.blueAccent,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               IconButton(
@@ -97,7 +125,7 @@ class AssetItem extends StatelessWidget {
                     ),
                   );
                 },
-                icon: const Icon(Icons.copy, color: Colors.white60, size: 16),
+                icon: const Icon(Icons.copy, color: Colors.white, size: 16),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 tooltip: context.l10n.copyTooltip,

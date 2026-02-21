@@ -15,6 +15,7 @@ import '../../domain/usecases/wallet/validate_mnemonic_use_case.dart';
 import '../../domain/usecases/wallet/save_mnemonic_use_case.dart';
 import '../../domain/usecases/market/get_coins_market_use_case.dart';
 import '../features/cubits/wallet/wallet_cubit.dart';
+import '../features/cubits/market/market_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -35,6 +36,9 @@ void _initCubits() {
       validateMnemonicUseCase: sl<ValidateMnemonicUseCase>(),
       saveMnemonicUseCase: sl<SaveMnemonicUseCase>(),
     ),
+  );
+  sl.registerLazySingleton<MarketCubit>(
+    () => MarketCubit(getCoinsMarketUseCase: sl<GetCoinsMarketUseCase>()),
   );
 }
 

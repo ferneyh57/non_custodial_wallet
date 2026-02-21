@@ -7,6 +7,7 @@ import 'package:non_custodial_wallet/ui/core/l10n/app_localizations.dart';
 import 'ui/core/di.dart' as di;
 import 'ui/core/di.dart';
 import 'ui/features/cubits/wallet/wallet_cubit.dart';
+import 'ui/features/cubits/market/market_cubit.dart';
 import 'ui/core/routes/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -34,8 +35,11 @@ void main() async {
       await di.init();
 
       runApp(
-        BlocProvider(
-          create: (context) => sl<WalletCubit>()..loadWallet(),
+        MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => sl<WalletCubit>()..loadWallet()),
+            BlocProvider(create: (context) => sl<MarketCubit>()..loadCoins()),
+          ],
           child: const MyApp(),
         ),
       );

@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/extensions/context_extension.dart';
 import '../cubits/wallet/wallet_state.dart';
+import '../cubits/market/market_state.dart';
 
 class BalanceCard extends StatelessWidget {
   final WalletState state;
+  final MarketState marketState;
 
-  const BalanceCard({super.key, required this.state});
+  const BalanceCard({
+    super.key,
+    required this.state,
+    required this.marketState,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +41,7 @@ class BalanceCard extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            '\$0.00 USD',
+            '\$0.00 USD', // In a real app, calculate: (btcAmount * btcPrice) + (ethAmount * ethPrice) ...
             style: GoogleFonts.poppins(
               color: Colors.white,
               fontSize: 32,
