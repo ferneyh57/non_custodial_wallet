@@ -1,53 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'data/datasources/wallet_datasource.dart';
+import 'injection_container.dart' as di;
+import 'injection_container.dart';
 import 'data/datasources/secure_storage_datasource.dart';
-import 'data/repositories/wallet_repository_impl.dart';
-import 'domain/usecases/wallet_usecases.dart';
-import 'ui/cubits/wallet_cubit.dart';
-import 'ui/logic/wallet_logic.dart';
+import 'ui/cubits/wallet/wallet_cubit.dart';
 import 'ui/screens/welcome_screen.dart';
 import 'ui/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Data Layer
-  final walletDataSource = WalletDataSource();
-  final storageDataSource = SecureStorageDataSource();
-  final walletRepository = WalletRepositoryImpl(
-    walletDataSource: walletDataSource,
-    storageDataSource: storageDataSource,
-  );
+  // Initialize Dependency Injection
+  await di.init();
 
-  // Domain Layer
-  final createWalletUseCase = CreateWalletUseCase(walletRepository);
-  final importWalletUseCase = ImportWalletUseCase(walletRepository);
-  final getStoredWalletUseCase = GetStoredWalletUseCase(walletRepository);
-  final logoutUseCase = LogoutWalletUseCase(walletRepository);
-  final validateMnemonicUseCase = ValidateMnemonicUseCase(walletRepository);
-  final saveMnemonicUseCase = SaveMnemonicUseCase(walletRepository);
-
-  // Presentation Layer - Logic
-  final walletLogic = WalletLogic(
-    createWalletUseCase: createWalletUseCase,
-    importWalletUseCase: importWalletUseCase,
-    getStoredWalletUseCase: getStoredWalletUseCase,
-    logoutWalletUseCase: logoutUseCase,
-    validateMnemonicUseCase: validateMnemonicUseCase,
-    saveMnemonicUseCase: saveMnemonicUseCase,
-  );
-
-  final hasWallet = await storageDataSource.hasWallet();
+  final hasWallet = await sl<SecureStorageDataSource>().hasWallet();
 
   runApp(
-    MultiRepositoryProvider(
-      providers: [RepositoryProvider<WalletLogic>(create: (_) => walletLogic)],
-      child: BlocProvider(
-        create: (context) =>
-            WalletCubit(context.read<WalletLogic>())..loadWallet(),
-        child: MyApp(hasWallet: hasWallet),
-      ),
+    BlocProvider(
+      create: (context) => sl<WalletCubit>()..loadWallet(),
+      child: MyApp(hasWallet: hasWallet),
     ),
   );
 }

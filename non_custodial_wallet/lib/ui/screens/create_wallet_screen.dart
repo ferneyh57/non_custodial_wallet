@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubits/wallet_cubit.dart';
-import '../cubits/wallet_state.dart';
+import '../cubits/wallet/wallet_cubit.dart';
+import '../cubits/wallet/wallet_state.dart';
 import 'home_screen.dart';
 
 class CreateWalletScreen extends StatefulWidget {
