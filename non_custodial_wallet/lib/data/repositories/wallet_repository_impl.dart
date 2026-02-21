@@ -1,3 +1,6 @@
+import '../../core/error/exceptions.dart';
+import '../../core/error/failures.dart';
+import '../../core/util/result.dart';
 import '../datasources/secure_storage_datasource.dart';
 import '../datasources/wallet_datasource.dart';
 import '../../domain/entities/wallet_entity.dart';
@@ -23,47 +26,96 @@ class WalletRepositoryImpl implements IWalletRepository {
   }
 
   @override
-  Future<WalletEntity> createNewWallet() async {
-    final mnemonic = generateMnemonic();
-    final btcAddress = await walletDataSource.getBtcAddress(mnemonic);
-    final ethAddress = await walletDataSource.getEthAddress(mnemonic);
+  Future<Result<WalletEntity>> createNewWallet() async {
+    try {
+      final mnemonic = generateMnemonic();
+      final btcAddress = await walletDataSource.getBtcAddress(mnemonic);
+      final ethAddress = await walletDataSource.getEthAddress(mnemonic);
 
-    return WalletEntity(
-      mnemonic: mnemonic,
-      btcAddress: btcAddress,
-      ethAddress: ethAddress,
-    );
+      return Result.success(
+        WalletEntity(
+          mnemonic: mnemonic,
+          btcAddress: btcAddress,
+          ethAddress: ethAddress,
+        ),
+      );
+    } on ServerException catch (e) {
+      return Result.failure(ServerFailure(e.message));
+    } catch (e) {
+      return Result.failure(
+        const ServerFailure('Unexpected error creating wallet'),
+      );
+    }
   }
 
   @override
-  Future<WalletEntity?> importWallet(String mnemonic) async {
-    if (!validateMnemonic(mnemonic)) return null;
+  Future<Result<WalletEntity>> importWallet(String mnemonic) async {
+    try {
+      if (!validateMnemonic(mnemonic)) {
+        return Result.failure(const ValidationFailure('Mnemonic inválido'));
+      }
 
-    final btcAddress = await walletDataSource.getBtcAddress(mnemonic);
-    final ethAddress = await walletDataSource.getEthAddress(mnemonic);
+      final btcAddress = await walletDataSource.getBtcAddress(mnemonic);
+      final ethAddress = await walletDataSource.getEthAddress(mnemonic);
 
-    final wallet = WalletEntity(
-      mnemonic: mnemonic,
-      btcAddress: btcAddress,
-      ethAddress: ethAddress,
-    );
+      final wallet = WalletEntity(
+        mnemonic: mnemonic,
+        btcAddress: btcAddress,
+        ethAddress: ethAddress,
+      );
 
-    await saveMnemonic(mnemonic);
-    return wallet;
+      await saveMnemonic(mnemonic);
+      return Result.success(wallet);
+    } on ServerException catch (e) {
+      return Result.failure(ServerFailure(e.message));
+    } on SecureStorageException catch (e) {
+      return Result.failure(SecureStorageFailure(e.message));
+    } catch (e) {
+      return Result.failure(
+        const ServerFailure('Unexpected error importing wallet'),
+      );
+    }
   }
 
   @override
-  Future<void> saveMnemonic(String mnemonic) async {
-    await storageDataSource.saveMnemonic(mnemonic);
+  Future<Result<void>> saveMnemonic(String mnemonic) async {
+    try {
+      await storageDataSource.saveMnemonic(mnemonic);
+      return Result.success(null);
+    } on SecureStorageException catch (e) {
+      return Result.failure(SecureStorageFailure(e.message));
+    } catch (e) {
+      return Result.failure(
+        const SecureStorageFailure('Unexpected error saving mnemonic'),
+      );
+    }
   }
 
   @override
-  Future<String?> getStoredMnemonic() async {
-    return await storageDataSource.getMnemonic();
+  Future<Result<String?>> getStoredMnemonic() async {
+    try {
+      final mnemonic = await storageDataSource.getMnemonic();
+      return Result.success(mnemonic);
+    } on SecureStorageException catch (e) {
+      return Result.failure(SecureStorageFailure(e.message));
+    } catch (e) {
+      return Result.failure(
+        const SecureStorageFailure('Unexpected error retrieving mnemonic'),
+      );
+    }
   }
 
   @override
-  Future<void> deleteMnemonic() async {
-    await storageDataSource.deleteMnemonic();
+  Future<Result<void>> deleteMnemonic() async {
+    try {
+      await storageDataSource.deleteMnemonic();
+      return Result.success(null);
+    } on SecureStorageException catch (e) {
+      return Result.failure(SecureStorageFailure(e.message));
+    } catch (e) {
+      return Result.failure(
+        const SecureStorageFailure('Unexpected error deleting mnemonic'),
+      );
+    }
   }
 }

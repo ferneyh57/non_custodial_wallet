@@ -4,6 +4,8 @@ import 'package:web3dart/web3dart.dart';
 import 'package:hex/hex.dart';
 import 'package:bip32/bip32.dart' as bip32;
 import 'dart:typed_data';
+import '../../core/util/app_logger.dart';
+import '../../core/error/exceptions.dart';
 
 class WalletDataSource {
   String generateMnemonic() {
@@ -16,38 +18,48 @@ class WalletDataSource {
 
   // ETH Address Derivation
   Future<String> getEthAddress(String mnemonic) async {
-    final seed = bip39.mnemonicToSeed(mnemonic);
-    final root = bip32.BIP32.fromSeed(seed);
-    final child = root.derivePath("m/44'/60'/0'/0/0");
-    final privateKey = Uint8List.fromList(child.privateKey!);
-    final credentials = EthPrivateKey.fromHex(HEX.encode(privateKey));
-    return credentials.address.hexEip55;
+    try {
+      final seed = bip39.mnemonicToSeed(mnemonic);
+      final root = bip32.BIP32.fromSeed(seed);
+      final child = root.derivePath("m/44'/60'/0'/0/0");
+      final privateKey = Uint8List.fromList(child.privateKey!);
+      final credentials = EthPrivateKey.fromHex(HEX.encode(privateKey));
+      return credentials.address.hexEip55;
+    } catch (e, stackTrace) {
+      AppLogger.error('Error deriving ETH address', e, stackTrace);
+      throw ServerException('Failed to derive ETH address');
+    }
   }
 
   // BTC Address Derivation (using BDK)
   Future<String> getBtcAddress(String mnemonic) async {
-    final mnemonicObj = await bdk.Mnemonic.fromString(mnemonic);
-    final descriptorSecretKey = await bdk.DescriptorSecretKey.create(
-      network: bdk.Network.testnet, // Using Testnet for development
-      mnemonic: mnemonicObj,
-    );
+    try {
+      final mnemonicObj = await bdk.Mnemonic.fromString(mnemonic);
+      final descriptorSecretKey = await bdk.DescriptorSecretKey.create(
+        network: bdk.Network.testnet, // Using Testnet for development
+        mnemonic: mnemonicObj,
+      );
 
-    final externalDescriptor = await bdk.Descriptor.newBip84(
-      secretKey: descriptorSecretKey,
-      network: bdk.Network.testnet,
-      keychain: bdk.KeychainKind.externalChain,
-    );
+      final externalDescriptor = await bdk.Descriptor.newBip84(
+        secretKey: descriptorSecretKey,
+        network: bdk.Network.testnet,
+        keychain: bdk.KeychainKind.externalChain,
+      );
 
-    final wallet = await bdk.Wallet.create(
-      descriptor: externalDescriptor,
-      network: bdk.Network.testnet,
-      databaseConfig: const bdk.DatabaseConfig.memory(),
-    );
+      final wallet = await bdk.Wallet.create(
+        descriptor: externalDescriptor,
+        network: bdk.Network.testnet,
+        databaseConfig: const bdk.DatabaseConfig.memory(),
+      );
 
-    final addressInfo = wallet.getAddress(
-      addressIndex: const bdk.AddressIndex.increase(),
-    );
+      final addressInfo = wallet.getAddress(
+        addressIndex: const bdk.AddressIndex.increase(),
+      );
 
-    return addressInfo.address.asString();
+      return addressInfo.address.asString();
+    } catch (e, stackTrace) {
+      AppLogger.error('Error deriving BTC address', e, stackTrace);
+      throw ServerException('Failed to derive BTC address');
+    }
   }
 }

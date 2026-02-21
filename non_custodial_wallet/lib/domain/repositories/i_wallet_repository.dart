@@ -1,11 +1,12 @@
+import '../../core/util/result.dart';
 import '../entities/wallet_entity.dart';
 
 abstract class IWalletRepository {
-  Future<WalletEntity> createNewWallet();
-  Future<WalletEntity?> importWallet(String mnemonic);
-  Future<void> saveMnemonic(String mnemonic);
-  Future<String?> getStoredMnemonic();
-  Future<void> deleteMnemonic();
+  Future<Result<WalletEntity>> createNewWallet();
+  Future<Result<WalletEntity>> importWallet(String mnemonic);
+  Future<Result<void>> saveMnemonic(String mnemonic);
+  Future<Result<String?>> getStoredMnemonic();
+  Future<Result<void>> deleteMnemonic();
   bool validateMnemonic(String mnemonic);
   String generateMnemonic();
 }

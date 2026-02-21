@@ -1,3 +1,4 @@
+import '../../../../core/util/result.dart';
 import '../../entities/wallet_entity.dart';
 import '../../repositories/i_wallet_repository.dart';
 
@@ -5,11 +6,18 @@ class GetStoredWalletUseCase {
   final IWalletRepository repository;
   GetStoredWalletUseCase(this.repository);
 
-  Future<WalletEntity?> execute() async {
-    final mnemonic = await repository.getStoredMnemonic();
+  Future<Result<WalletEntity?>> execute() async {
+    final result = await repository.getStoredMnemonic();
+
+    if (result.isFailure) {
+      return Result.failure(result.failure);
+    }
+
+    final mnemonic = result.data;
     if (mnemonic != null) {
       return await repository.importWallet(mnemonic);
     }
-    return null;
+
+    return Result.success(null);
   }
 }

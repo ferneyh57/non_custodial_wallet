@@ -1,3 +1,4 @@
+import '../../../../core/util/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'wallet_state.dart';
 import '../../../../domain/usecases/wallet/create_wallet_use_case.dart';
@@ -31,72 +32,108 @@ class WalletCubit extends Cubit<WalletState> {
        super(WalletState());
 
   Future<void> loadWallet() async {
+    AppLogger.info('Loading stored wallet...');
     emit(state.copyWith(isLoading: true, errorMessage: null));
-    try {
-      final wallet = await _getStoredWalletUseCase.execute();
-      if (wallet != null) {
-        emit(
-          state.copyWith(isLoading: false, wallet: wallet, isAuthorized: true),
-        );
-      } else {
-        emit(state.copyWith(isLoading: false, isAuthorized: false));
-      }
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
-    }
+
+    final result = await _getStoredWalletUseCase.execute();
+
+    result.fold(
+      (wallet) {
+        if (wallet != null) {
+          AppLogger.info('Wallet loaded successfully');
+          emit(
+            state.copyWith(
+              isLoading: false,
+              wallet: wallet,
+              isAuthorized: true,
+            ),
+          );
+        } else {
+          AppLogger.info('No stored wallet found');
+          emit(state.copyWith(isLoading: false, isAuthorized: false));
+        }
+      },
+      (failure) {
+        AppLogger.error('Failed to load wallet: ${failure.message}');
+        emit(state.copyWith(isLoading: false, errorMessage: failure.message));
+      },
+    );
   }
 
   Future<void> createNewWallet() async {
+    AppLogger.info('Creating new wallet...');
     emit(state.copyWith(isLoading: true, errorMessage: null));
-    try {
-      final wallet = await _createWalletUseCase.execute();
-      emit(
-        state.copyWith(isLoading: false, wallet: wallet, isAuthorized: true),
-      );
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
-    }
+
+    final result = await _createWalletUseCase.execute();
+
+    result.fold(
+      (wallet) {
+        AppLogger.info('New wallet created successfully');
+        emit(
+          state.copyWith(isLoading: false, wallet: wallet, isAuthorized: true),
+        );
+      },
+      (failure) {
+        AppLogger.error('Failed to create wallet: ${failure.message}');
+        emit(state.copyWith(isLoading: false, errorMessage: failure.message));
+      },
+    );
   }
 
   Future<void> importWallet(String mnemonic) async {
+    AppLogger.info('Importing wallet...');
     if (!_validateMnemonicUseCase.execute(mnemonic)) {
+      AppLogger.warning('Attempted to import wallet with invalid mnemonic');
       emit(state.copyWith(errorMessage: 'Mnemonic inválido'));
       return;
     }
 
     emit(state.copyWith(isLoading: true, errorMessage: null));
-    try {
-      final wallet = await _importWalletUseCase.execute(mnemonic);
-      if (wallet != null) {
+
+    final result = await _importWalletUseCase.execute(mnemonic);
+
+    result.fold(
+      (wallet) {
+        AppLogger.info('Wallet imported successfully');
         emit(
           state.copyWith(isLoading: false, wallet: wallet, isAuthorized: true),
         );
-      } else {
-        emit(
-          state.copyWith(
-            isLoading: false,
-            errorMessage: 'Error al importar wallet',
-          ),
-        );
-      }
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
-    }
+      },
+      (failure) {
+        AppLogger.error('Failed to import wallet: ${failure.message}');
+        emit(state.copyWith(isLoading: false, errorMessage: failure.message));
+      },
+    );
   }
 
   Future<void> logout() async {
+    AppLogger.info('Logging out...');
     emit(state.copyWith(isLoading: true));
-    try {
-      await _logoutWalletUseCase.execute();
-      emit(WalletState());
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
-    }
+
+    final result = await _logoutWalletUseCase.execute();
+
+    result.fold(
+      (_) {
+        AppLogger.info('Logged out successfully');
+        emit(WalletState());
+      },
+      (failure) {
+        AppLogger.error('Logout failed: ${failure.message}');
+        emit(state.copyWith(isLoading: false, errorMessage: failure.message));
+      },
+    );
   }
 
   Future<void> saveMnemonic() async {
     if (state.wallet?.mnemonic != null) {
-      await _saveMnemonicUseCase.execute(state.wallet!.mnemonic);
+      AppLogger.info('Saving mnemonic to secure storage...');
+      final result = await _saveMnemonicUseCase.execute(state.wallet!.mnemonic);
+
+      result.fold(
+        (_) => AppLogger.info('Mnemonic saved successfully'),
+        (failure) =>
+            AppLogger.error('Failed to save mnemonic: ${failure.message}'),
+      );
     }
   }
 }
