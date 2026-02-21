@@ -1,14 +1,19 @@
 import 'package:get_it/get_it.dart';
+import 'package:dio/dio.dart';
 import '../../data/datasources/wallet_datasource.dart';
 import '../../data/datasources/secure_storage_datasource.dart';
+import '../../data/datasources/market/coin_gecko_datasource.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
+import '../../data/repositories/market/market_repository_impl.dart';
 import '../../domain/repositories/wallet/i_wallet_repository.dart';
+import '../../domain/repositories/market/i_market_repository.dart';
 import '../../domain/usecases/wallet/create_wallet_use_case.dart';
 import '../../domain/usecases/wallet/import_wallet_use_case.dart';
 import '../../domain/usecases/wallet/get_stored_wallet_use_case.dart';
 import '../../domain/usecases/wallet/logout_wallet_use_case.dart';
 import '../../domain/usecases/wallet/validate_mnemonic_use_case.dart';
 import '../../domain/usecases/wallet/save_mnemonic_use_case.dart';
+import '../../domain/usecases/market/get_coins_market_use_case.dart';
 import '../features/cubits/wallet/wallet_cubit.dart';
 
 final sl = GetIt.instance;
@@ -52,6 +57,9 @@ void _initUseCases() {
   sl.registerLazySingleton<SaveMnemonicUseCase>(
     () => SaveMnemonicUseCase(sl<IWalletRepository>()),
   );
+  sl.registerLazySingleton<GetCoinsMarketUseCase>(
+    () => GetCoinsMarketUseCase(sl<IMarketRepository>()),
+  );
 }
 
 void _initRepositories() {
@@ -61,11 +69,19 @@ void _initRepositories() {
       storageDataSource: sl<SecureStorageDataSource>(),
     ),
   );
+  sl.registerLazySingleton<IMarketRepository>(
+    () => MarketRepositoryImpl(sl<CoinGeckoDataSource>()),
+  );
 }
 
 void _initDataSources() {
   sl.registerLazySingleton<WalletDataSource>(() => WalletDataSource());
   sl.registerLazySingleton<SecureStorageDataSource>(
     () => SecureStorageDataSource(),
+  );
+
+  sl.registerLazySingleton<Dio>(() => Dio());
+  sl.registerLazySingleton<CoinGeckoDataSource>(
+    () => CoinGeckoDataSource(sl<Dio>()),
   );
 }
