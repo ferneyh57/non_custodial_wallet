@@ -5,7 +5,7 @@ import '../cubits/wallet_cubit.dart';
 import '../cubits/wallet_state.dart';
 import '../widgets/balance_card.dart';
 import '../widgets/asset_item.dart';
-import '../../../../core/extensions/context_extension.dart';
+import '../../../core/extensions/context_extension.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

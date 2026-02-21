@@ -9,7 +9,7 @@ import 'domain/usecases/wallet/get_stored_wallet_use_case.dart';
 import 'domain/usecases/wallet/logout_wallet_use_case.dart';
 import 'domain/usecases/wallet/validate_mnemonic_use_case.dart';
 import 'domain/usecases/wallet/save_mnemonic_use_case.dart';
-import 'ui/features/wallet/cubits/wallet_cubit.dart';
+import 'ui/features/cubits/wallet_cubit.dart';
 
 final sl = GetIt.instance;
 
