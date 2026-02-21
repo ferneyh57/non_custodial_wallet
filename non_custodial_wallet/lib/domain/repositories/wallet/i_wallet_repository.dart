@@ -1,4 +1,4 @@
-import '../../../core/util/result.dart';
+import '../../../ui/core/util/result.dart';
 import '../../entities/wallet/wallet_entity.dart';
 
 abstract class IWalletRepository {

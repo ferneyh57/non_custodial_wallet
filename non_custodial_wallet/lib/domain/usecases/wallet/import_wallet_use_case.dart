@@ -1,4 +1,4 @@
-import '../../../../core/util/result.dart';
+import '../../../ui/core/util/result.dart';
 import '../../entities/wallet/wallet_entity.dart';
 import '../../repositories/wallet/i_wallet_repository.dart';
 

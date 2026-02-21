@@ -1,4 +1,4 @@
-import '../../../../core/util/app_logger.dart';
+import '../../../core/util/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'wallet_state.dart';
 import '../../../../domain/usecases/wallet/create_wallet_use_case.dart';

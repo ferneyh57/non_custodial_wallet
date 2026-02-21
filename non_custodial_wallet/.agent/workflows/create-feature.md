@@ -12,15 +12,13 @@ This workflow guides you through creating a new feature following the 3-layer ar
 2. **Create the Directory Structure**
    Run the following command to create the basic folder structure:
    ```bash
-   mkdir -p lib/features/<feature_name>/domain/entities
-   mkdir -p lib/features/<feature_name>/domain/repositories
-   mkdir -p lib/features/<feature_name>/domain/usecases
-   mkdir -p lib/features/<feature_name>/data/models
-   mkdir -p lib/features/<feature_name>/data/repositories
-   mkdir -p lib/features/<feature_name>/data/datasources
-   mkdir -p lib/ui/features/<feature_name>/screens
-   mkdir -p lib/ui/features/<feature_name>/widgets
-   mkdir -p lib/ui/features/<feature_name>/cubits
+   mkdir -p lib/domain/entities/<feature_name>
+   mkdir -p lib/domain/repositories/<feature_name>
+   mkdir -p lib/domain/usecases/<feature_name>
+   mkdir -p lib/data/models/<feature_name>
+   mkdir -p lib/ui/features/screens/<feature_name>
+   mkdir -p lib/ui/features/widgets/<feature_name>
+   mkdir -p lib/ui/features/cubits/<feature_name>
    ```
 
 3. **Implement the Domain Layer**

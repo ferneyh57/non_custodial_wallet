@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:non_custodial_wallet/core/util/app_logger.dart';
-import 'package:non_custodial_wallet/l10n/app_localizations.dart';
-import 'injection_container.dart' as di;
-import 'injection_container.dart';
+import 'package:non_custodial_wallet/ui/core/util/app_logger.dart';
+import 'package:non_custodial_wallet/ui/core/l10n/app_localizations.dart';
+import 'ui/core/di.dart' as di;
+import 'ui/core/di.dart';
 import 'ui/features/cubits/wallet/wallet_cubit.dart';
-import 'ui/router.dart';
+import 'ui/core/routes/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {

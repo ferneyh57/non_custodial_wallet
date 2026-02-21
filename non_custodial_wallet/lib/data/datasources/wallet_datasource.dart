@@ -4,8 +4,8 @@ import 'package:web3dart/web3dart.dart';
 import 'package:hex/hex.dart';
 import 'package:bip32/bip32.dart' as bip32;
 import 'dart:typed_data';
-import '../../core/util/app_logger.dart';
-import '../../core/error/exceptions.dart';
+import '../../ui/core/util/app_logger.dart';
+import '../../ui/core/error/exceptions.dart';
 
 class WalletDataSource {
   String generateMnemonic() {
