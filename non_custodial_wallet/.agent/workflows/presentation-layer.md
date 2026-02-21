@@ -7,71 +7,106 @@ The Presentation layer handles the UI and user interaction. It depends on the Do
 ### Folder Structure
 *   `screens/`: Top-level pages.
 *   `widgets/`: Smaller, reusable UI components.
-*   `providers/`: State management using the `Provider` package.
+*   `cubits/`: State management using `Cubit` and `Freezed` states.
+*   `logic/`: Encapsulated logic objects for Cubit operations.
 
 ### Templates
 
-#### 1. Provider (State Management)
+#### 1. State (using Freezed)
+Create in `cubits/feature_state.dart`:
 ```dart
-import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../domain/entities/feature_entity.dart';
+
+part 'feature_state.freezed.dart';
+
+@freezed
+class FeatureState with _$FeatureState {
+  const factory FeatureState({
+    @Default(false) bool isLoading,
+    List<FeatureEntity>? features,
+    String? errorMessage,
+    @Default(false) bool isInitial,
+  }) = _FeatureState;
+
+  factory FeatureState.initial() => const FeatureState(isInitial: true);
+}
+```
+
+#### 2. Logic Object
+Create in `logic/feature_logic.dart`:
+```dart
 import '../../domain/usecases/get_features_usecase.dart';
 import '../../domain/entities/feature_entity.dart';
 
-class FeatureProvider extends ChangeNotifier {
-  final GetFeaturesUseCase getFeaturesUseCase;
+class FeatureLogic {
+  final GetFeaturesUseCase _getFeaturesUseCase;
 
-  List<FeatureEntity> _features = [];
-  bool _isLoading = false;
+  FeatureLogic(this._getFeaturesUseCase);
 
-  FeatureProvider({required this.getFeaturesUseCase});
+  Future<List<FeatureEntity>> fetchFeatures() async {
+    return await _getFeaturesUseCase.execute();
+  }
+}
+```
 
-  List<FeatureEntity> get features => _features;
-  bool get isLoading => _isLoading;
+#### 3. Cubit
+Create in `cubits/feature_cubit.dart`:
+```dart
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'feature_state.dart';
+import '../logic/feature_logic.dart';
+
+class FeatureCubit extends Cubit<FeatureState> {
+  final FeatureLogic _logic;
+
+  FeatureCubit(this._logic) : super(const FeatureState.initial());
 
   Future<void> loadFeatures() async {
-    _isLoading = true;
-    notifyListeners();
-
+    emit(const FeatureState.loading());
     try {
-      _features = await getFeaturesUseCase.execute();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      final features = await _logic.fetchFeatures();
+      emit(FeatureState.loaded(features));
+    } catch (e) {
+      emit(FeatureState.error(e.toString()));
     }
   }
 }
 ```
 
-#### 2. Screen
+#### 4. Screen
 ```dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/feature_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/feature_cubit.dart';
+import '../cubits/feature_state.dart';
 
 class FeatureScreen extends StatelessWidget {
   const FeatureScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Features')),
-      body: Consumer<FeatureProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return ListView.builder(
-            itemCount: provider.features.length,
-            itemBuilder: (context, index) {
-              final feature = provider.features[index];
-              return ListTile(title: Text(feature.name));
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<FeatureProvider>().loadFeatures(),
-        child: const Icon(Icons.refresh),
+    return BlocProvider(
+      create: (context) => FeatureCubit(context.read<FeatureLogic>())..loadFeatures(),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Features')),
+        body: BlocBuilder<FeatureCubit, FeatureState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (state.errorMessage != null) {
+              return Center(child: Text(state.errorMessage!));
+            }
+            if (state.features != null) {
+              return ListView.builder(
+                itemCount: state.features!.length,
+                itemBuilder: (context, index) => ListTile(title: Text(state.features![index].name)),
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
       ),
     );
   }
@@ -79,6 +114,7 @@ class FeatureScreen extends StatelessWidget {
 ```
 
 ### Best Practices
-*   **Logic-free UI**: Keep logic in the Provider and only use the UI for display.
-*   **Reusable Widgets**: Extract complex UI parts into the `widgets/` folder.
-*   **Provider Scope**: Ensure the Provider is available in the widget tree (usually via `ChangeNotifierProvider`).
+*   **Encapsulated Logic**: Always create a `Logic` object to handle the implementation details of a Cubit action.
+*   **Immutability**: Use `Freezed` for all Bloc/Cubit states.
+*   **Logic-free UI**: The UI should only react to states and call Cubit methods.
+*   **Dependency Injection**: Provide Logic objects and Cubits using appropriate providers (e.g., `RepositoryProvider`, `BlocProvider`).

@@ -5,7 +5,7 @@ import 'package:hex/hex.dart';
 import 'package:bip32/bip32.dart' as bip32;
 import 'dart:typed_data';
 
-class WalletService {
+class WalletDataSource {
   String generateMnemonic() {
     return bip39.generateMnemonic();
   }

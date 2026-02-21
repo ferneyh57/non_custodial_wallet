@@ -39,7 +39,9 @@ This workflow guides you through creating a new feature following the 3-layer ar
    Follow the [presentation-layer](file:///Users/ferneyhurtado/Dev/non_custodial_wallet/non_custodial_wallet/.agent/workflows/presentation-layer.md) workflow to define:
    *   **Screens**: Complete UI pages.
    *   **Widgets**: Reusable UI components.
-   *   **Providers**: State management logic using the `Provider` package.
+   *   **Cubits**: State management using BLoC pattern.
+   *   **Logic**: Encapsulated logic objects for Cubits.
+   *   **States**: Immutable states using `Freezed`.
 
 6. **Register Dependencies**
    Ensure all new classes are properly registered in your dependency injection container or provided via `MultiProvider` in `main.dart`.

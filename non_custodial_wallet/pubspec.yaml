@@ -40,7 +40,6 @@ dependencies:
   bdk_flutter: ^0.31.1
   bip32: ^2.0.0
   hex: ^0.2.0
-  provider: ^6.1.2
   google_fonts: ^6.2.1
   get_it: ^9.2.1
   retrofit: ^4.9.2
