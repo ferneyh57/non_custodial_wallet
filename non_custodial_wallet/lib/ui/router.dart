@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'features/screens/welcome_screen.dart';
-import 'features/screens/home_screen.dart';
-import 'features/screens/create_wallet_screen.dart';
-import 'features/screens/import_wallet_screen.dart';
-import 'features/screens/splash_screen.dart';
-import 'features/cubits/wallet_cubit.dart';
+import 'features/screens/welcome/welcome_screen.dart';
+import 'features/screens/home/home_screen.dart';
+import 'features/screens/auth/create_wallet_screen.dart';
+import 'features/screens/auth/import_wallet_screen.dart';
+import 'features/screens/splash/splash_screen.dart';
+import 'features/cubits/wallet/wallet_cubit.dart';
 import 'app_routes.dart';
 
 GoRouter createRouter(WalletCubit walletCubit) => GoRouter(

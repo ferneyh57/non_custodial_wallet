@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../domain/entities/wallet_entity.dart';
+import '../../../../domain/entities/wallet_entity.dart';
 
 part 'wallet_state.freezed.dart';
 

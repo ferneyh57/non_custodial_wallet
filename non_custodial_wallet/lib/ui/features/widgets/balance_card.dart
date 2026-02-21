@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/extensions/context_extension.dart';
-import '../cubits/wallet_state.dart';
+import '../cubits/wallet/wallet_state.dart';
 
 class BalanceCard extends StatelessWidget {
   final WalletState state;

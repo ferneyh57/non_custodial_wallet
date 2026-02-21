@@ -1,12 +1,12 @@
-import '../../../core/util/app_logger.dart';
+import '../../../../core/util/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'wallet_state.dart';
-import '../../../domain/usecases/wallet/create_wallet_use_case.dart';
-import '../../../domain/usecases/wallet/import_wallet_use_case.dart';
-import '../../../domain/usecases/wallet/get_stored_wallet_use_case.dart';
-import '../../../domain/usecases/wallet/logout_wallet_use_case.dart';
-import '../../../domain/usecases/wallet/validate_mnemonic_use_case.dart';
-import '../../../domain/usecases/wallet/save_mnemonic_use_case.dart';
+import '../../../../domain/usecases/wallet/create_wallet_use_case.dart';
+import '../../../../domain/usecases/wallet/import_wallet_use_case.dart';
+import '../../../../domain/usecases/wallet/get_stored_wallet_use_case.dart';
+import '../../../../domain/usecases/wallet/logout_wallet_use_case.dart';
+import '../../../../domain/usecases/wallet/validate_mnemonic_use_case.dart';
+import '../../../../domain/usecases/wallet/save_mnemonic_use_case.dart';
 
 class WalletCubit extends Cubit<WalletState> {
   final CreateWalletUseCase _createWalletUseCase;

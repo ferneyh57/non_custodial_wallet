@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubits/wallet_cubit.dart';
-import '../cubits/wallet_state.dart';
-import '../../../core/extensions/context_extension.dart';
+import '../../cubits/wallet/wallet_cubit.dart';
+import '../../cubits/wallet/wallet_state.dart';
+import '../../../../core/extensions/context_extension.dart';
 
 class ImportWalletScreen extends StatefulWidget {
   const ImportWalletScreen({super.key});

@@ -6,7 +6,7 @@ import 'package:non_custodial_wallet/core/util/app_logger.dart';
 import 'package:non_custodial_wallet/l10n/app_localizations.dart';
 import 'injection_container.dart' as di;
 import 'injection_container.dart';
-import 'ui/features/cubits/wallet_cubit.dart';
+import 'ui/features/cubits/wallet/wallet_cubit.dart';
 import 'ui/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
