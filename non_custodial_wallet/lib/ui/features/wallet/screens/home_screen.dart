@@ -6,6 +6,7 @@ import '../cubits/wallet_cubit.dart';
 import '../cubits/wallet_state.dart';
 import '../widgets/balance_card.dart';
 import '../widgets/asset_item.dart';
+import '../../../app_routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () async {
                   await context.read<WalletCubit>().logout();
                   if (context.mounted) {
-                    context.go('/');
+                    context.go(AppRoutes.splash);
                   }
                 },
                 icon: const Icon(Icons.logout, color: Colors.white70),

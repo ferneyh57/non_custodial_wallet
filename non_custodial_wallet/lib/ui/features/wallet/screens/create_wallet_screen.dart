@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../cubits/wallet_cubit.dart';
 import '../cubits/wallet_state.dart';
+import '../../../app_routes.dart';
 
 class CreateWalletScreen extends StatefulWidget {
   const CreateWalletScreen({super.key});
@@ -98,7 +99,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                         : () async {
                             await context.read<WalletCubit>().saveMnemonic();
                             if (context.mounted) {
-                              context.go('/home');
+                              context.go(AppRoutes.home);
                             }
                           },
                     style: ElevatedButton.styleFrom(

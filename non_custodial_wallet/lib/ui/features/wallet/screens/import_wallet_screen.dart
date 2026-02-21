@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../cubits/wallet_cubit.dart';
 import '../cubits/wallet_state.dart';
+import '../../../app_routes.dart';
 
 class ImportWalletScreen extends StatefulWidget {
   const ImportWalletScreen({super.key});
@@ -20,7 +21,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
     return BlocConsumer<WalletCubit, WalletState>(
       listener: (context, state) {
         if (state.isAuthorized && !state.isLoading && state.wallet != null) {
-          context.go('/home');
+          context.go(AppRoutes.home);
         }
         if (state.errorMessage != null && !state.isLoading) {
           ScaffoldMessenger.of(

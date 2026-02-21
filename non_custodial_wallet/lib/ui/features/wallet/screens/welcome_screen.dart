@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import '../../../app_routes.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -52,7 +53,7 @@ class WelcomeScreen extends StatelessWidget {
                   height: 55,
                   child: ElevatedButton(
                     onPressed: () {
-                      context.push('/create');
+                      context.push(AppRoutes.create);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
@@ -72,7 +73,7 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(height: 15),
                 TextButton(
                   onPressed: () {
-                    context.push('/import');
+                    context.push(AppRoutes.import);
                   },
                   child: Text(
                     'I already have a wallet',
