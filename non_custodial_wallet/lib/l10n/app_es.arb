@@ -1,5 +1,5 @@
 {
-  "appName": "Clon de Trust Wallet",
+  "appName": "Non Wallet",
   "welcomeSubtitle": "Tu puerta de entrada no-custodial a BTC, ETH y USDC.",
   "createWalletButton": "CREAR UNA NUEVA BILLETERA",
   "importWalletButton": "Ya tengo una billetera",
@@ -15,6 +15,8 @@
   "addressLabel": "Dirección:",
   "totalBalanceLabel": "Saldo Total",
   "loading": "Cargando...",
+  "copyMnemonic": "Copiar Frase",
+  "mnemonicCopied": "Frase mnemónica copiada al portapapeles",
   "error": "Error: {message}",
   "@error": {
     "placeholders": {

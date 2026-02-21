@@ -21,8 +21,11 @@ GoRouter createRouter(WalletCubit walletCubit) => GoRouter(
     if (isLoading && location == AppRoutes.splash) return null;
 
     if (isAuthorized) {
-      // If authorized, any attempt to go to splash or welcome redirects to home
-      if (location == AppRoutes.splash || location == AppRoutes.welcome) {
+      // If authorized, any attempt to go to onboarding screens redirects to home
+      if (location == AppRoutes.splash ||
+          location == AppRoutes.welcome ||
+          location == AppRoutes.create ||
+          location == AppRoutes.import) {
         return AppRoutes.home;
       }
     } else {

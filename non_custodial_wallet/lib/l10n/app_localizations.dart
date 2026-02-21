@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'Trust Wallet Clone'**
+  /// **'Non Wallet'**
   String get appName;
 
   /// No description provided for @welcomeSubtitle.
@@ -193,6 +193,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading...'**
   String get loading;
+
+  /// No description provided for @copyMnemonic.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Phrase'**
+  String get copyMnemonic;
+
+  /// No description provided for @mnemonicCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Mnemonic copied to clipboard'**
+  String get mnemonicCopied;
 
   /// No description provided for @error.
   ///

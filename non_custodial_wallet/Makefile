@@ -1,10 +1,13 @@
-.PHONY: clean get build watch analyze format test run-dev
+.PHONY: clean get l10n build watch analyze format test run-dev
 
 clean:
 	flutter clean
 
 get:
 	flutter pub get
+
+l10n:
+	flutter gen-l10n
 
 build:
 	dart run build_runner build --delete-conflicting-outputs

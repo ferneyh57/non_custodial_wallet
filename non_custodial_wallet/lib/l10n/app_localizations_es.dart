@@ -9,7 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appName => 'Clon de Trust Wallet';
+  String get appName => 'Non Wallet';
 
   @override
   String get welcomeSubtitle =>
@@ -58,6 +58,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get loading => 'Cargando...';
+
+  @override
+  String get copyMnemonic => 'Copiar Frase';
+
+  @override
+  String get mnemonicCopied => 'Frase mnemónica copiada al portapapeles';
 
   @override
   String error(String message) {

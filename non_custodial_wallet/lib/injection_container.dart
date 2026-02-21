@@ -21,7 +21,7 @@ Future<void> init() async {
 }
 
 void _initCubits() {
-  sl.registerFactory<WalletCubit>(
+  sl.registerLazySingleton<WalletCubit>(
     () => WalletCubit(
       createWalletUseCase: sl<CreateWalletUseCase>(),
       importWalletUseCase: sl<ImportWalletUseCase>(),
