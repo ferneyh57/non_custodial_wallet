@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubits/wallet/wallet_cubit.dart';
-import '../cubits/wallet/wallet_state.dart';
-import 'home_screen.dart';
+import 'package:go_router/go_router.dart';
+import '../cubits/wallet_cubit.dart';
+import '../cubits/wallet_state.dart';
 
 class CreateWalletScreen extends StatefulWidget {
   const CreateWalletScreen({super.key});
@@ -96,14 +96,10 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     onPressed: state.wallet?.mnemonic == null
                         ? null
                         : () async {
-                            final navigator = Navigator.of(context);
                             await context.read<WalletCubit>().saveMnemonic();
-                            navigator.pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context) => const HomeScreen(),
-                              ),
-                              (route) => false,
-                            );
+                            if (context.mounted) {
+                              context.go('/home');
+                            }
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,

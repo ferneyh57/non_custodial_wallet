@@ -2,119 +2,61 @@
 description: Presentation Layer Guidelines and Templates
 ---
 
-The Presentation layer handles the UI and user interaction. It depends on the Domain layer (UseCases).
+The Presentation layer handles the UI and user interaction. Each flow (feature) must have its own directory.
 
 ### Folder Structure
-*   `screens/`: Top-level pages.
-*   `widgets/`: Smaller, reusable UI components.
+Each flow should be located in `lib/ui/features/<flow_name>/` and contain:
+*   `screens/`: Flow-specific pages.
+*   `widgets/`: Flow-specific widgets (replaces private widget functions).
 *   `cubits/`: State management using `Cubit` and `Freezed` states.
-*   `logic/`: Encapsulated logic objects for Cubit operations.
+
+> [!IMPORTANT]
+> **No Private Widget Functions**: Never use private functions (e.g., `_buildHeader()`) that return widgets inside a Screen or Widget class. Instead, extract these into small, focused `StatelessWidget` classes in the `widgets/` folder of the flow.
 
 ### Templates
 
 #### 1. State (using Freezed)
-Create in `cubits/feature_state.dart`:
+Create in `cubits/<flow>_state.dart`:
 ```dart
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/feature_entity.dart';
 
-part 'feature_state.freezed.dart';
+part '<flow>_state.freezed.dart';
 
 @freezed
-class FeatureState with _$FeatureState {
-  const factory FeatureState({
+abstract class <Flow>State with _$<Flow>State {
+  const factory <Flow>State({
     @Default(false) bool isLoading,
-    List<FeatureEntity>? features,
     String? errorMessage,
-    @Default(false) bool isInitial,
-  }) = _FeatureState;
-
-  factory FeatureState.initial() => const FeatureState(isInitial: true);
+  }) = _<Flow>State;
 }
 ```
 
-#### 2. Logic Object
-Create in `logic/feature_logic.dart`:
-```dart
-import '../../domain/usecases/get_features_usecase.dart';
-import '../../domain/entities/feature_entity.dart';
-
-class FeatureLogic {
-  final GetFeaturesUseCase _getFeaturesUseCase;
-
-  FeatureLogic(this._getFeaturesUseCase);
-
-  Future<List<FeatureEntity>> fetchFeatures() async {
-    return await _getFeaturesUseCase.execute();
-  }
-}
-```
-
-#### 3. Cubit
-Create in `cubits/feature_cubit.dart`:
+#### 2. Cubit
+Create in `cubits/<flow>_cubit.dart`:
 ```dart
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'feature_state.dart';
-import '../logic/feature_logic.dart';
+import 'wallet_state.dart';
 
-class FeatureCubit extends Cubit<FeatureState> {
-  final FeatureLogic _logic;
-
-  FeatureCubit(this._logic) : super(const FeatureState.initial());
-
-  Future<void> loadFeatures() async {
-    emit(const FeatureState.loading());
-    try {
-      final features = await _logic.fetchFeatures();
-      emit(FeatureState.loaded(features));
-    } catch (e) {
-      emit(FeatureState.error(e.toString()));
-    }
-  }
+class <Flow>Cubit extends Cubit<<Flow>State> {
+  <Flow>Cubit() : super(<Flow>State());
 }
 ```
 
-#### 4. Screen
+#### 3. Flow Widgets
+Create in `widgets/feature_component.dart`:
 ```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubits/feature_cubit.dart';
-import '../cubits/feature_state.dart';
-
-class FeatureScreen extends StatelessWidget {
-  const FeatureScreen({super.key});
+class FeatureComponent extends StatelessWidget {
+  const FeatureComponent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => FeatureCubit(context.read<FeatureLogic>())..loadFeatures(),
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Features')),
-        body: BlocBuilder<FeatureCubit, FeatureState>(
-          builder: (context, state) {
-            if (state.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state.errorMessage != null) {
-              return Center(child: Text(state.errorMessage!));
-            }
-            if (state.features != null) {
-              return ListView.builder(
-                itemCount: state.features!.length,
-                itemBuilder: (context, index) => ListTile(title: Text(state.features![index].name)),
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-      ),
-    );
+    return Container(...);
   }
 }
 ```
 
 ### Best Practices
-*   **Encapsulated Logic**: Always create a `Logic` object to handle the implementation details of a Cubit action.
+*   **Flow-Based Folders**: Group all UI components of a feature/flow in `lib/ui/features/<flow>/`.
+*   **Stateless Componentization**: Prefer many small `StatelessWidget` over large `build` methods or helper functions.
 *   **Immutability**: Use `Freezed` for all Bloc/Cubit states.
 *   **Logic-free UI**: The UI should only react to states and call Cubit methods.
-*   **Dependency Injection**: Provide Logic objects and Cubits using appropriate providers (e.g., `RepositoryProvider`, `BlocProvider`).

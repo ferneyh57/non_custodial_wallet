@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'injection_container.dart' as di;
 import 'injection_container.dart';
 import 'data/datasources/secure_storage_datasource.dart';
-import 'ui/cubits/wallet/wallet_cubit.dart';
-import 'ui/screens/welcome_screen.dart';
-import 'ui/screens/home_screen.dart';
+import 'ui/features/wallet/cubits/wallet_cubit.dart';
+import 'ui/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,22 +13,23 @@ void main() async {
   await di.init();
 
   final hasWallet = await sl<SecureStorageDataSource>().hasWallet();
+  final initialLocation = hasWallet ? '/home' : '/';
 
   runApp(
     BlocProvider(
       create: (context) => sl<WalletCubit>()..loadWallet(),
-      child: MyApp(hasWallet: hasWallet),
+      child: MyApp(initialLocation: initialLocation),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  final bool hasWallet;
-  const MyApp({super.key, required this.hasWallet});
+  final String initialLocation;
+  const MyApp({super.key, required this.initialLocation});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Trust Wallet Clone',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: hasWallet ? const HomeScreen() : const WelcomeScreen(),
+      routerConfig: createRouter(initialLocation),
     );
   }
 }

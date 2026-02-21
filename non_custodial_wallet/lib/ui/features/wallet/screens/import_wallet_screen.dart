@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubits/wallet/wallet_cubit.dart';
-import '../cubits/wallet/wallet_state.dart';
-import 'home_screen.dart';
+import 'package:go_router/go_router.dart';
+import '../cubits/wallet_cubit.dart';
+import '../cubits/wallet_state.dart';
 
 class ImportWalletScreen extends StatefulWidget {
   const ImportWalletScreen({super.key});
@@ -20,10 +20,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
     return BlocConsumer<WalletCubit, WalletState>(
       listener: (context, state) {
         if (state.isAuthorized && !state.isLoading && state.wallet != null) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-            (route) => false,
-          );
+          context.go('/home');
         }
         if (state.errorMessage != null && !state.isLoading) {
           ScaffoldMessenger.of(

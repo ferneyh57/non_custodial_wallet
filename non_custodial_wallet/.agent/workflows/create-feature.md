@@ -18,9 +18,9 @@ This workflow guides you through creating a new feature following the 3-layer ar
    mkdir -p lib/features/<feature_name>/data/models
    mkdir -p lib/features/<feature_name>/data/repositories
    mkdir -p lib/features/<feature_name>/data/datasources
-   mkdir -p lib/features/<feature_name>/presentation/screens
-   mkdir -p lib/features/<feature_name>/presentation/widgets
-   mkdir -p lib/features/<feature_name>/presentation/providers
+   mkdir -p lib/ui/features/<feature_name>/screens
+   mkdir -p lib/ui/features/<feature_name>/widgets
+   mkdir -p lib/ui/features/<feature_name>/cubits
    ```
 
 3. **Implement the Domain Layer**
