@@ -1,5 +1,5 @@
 import '../../../../core/util/result.dart';
-import '../../repositories/i_wallet_repository.dart';
+import '../../repositories/wallet/i_wallet_repository.dart';
 
 class SaveMnemonicUseCase {
   final IWalletRepository repository;

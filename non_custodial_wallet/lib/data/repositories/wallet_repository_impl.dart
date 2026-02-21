@@ -3,8 +3,8 @@ import '../../core/error/failures.dart';
 import '../../core/util/result.dart';
 import '../datasources/secure_storage_datasource.dart';
 import '../datasources/wallet_datasource.dart';
-import '../../domain/entities/wallet_entity.dart';
-import '../../domain/repositories/i_wallet_repository.dart';
+import '../../domain/entities/wallet/wallet_entity.dart';
+import '../../domain/repositories/wallet/i_wallet_repository.dart';
 
 class WalletRepositoryImpl implements IWalletRepository {
   final WalletDataSource walletDataSource;

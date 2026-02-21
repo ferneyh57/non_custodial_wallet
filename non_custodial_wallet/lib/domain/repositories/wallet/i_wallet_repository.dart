@@ -1,5 +1,5 @@
-import '../../core/util/result.dart';
-import '../entities/wallet_entity.dart';
+import '../../../core/util/result.dart';
+import '../../entities/wallet/wallet_entity.dart';
 
 abstract class IWalletRepository {
   Future<Result<WalletEntity>> createNewWallet();

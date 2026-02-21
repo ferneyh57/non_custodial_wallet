@@ -1,6 +1,6 @@
 import '../../../../core/util/result.dart';
-import '../../entities/wallet_entity.dart';
-import '../../repositories/i_wallet_repository.dart';
+import '../../entities/wallet/wallet_entity.dart';
+import '../../repositories/wallet/i_wallet_repository.dart';
 
 class GetStoredWalletUseCase {
   final IWalletRepository repository;

@@ -1,4 +1,4 @@
-import '../../repositories/i_wallet_repository.dart';
+import '../../repositories/wallet/i_wallet_repository.dart';
 
 class ValidateMnemonicUseCase {
   final IWalletRepository repository;
