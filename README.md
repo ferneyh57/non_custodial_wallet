@@ -1,4 +1,4 @@
-# 📱 Non-Custodial Wallet (Trust Wallet Clone)
+# 📱 Non Wallet
 
 ![Flutter Version](https://img.shields.io/badge/Flutter-%5E3.11.0-blue.svg?style=flat&logo=flutter)
 ![Dart Version](https://img.shields.io/badge/Dart-3.0+-blue.svg?style=flat&logo=dart)
