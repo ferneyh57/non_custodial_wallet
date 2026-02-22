@@ -18,29 +18,13 @@ class SendScreen extends StatelessWidget {
   }
 }
 
-class SendScreenView extends StatefulWidget {
+class SendScreenView extends StatelessWidget {
   const SendScreenView({super.key});
 
   @override
-  State<SendScreenView> createState() => _SendScreenViewState();
-}
-
-class _SendScreenViewState extends State<SendScreenView> {
-  String _selectedNetwork = 'BTC'; // Default network
-  final List<String> _networks = ['BTC', 'ETH'];
-
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
-
-  @override
-  void dispose() {
-    _addressController.dispose();
-    _amountController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SendCubit>();
+
     return BlocConsumer<SendCubit, SendState>(
       listener: (context, state) {
         if (state.txHash != null) {
@@ -96,14 +80,14 @@ class _SendScreenViewState extends State<SendScreenView> {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      value: _selectedNetwork,
+                      value: state.selectedNetwork,
                       isExpanded: true,
                       dropdownColor: const Color(0xFF1E2A32),
                       icon: const Icon(
                         Icons.keyboard_arrow_down,
                         color: Colors.white70,
                       ),
-                      items: _networks.map((String network) {
+                      items: cubit.networks.map((String network) {
                         return DropdownMenuItem<String>(
                           value: network,
                           child: Text(
@@ -117,9 +101,7 @@ class _SendScreenViewState extends State<SendScreenView> {
                       }).toList(),
                       onChanged: (String? newValue) {
                         if (newValue != null) {
-                          setState(() {
-                            _selectedNetwork = newValue;
-                          });
+                          cubit.updateNetwork(newValue);
                         }
                       },
                     ),
@@ -137,7 +119,7 @@ class _SendScreenViewState extends State<SendScreenView> {
                 ),
                 const SizedBox(height: 8),
                 TextField(
-                  controller: _addressController,
+                  controller: cubit.addressController,
                   style: GoogleFonts.poppins(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: context.l10n.addressHint,
@@ -183,7 +165,7 @@ class _SendScreenViewState extends State<SendScreenView> {
                 ),
                 const SizedBox(height: 8),
                 TextField(
-                  controller: _amountController,
+                  controller: cubit.amountController,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
@@ -205,8 +187,7 @@ class _SendScreenViewState extends State<SendScreenView> {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          // TODO: Implement MAX logic
-                          _amountController.text = "100.00"; // Dummy max amount
+                          cubit.setMaxAmount();
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.blueAccent,
@@ -228,13 +209,7 @@ class _SendScreenViewState extends State<SendScreenView> {
                     onPressed: isLoading
                         ? null
                         : () {
-                            final amount =
-                                double.tryParse(_amountController.text) ?? 0.0;
-                            context.read<SendCubit>().sendTransaction(
-                              network: _selectedNetwork,
-                              address: _addressController.text,
-                              amount: amount,
-                            );
+                            cubit.sendTransaction();
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
