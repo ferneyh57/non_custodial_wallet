@@ -26,5 +26,13 @@
         "type": "String"
       }
     }
-  }
+  },
+  "sendButton": "Enviar",
+  "receiveButton": "Recibir",
+  "sendTitle": "Enviar",
+  "networkLabel": "Red",
+  "addressHint": "Dirección Destino",
+  "amountHint": "Monto",
+  "maxButton": "MÁX",
+  "sendAction": "Enviar"
 }

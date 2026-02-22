@@ -26,5 +26,13 @@
         "type": "String"
       }
     }
-  }
+  },
+  "sendButton": "Send",
+  "receiveButton": "Receive",
+  "sendTitle": "Send",
+  "networkLabel": "Network",
+  "addressHint": "Recipient Address",
+  "amountHint": "Amount",
+  "maxButton": "MAX",
+  "sendAction": "Send"
 }

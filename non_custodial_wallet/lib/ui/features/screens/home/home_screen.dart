@@ -11,6 +11,9 @@ import '../../../../domain/entities/market/coin_entity.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/constants/app_constants.dart';
 
+import 'package:go_router/go_router.dart';
+import '../../../core/routes/app_routes.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -67,6 +70,65 @@ class HomeScreen extends StatelessWidget {
                   return Column(
                     children: [
                       BalanceCard(state: state, marketState: marketState),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                context.push(AppRoutes.send);
+                              },
+                              icon: const Icon(Icons.arrow_upward, size: 20),
+                              label: Text(
+                                context.l10n.sendButton,
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blueAccent,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // TODO: Implement receive
+                              },
+                              icon: const Icon(Icons.arrow_downward, size: 20),
+                              label: Text(
+                                context.l10n.receiveButton,
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(
+                                  0xFF2EBD85,
+                                ), // Greenish
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 30),
                       AssetItem(
                         icon: Icons.currency_bitcoin,

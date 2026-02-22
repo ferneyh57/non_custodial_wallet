@@ -75,4 +75,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String error(String message) {
     return 'Error: $message';
   }
+
+  @override
+  String get sendButton => 'Send';
+
+  @override
+  String get receiveButton => 'Receive';
+
+  @override
+  String get sendTitle => 'Send';
+
+  @override
+  String get networkLabel => 'Network';
+
+  @override
+  String get addressHint => 'Recipient Address';
+
+  @override
+  String get amountHint => 'Amount';
+
+  @override
+  String get maxButton => 'MAX';
+
+  @override
+  String get sendAction => 'Send';
 }

@@ -4,19 +4,29 @@ import 'package:web3dart/web3dart.dart';
 import 'package:hex/hex.dart';
 import 'package:bip32/bip32.dart' as bip32;
 import 'dart:typed_data';
-import '../../ui/core/util/app_logger.dart';
-import '../../ui/core/error/exceptions.dart';
+import '../../../ui/core/util/app_logger.dart';
+import '../../../ui/core/error/exceptions.dart';
 
-class WalletDataSource {
+abstract class WalletDataSource {
+  String generateMnemonic();
+  bool validateMnemonic(String mnemonic);
+  Future<String> getEthAddress(String mnemonic);
+  Future<String> getBtcAddress(String mnemonic);
+}
+
+class WalletDataSourceImpl implements WalletDataSource {
+  @override
   String generateMnemonic() {
     return bip39.generateMnemonic();
   }
 
+  @override
   bool validateMnemonic(String mnemonic) {
     return bip39.validateMnemonic(mnemonic);
   }
 
   // ETH Address Derivation
+  @override
   Future<String> getEthAddress(String mnemonic) async {
     try {
       final seed = bip39.mnemonicToSeed(mnemonic);
@@ -32,6 +42,7 @@ class WalletDataSource {
   }
 
   // BTC Address Derivation (using BDK)
+  @override
   Future<String> getBtcAddress(String mnemonic) async {
     try {
       final mnemonicObj = await bdk.Mnemonic.fromString(mnemonic);

@@ -1,8 +1,9 @@
+import 'package:non_custodial_wallet/data/datasources/wallet_datasource.dart';
+
 import '../../ui/core/error/exceptions.dart';
 import '../../ui/core/error/failures.dart';
 import '../../ui/core/util/result.dart';
-import '../datasources/secure_storage_datasource.dart';
-import '../datasources/wallet_datasource.dart';
+import '../datasources/storage/secure_storage_datasource.dart';
 import '../../domain/entities/wallet/wallet_entity.dart';
 import '../../domain/repositories/wallet/i_wallet_repository.dart';
 

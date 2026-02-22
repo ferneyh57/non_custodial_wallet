@@ -223,6 +223,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error: {message}'**
   String error(String message);
+
+  /// No description provided for @sendButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendButton;
+
+  /// No description provided for @receiveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive'**
+  String get receiveButton;
+
+  /// No description provided for @sendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendTitle;
+
+  /// No description provided for @networkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get networkLabel;
+
+  /// No description provided for @addressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient Address'**
+  String get addressHint;
+
+  /// No description provided for @amountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amountHint;
+
+  /// No description provided for @maxButton.
+  ///
+  /// In en, this message translates to:
+  /// **'MAX'**
+  String get maxButton;
+
+  /// No description provided for @sendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendAction;
 }
 
 class _AppLocalizationsDelegate
