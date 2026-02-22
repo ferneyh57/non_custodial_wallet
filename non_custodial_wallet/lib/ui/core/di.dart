@@ -21,6 +21,7 @@ import '../../domain/usecases/transaction/send_transaction_use_case.dart';
 import '../features/cubits/wallet/wallet_cubit.dart';
 import '../features/cubits/market/market_cubit.dart';
 import '../features/cubits/send/send_cubit.dart';
+import '../features/cubits/receive/receive_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -47,6 +48,9 @@ void _initCubits() {
   );
   sl.registerFactory<SendCubit>(
     () => SendCubit(sendTransactionUseCase: sl<SendTransactionUseCase>()),
+  );
+  sl.registerFactory<ReceiveCubit>(
+    () => ReceiveCubit(walletRepository: sl<IWalletRepository>()),
   );
 }
 

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../core/extensions/context_extension.dart';
-import '../../core/mixins/block_explorer_mixin.dart';
+import '../../core/mixins/social_mixin.dart';
 
-class AssetItem extends StatelessWidget with BlockExplorerMixin {
+class AssetItem extends StatelessWidget with SocialMixin {
   final IconData icon;
   final String name;
   final String symbol;
@@ -117,12 +116,10 @@ class AssetItem extends StatelessWidget with BlockExplorerMixin {
               ),
               IconButton(
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: address));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(context.l10n.copiedToClipboard),
-                      duration: const Duration(seconds: 2),
-                    ),
+                  copyToClipboard(
+                    context,
+                    address,
+                    context.l10n.copiedToClipboard,
                   );
                 },
                 icon: const Icon(Icons.copy, color: Colors.white, size: 16),

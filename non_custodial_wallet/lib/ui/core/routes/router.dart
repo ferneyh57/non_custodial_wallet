@@ -6,6 +6,7 @@ import '../../features/screens/home/home_screen.dart';
 import '../../features/screens/auth/create_wallet_screen.dart';
 import '../../features/screens/auth/import_wallet_screen.dart';
 import '../../features/screens/send/send_screen.dart';
+import '../../features/screens/receive/receive_screen.dart';
 import '../../features/screens/splash/splash_screen.dart';
 import '../../features/cubits/wallet/wallet_cubit.dart';
 import 'app_routes.dart';
@@ -73,6 +74,10 @@ GoRouter createRouter(WalletCubit walletCubit) => GoRouter(
     GoRoute(
       path: AppRoutes.send,
       builder: (context, state) => const SendScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.receive,
+      builder: (context, state) => const ReceiveScreen(),
     ),
   ],
 );

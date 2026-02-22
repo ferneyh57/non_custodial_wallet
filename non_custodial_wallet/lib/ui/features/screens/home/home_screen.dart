@@ -103,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                // TODO: Implement receive
+                                context.push(AppRoutes.receive);
                               },
                               icon: const Icon(Icons.arrow_downward, size: 20),
                               label: Text(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 import '../constants/app_constants.dart';
 
-mixin BlockExplorerMixin {
+mixin SocialMixin {
   Future<void> openBlockExplorer(
     BuildContext context,
     String address,
@@ -30,5 +32,26 @@ mixin BlockExplorerMixin {
         );
       }
     }
+  }
+
+  Future<void> copyToClipboard(
+    BuildContext context,
+    String text,
+    String successMessage,
+  ) async {
+    await Clipboard.setData(ClipboardData(text: text));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(successMessage),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<void> shareText(String text, {String? subject}) async {
+    await SharePlus.instance.share(ShareParams(text: text));
   }
 }
