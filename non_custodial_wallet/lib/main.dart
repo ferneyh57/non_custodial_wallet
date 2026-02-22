@@ -37,7 +37,6 @@ void main() async {
       runApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => sl<WalletCubit>()..loadWallet()),
             BlocProvider(create: (context) => sl<MarketCubit>()..loadCoins()),
           ],
           child: const MyApp(),

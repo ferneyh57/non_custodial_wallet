@@ -1,19 +1,19 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:non_custodial_wallet/data/datasources/transaction/transaction_datasource.dart';
-import 'package:non_custodial_wallet/data/datasources/wallet_datasource.dart';
+import 'package:non_custodial_wallet/data/datasources/wallet/wallet_datasource.dart';
+import 'package:non_custodial_wallet/domain/repositories/auth/i_auth_repository.dart';
+import 'package:non_custodial_wallet/domain/usecases/auth/delete_key_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/auth/generate_key_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/auth/get_key_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/auth/save_key_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/auth/validate_key_use_case.dart';
 import '../../data/datasources/storage/secure_storage_datasource.dart';
 import '../../data/datasources/market/coin_gecko_datasource.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
 import '../../data/repositories/market/market_repository_impl.dart';
 import '../../domain/repositories/wallet/i_wallet_repository.dart';
 import '../../domain/repositories/market/i_market_repository.dart';
-import '../../domain/usecases/wallet/create_wallet_use_case.dart';
-import '../../domain/usecases/wallet/import_wallet_use_case.dart';
-import '../../domain/usecases/wallet/get_stored_wallet_use_case.dart';
-import '../../domain/usecases/wallet/logout_wallet_use_case.dart';
-import '../../domain/usecases/wallet/validate_mnemonic_use_case.dart';
-import '../../domain/usecases/wallet/save_mnemonic_use_case.dart';
 import '../../domain/usecases/market/get_coins_market_use_case.dart';
 import '../../domain/repositories/transaction/i_transaction_repository.dart';
 import '../../data/repositories/transaction/transaction_repository_impl.dart';
@@ -33,16 +33,7 @@ Future<void> init() async {
 }
 
 void _initCubits() {
-  sl.registerLazySingleton<WalletCubit>(
-    () => WalletCubit(
-      createWalletUseCase: sl<CreateWalletUseCase>(),
-      importWalletUseCase: sl<ImportWalletUseCase>(),
-      getStoredWalletUseCase: sl<GetStoredWalletUseCase>(),
-      logoutWalletUseCase: sl<LogoutWalletUseCase>(),
-      validateMnemonicUseCase: sl<ValidateMnemonicUseCase>(),
-      saveMnemonicUseCase: sl<SaveMnemonicUseCase>(),
-    ),
-  );
+  sl.registerLazySingleton<WalletCubit>(() => WalletCubit());
   sl.registerLazySingleton<MarketCubit>(
     () => MarketCubit(getCoinsMarketUseCase: sl<GetCoinsMarketUseCase>()),
   );
@@ -55,23 +46,20 @@ void _initCubits() {
 }
 
 void _initUseCases() {
-  sl.registerLazySingleton<CreateWalletUseCase>(
-    () => CreateWalletUseCase(sl<IWalletRepository>()),
+  sl.registerLazySingleton<GenerateKeyUseCase>(
+    () => GenerateKeyUseCase(authRepository: sl<IAuthRepository>()),
   );
-  sl.registerLazySingleton<ImportWalletUseCase>(
-    () => ImportWalletUseCase(sl<IWalletRepository>()),
+  sl.registerLazySingleton<SaveKeyUseCase>(
+    () => SaveKeyUseCase(authRepository: sl<IAuthRepository>()),
   );
-  sl.registerLazySingleton<GetStoredWalletUseCase>(
-    () => GetStoredWalletUseCase(sl<IWalletRepository>()),
+  sl.registerLazySingleton<ValidateKeyUseCase>(
+    () => ValidateKeyUseCase(authRepository: sl<IAuthRepository>()),
   );
-  sl.registerLazySingleton<LogoutWalletUseCase>(
-    () => LogoutWalletUseCase(sl<IWalletRepository>()),
+  sl.registerLazySingleton<DeleteKeyUseCase>(
+    () => DeleteKeyUseCase(authRepository: sl<IAuthRepository>()),
   );
-  sl.registerLazySingleton<ValidateMnemonicUseCase>(
-    () => ValidateMnemonicUseCase(sl<IWalletRepository>()),
-  );
-  sl.registerLazySingleton<SaveMnemonicUseCase>(
-    () => SaveMnemonicUseCase(sl<IWalletRepository>()),
+  sl.registerLazySingleton<GetKeyUseCase>(
+    () => GetKeyUseCase(authRepository: sl<IAuthRepository>()),
   );
   sl.registerLazySingleton<GetCoinsMarketUseCase>(
     () => GetCoinsMarketUseCase(sl<IMarketRepository>()),
@@ -83,10 +71,7 @@ void _initUseCases() {
 
 void _initRepositories() {
   sl.registerLazySingleton<IWalletRepository>(
-    () => WalletRepositoryImpl(
-      walletDataSource: sl<WalletDataSource>(),
-      storageDataSource: sl<SecureStorageDataSource>(),
-    ),
+    () => WalletRepositoryImpl(walletDataSource: sl<WalletDataSource>()),
   );
   sl.registerLazySingleton<IMarketRepository>(
     () => MarketRepositoryImpl(sl<CoinGeckoDataSource>()),

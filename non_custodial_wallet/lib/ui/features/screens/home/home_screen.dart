@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:non_custodial_wallet/ui/features/cubits/auth/auth_cubit.dart';
 import '../../cubits/wallet/wallet_cubit.dart';
 import '../../cubits/wallet/wallet_state.dart';
 import '../../cubits/market/market_cubit.dart';
@@ -33,7 +34,7 @@ class HomeScreen extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  context.read<WalletCubit>().logout();
+                  context.read<AuthCubit>().logout();
                 },
                 icon: const Icon(Icons.logout, color: Colors.white70),
                 tooltip: context.l10n.logoutTooltip,

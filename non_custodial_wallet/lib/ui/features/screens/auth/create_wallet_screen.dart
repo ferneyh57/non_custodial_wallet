@@ -6,21 +6,8 @@ import '../../cubits/wallet/wallet_cubit.dart';
 import '../../cubits/wallet/wallet_state.dart';
 import '../../../core/extensions/context_extension.dart';
 
-class CreateWalletScreen extends StatefulWidget {
+class CreateWalletScreen extends StatelessWidget {
   const CreateWalletScreen({super.key});
-
-  @override
-  State<CreateWalletScreen> createState() => _CreateWalletScreenState();
-}
-
-class _CreateWalletScreenState extends State<CreateWalletScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<WalletCubit>().createNewWallet();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,9 +108,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                   child: ElevatedButton(
                     onPressed: state.wallet?.mnemonic == null
                         ? null
-                        : () async {
-                            await context.read<WalletCubit>().saveMnemonic();
-                          },
+                        : () async {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
