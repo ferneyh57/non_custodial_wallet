@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'send_state.dart';
+import '../../../../domain/usecases/transaction/send_transaction_use_case.dart';
 
 class SendCubit extends Cubit<SendState> {
-  SendCubit() : super(const SendState());
+  final SendTransactionUseCase sendTransactionUseCase;
+
+  SendCubit({required this.sendTransactionUseCase}) : super(const SendState());
 
   Future<void> sendTransaction({
     required String network,
@@ -22,14 +25,20 @@ class SendCubit extends Cubit<SendState> {
     try {
       emit(state.copyWith(isLoading: true, errorMessage: null, txHash: null));
 
-      // Simulate a network delay for sending the transaction
-      await Future.delayed(const Duration(seconds: 2));
+      final result = await sendTransactionUseCase(
+        network: network,
+        address: address,
+        amount: amount,
+      );
 
-      // Simulate a successful transaction hash
-      final fakeTxHash =
-          "0x${DateTime.now().millisecondsSinceEpoch.toRadixString(16)}";
-
-      emit(state.copyWith(isLoading: false, txHash: fakeTxHash));
+      result.fold(
+        (txHash) {
+          emit(state.copyWith(isLoading: false, txHash: txHash));
+        },
+        (failure) {
+          emit(state.copyWith(isLoading: false, errorMessage: failure.message));
+        },
+      );
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
