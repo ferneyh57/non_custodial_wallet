@@ -39,8 +39,7 @@ class AssetItem extends StatelessWidget {
               // Network icon
               CircleAvatar(
                 radius: 22,
-                backgroundColor:
-                    context.colors.primary.withValues(alpha: 0.12),
+                backgroundColor: context.colors.primary.withValues(alpha: 0.12),
                 backgroundImage: NetworkImage(network.iconUrl),
                 onBackgroundImageError: (_, _) {},
                 child: network.iconUrl.isEmpty
@@ -55,7 +54,7 @@ class AssetItem extends StatelessWidget {
                     : null,
               ),
               const SizedBox(width: 14),
-              // Name and symbol
+              // Name and unit price
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +69,7 @@ class AssetItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      network.nativeSymbol,
+                      NumberFormat.currency(symbol: '\$').format(price ?? 0),
                       style: GoogleFonts.poppins(
                         color: context.appColors.subtitleText,
                         fontSize: 13,
@@ -79,7 +78,7 @@ class AssetItem extends StatelessWidget {
                   ],
                 ),
               ),
-              // Balance and USD value
+              // Balance and total USD value
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

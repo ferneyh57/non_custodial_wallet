@@ -90,7 +90,7 @@ class TokenItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 14),
-            // Token name and network
+            // Token name and unit price
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +105,7 @@ class TokenItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    networkName,
+                    NumberFormat.currency(symbol: '\$').format(price ?? 0),
                     style: GoogleFonts.poppins(
                       color: context.appColors.subtitleText,
                       fontSize: 13,
@@ -114,7 +114,7 @@ class TokenItem extends StatelessWidget {
                 ],
               ),
             ),
-            // Balance and USD value
+            // Balance and total USD value
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [

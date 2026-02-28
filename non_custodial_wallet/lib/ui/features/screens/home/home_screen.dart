@@ -15,6 +15,7 @@ import '../../widgets/home_tab_toggle.dart';
 import '../../widgets/home_assets_list.dart';
 import '../../widgets/home_tokens_list.dart';
 import '../../../core/constants/app_networks.dart';
+import '../../../core/constants/app_faucets.dart';
 import '../../../core/extensions/context_extension.dart';
 
 import 'package:go_router/go_router.dart';
@@ -147,12 +148,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           label: context.l10n.swapButton,
                                           enabled: false,
                                         ),
-                                        QuickActionButton(
-                                          icon: Icons.water_drop_rounded,
-                                          label: context.l10n.faucetButton,
-                                          onTap: () => context
-                                              .push(AppRoutes.faucet),
-                                        ),
+                                        if (AppFaucets.isAvailable)
+                                          QuickActionButton(
+                                            icon: Icons.water_drop_rounded,
+                                            label: context.l10n.faucetButton,
+                                            onTap: () => context
+                                                .push(AppRoutes.faucet),
+                                          ),
                                       ],
                                     ),
                                     const SizedBox(height: 24),

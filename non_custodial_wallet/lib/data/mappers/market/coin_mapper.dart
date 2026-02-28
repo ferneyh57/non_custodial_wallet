@@ -4,12 +4,18 @@ import '../../models/market/alchemy_prices_response_model.dart';
 class CoinMapper {
   static const _usdCurrency = 'usd';
 
+  /// Maps API symbols to the symbols used in the app.
+  /// Alchemy uses 'MATIC' but Polygon rebranded to 'POL'.
+  static const _symbolAliases = {
+    'MATIC': 'POL',
+  };
+
   static final _displayNames = {
     'ETH': 'Ethereum',
     'POL': 'Polygon',
     'USDC': 'USD Coin',
     'USDT': 'Tether USD',
-'LINK': 'Chainlink',
+    'LINK': 'Chainlink',
     'WETH': 'Wrapped Ether',
     'EURC': 'Euro Coin',
   };
@@ -22,9 +28,12 @@ class CoinMapper {
 
     if (usdPrice == null) return null;
 
+    final rawSymbol = model.symbol.toUpperCase();
+    final symbol = _symbolAliases[rawSymbol] ?? rawSymbol;
+
     return CoinEntity(
-      symbol: model.symbol.toUpperCase(),
-      name: _displayNames[model.symbol.toUpperCase()] ?? model.symbol,
+      symbol: symbol,
+      name: _displayNames[symbol] ?? model.symbol,
       currentPrice: usdPrice,
     );
   }

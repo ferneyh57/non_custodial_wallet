@@ -36,7 +36,7 @@ class HomeTokensList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 40),
         child: Center(
           child: Text(
-            context.l10n.noTokensFound,
+            context.l10n.noStableFound,
             style: GoogleFonts.poppins(
               color: context.appColors.subtitleText,
               fontSize: 14,

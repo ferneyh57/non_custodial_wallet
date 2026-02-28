@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
@@ -160,6 +161,13 @@ void _initDataSources() {
     baseUrl:
         '${NetworkConstants.alchemyPricesBaseUrl}${NetworkConstants.alchemyApiKey}/',
   ));
+  if (kDebugMode) {
+    alchemyDio.interceptors.add(LogInterceptor(
+      requestHeader: false,
+      requestBody: false,
+      responseBody: true,
+    ));
+  }
   sl.registerLazySingleton<AlchemyPricesDatasource>(
     () => AlchemyPricesDatasource(alchemyDio),
   );

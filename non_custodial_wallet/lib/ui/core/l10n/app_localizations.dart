@@ -278,23 +278,29 @@ abstract class AppLocalizations {
   /// **'Toggle theme'**
   String get themeToggleTooltip;
 
-  /// No description provided for @assetsTab.
+  /// No description provided for @nativeTab.
   ///
   /// In en, this message translates to:
-  /// **'Assets'**
-  String get assetsTab;
+  /// **'Native'**
+  String get nativeTab;
 
-  /// No description provided for @tokensTab.
+  /// No description provided for @stableTab.
   ///
   /// In en, this message translates to:
-  /// **'Tokens'**
-  String get tokensTab;
+  /// **'Stable'**
+  String get stableTab;
 
-  /// No description provided for @noTokensFound.
+  /// No description provided for @noStableFound.
   ///
   /// In en, this message translates to:
-  /// **'No tokens found'**
-  String get noTokensFound;
+  /// **'No stablecoins found'**
+  String get noStableFound;
+
+  /// No description provided for @allNetworksFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allNetworksFilter;
 
   /// No description provided for @swapButton.
   ///

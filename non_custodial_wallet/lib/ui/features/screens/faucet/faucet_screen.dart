@@ -32,10 +32,10 @@ class FaucetScreen extends StatelessWidget {
             const SizedBox(height: 20),
             Expanded(
               child: ListView.separated(
-                itemCount: AppFaucets.sepolia.length,
+                itemCount: AppFaucets.current.length,
                 separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
-                  final faucet = AppFaucets.sepolia[index];
+                  final faucet = AppFaucets.current[index];
                   return FaucetItem(
                     faucet: faucet,
                     onTap: () => _openFaucet(faucet.url),

@@ -1,4 +1,4 @@
-.PHONY: clean get l10n build watch analyze format test run-dev
+.PHONY: clean get l10n build watch analyze format test run-dev run-prod
 
 clean:
 	flutter clean
@@ -25,4 +25,7 @@ test:
 	flutter test
 
 run-dev:
-	flutter run -d chrome --web-renderer canvaskit
+	flutter run --dart-define=ENV=testnet --dart-define=ALCHEMY_API_KEY=$(ALCHEMY_API_KEY)
+
+run-prod:
+	flutter run --dart-define=ENV=mainnet --dart-define=ALCHEMY_API_KEY=$(ALCHEMY_API_KEY)

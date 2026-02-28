@@ -1,3 +1,5 @@
+import 'network_constants.dart';
+
 class FaucetLink {
   final String name;
   final String url;
@@ -11,6 +13,11 @@ class FaucetLink {
 }
 
 class AppFaucets {
+  static bool get isAvailable => AppEnvironment.isTestnet;
+
+  static List<FaucetLink> get current =>
+      AppEnvironment.isTestnet ? sepolia : const [];
+
   static const _ethIcon =
       'https://assets.coingecko.com/coins/images/279/small/ethereum.png';
   static const _usdcIcon =

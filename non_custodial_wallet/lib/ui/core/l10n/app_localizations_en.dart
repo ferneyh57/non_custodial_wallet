@@ -103,13 +103,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeToggleTooltip => 'Toggle theme';
 
   @override
-  String get assetsTab => 'Assets';
+  String get nativeTab => 'Native';
 
   @override
-  String get tokensTab => 'Tokens';
+  String get stableTab => 'Stable';
 
   @override
-  String get noTokensFound => 'No tokens found';
+  String get noStableFound => 'No stablecoins found';
+
+  @override
+  String get allNetworksFilter => 'All';
 
   @override
   String get swapButton => 'Swap';

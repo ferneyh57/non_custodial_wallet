@@ -40,7 +40,11 @@ class TokenCubit extends Cubit<TokenState> {
       allBalances.addAll(networkBalances);
     }
 
-    allBalances.sort((a, b) => a.token.symbol.compareTo(b.token.symbol));
+    allBalances.sort((a, b) {
+      final chainCmp = a.chainId.compareTo(b.chainId);
+      if (chainCmp != 0) return chainCmp;
+      return a.token.symbol.compareTo(b.token.symbol);
+    });
 
     emit(state.copyWith(
       isLoading: false,
