@@ -211,7 +211,7 @@ return $default(_that.selectedNetwork,_that.address,_that.amount,_that.isLoading
 
 
 class _SendState implements SendState {
-  const _SendState({this.selectedNetwork = 'BTC', this.address = '', this.amount = '', this.isLoading = false, this.txHash, this.errorMessage});
+  const _SendState({this.selectedNetwork = 'ETH', this.address = '', this.amount = '', this.isLoading = false, this.txHash, this.errorMessage});
   
 
 @override@JsonKey() final  String selectedNetwork;

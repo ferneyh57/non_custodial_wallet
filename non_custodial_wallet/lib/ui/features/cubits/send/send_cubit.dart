@@ -7,7 +7,7 @@ class SendCubit extends Cubit<SendState> {
   final SendTransactionUseCase sendTransactionUseCase;
   final TextEditingController addressController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-  final List<String> networks = ['BTC', 'ETH'];
+  final List<String> networks = ['ETH'];
 
   SendCubit({required this.sendTransactionUseCase}) : super(const SendState());
 

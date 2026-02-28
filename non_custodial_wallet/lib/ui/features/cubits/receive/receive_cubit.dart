@@ -6,7 +6,7 @@ import 'receive_state.dart';
 class ReceiveCubit extends Cubit<ReceiveState> {
   final IWalletRepository walletRepository;
   final TextEditingController amountController = TextEditingController();
-  final List<String> networks = ['BTC', 'ETH'];
+  final List<String> networks = ['ETH'];
 
   ReceiveCubit({required this.walletRepository}) : super(const ReceiveState());
 
@@ -15,16 +15,8 @@ class ReceiveCubit extends Cubit<ReceiveState> {
   }
 
   Future<void> updateNetwork(String network) async {
-    // Generate/fetch address depending on the selected network.
-    // Assuming the wallet is already loaded on WalletCubit, let's just get the mnemonic or derivation
-    // For now we will mock the address or generate a dummy one since IWalletRepository doesn't expose
-    // getAddress(network) yet. Let's see what methods it has. If it has getMnemonic, we might derive it.
-    // For simplicity or until we add getAddress(network) to IWalletRepository, we'll dummy it.
-
     // TODO: Use real address derivation in a future iteration
-    final String dummyAddress = network == 'BTC'
-        ? "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
-        : "0x71C...976F";
+    const String dummyAddress = "0x71C...976F";
 
     emit(
       state.copyWith(

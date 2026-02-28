@@ -13,7 +13,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get welcomeSubtitle =>
-      'Tu puerta de entrada no-custodial a BTC, ETH y USDC.';
+      'Tu puerta de entrada no-custodial a ETH y USDC.';
 
   @override
   String get createWalletButton => 'CREAR UNA NUEVA BILLETERA';

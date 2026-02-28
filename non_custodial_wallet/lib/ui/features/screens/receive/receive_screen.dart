@@ -14,7 +14,7 @@ class ReceiveScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<ReceiveCubit>()..init('BTC'),
+      create: (_) => sl<ReceiveCubit>()..init('ETH'),
       child: const ReceiveScreenView(),
     );
   }
@@ -34,10 +34,7 @@ class ReceiveScreenView extends StatelessWidget with SocialMixin {
         if (state.amount.isNotEmpty &&
             double.tryParse(state.amount) != null &&
             double.parse(state.amount) > 0) {
-          final prefix = state.selectedNetwork == 'BTC'
-              ? 'bitcoin:'
-              : 'ethereum:';
-          qrData = '$prefix${state.address}?amount=${state.amount}';
+          qrData = 'ethereum:${state.address}?amount=${state.amount}';
         }
 
         return Scaffold(

@@ -1,6 +1,6 @@
 {
   "appName": "Non Wallet",
-  "welcomeSubtitle": "Tu puerta de entrada no-custodial a BTC, ETH y USDC.",
+  "welcomeSubtitle": "Tu puerta de entrada no-custodial a ETH y USDC.",
   "createWalletButton": "CREAR UNA NUEVA BILLETERA",
   "importWalletButton": "Ya tengo una billetera",
   "homeTitle": "Mi Billetera",

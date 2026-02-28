@@ -11,9 +11,4 @@ class WalletRepositoryImpl implements IWalletRepository {
   Future<Result<String>> getEthAddress(String mnemonic) async {
     return walletDataSource.getEthAddress(mnemonic);
   }
-
-  @override
-  Future<Result<String>> getBtcAddress(String mnemonic) async {
-    return walletDataSource.getBtcAddress(mnemonic);
-  }
 }

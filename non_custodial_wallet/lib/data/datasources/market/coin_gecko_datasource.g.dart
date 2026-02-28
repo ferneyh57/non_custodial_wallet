@@ -24,7 +24,7 @@ class _CoinGeckoDataSource implements CoinGeckoDataSource {
   @override
   Future<List<CoinModel>> getCoinsMarket({
     String vsCurrency = "usd",
-    String ids = "bitcoin,ethereum,usd-coin",
+    String ids = "ethereum,usd-coin",
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{

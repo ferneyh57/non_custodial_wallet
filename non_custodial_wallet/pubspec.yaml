@@ -40,7 +40,7 @@ dependencies:
   bip39: ^1.0.6
   flutter_secure_storage: ^9.2.2
   web3dart: ^2.7.3
-  bdk_flutter: ^0.31.1
+
   bip32: ^2.0.0
   hex: ^0.2.0
   google_fonts: ^6.2.1

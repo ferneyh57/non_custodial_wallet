@@ -1,7 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource.dart';
+import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource_impl.dart';
 import 'package:non_custodial_wallet/data/datasources/transaction/transaction_datasource.dart';
 import 'package:non_custodial_wallet/data/datasources/wallet/wallet_datasource.dart';
+import 'package:non_custodial_wallet/data/repositories/auth/auth_repository_impl.dart';
 import 'package:non_custodial_wallet/domain/repositories/auth/i_auth_repository.dart';
 import 'package:non_custodial_wallet/domain/usecases/auth/delete_key_use_case.dart';
 import 'package:non_custodial_wallet/domain/usecases/auth/generate_key_use_case.dart';
@@ -33,7 +36,15 @@ Future<void> init() async {
 }
 
 void _initCubits() {
-  sl.registerLazySingleton<WalletCubit>(() => WalletCubit());
+  sl.registerLazySingleton<WalletCubit>(
+    () => WalletCubit(
+      generateKeyUseCase: sl<GenerateKeyUseCase>(),
+      saveKeyUseCase: sl<SaveKeyUseCase>(),
+      getKeyUseCase: sl<GetKeyUseCase>(),
+      deleteKeyUseCase: sl<DeleteKeyUseCase>(),
+      walletRepository: sl<IWalletRepository>(),
+    ),
+  );
   sl.registerLazySingleton<MarketCubit>(
     () => MarketCubit(getCoinsMarketUseCase: sl<GetCoinsMarketUseCase>()),
   );
@@ -70,6 +81,9 @@ void _initUseCases() {
 }
 
 void _initRepositories() {
+  sl.registerLazySingleton<IAuthRepository>(
+    () => AuthRepositoryImpl(authDataSource: sl<AuthDataSource>()),
+  );
   sl.registerLazySingleton<IWalletRepository>(
     () => WalletRepositoryImpl(walletDataSource: sl<WalletDataSource>()),
   );
@@ -86,6 +100,10 @@ void _initDataSources() {
 
   sl.registerLazySingleton<SecureStorageDataSource>(
     () => SecureStorageDataSource(),
+  );
+
+  sl.registerLazySingleton<AuthDataSource>(
+    () => AuthDataSourceImpl(storageDataSource: sl<SecureStorageDataSource>()),
   );
 
   sl.registerLazySingleton<Dio>(() => Dio());

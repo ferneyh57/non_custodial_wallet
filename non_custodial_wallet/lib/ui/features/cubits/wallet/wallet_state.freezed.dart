@@ -209,7 +209,7 @@ return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthoriz
 
 
 class _WalletState implements WalletState {
-  const _WalletState({this.isLoading = false, this.wallet, this.errorMessage, this.isAuthorized = false});
+  const _WalletState({this.isLoading = true, this.wallet, this.errorMessage, this.isAuthorized = false});
   
 
 @override@JsonKey() final  bool isLoading;

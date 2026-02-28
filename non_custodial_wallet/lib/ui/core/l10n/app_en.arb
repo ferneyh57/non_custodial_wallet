@@ -1,6 +1,6 @@
 {
   "appName": "Non Wallet",
-  "welcomeSubtitle": "Your non-custodial gateway to BTC, ETH, and USDC.",
+  "welcomeSubtitle": "Your non-custodial gateway to ETH and USDC.",
   "createWalletButton": "CREATE A NEW WALLET",
   "importWalletButton": "I already have a wallet",
   "homeTitle": "My Wallet",

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:non_custodial_wallet/ui/features/cubits/auth/auth_cubit.dart';
 import '../../cubits/wallet/wallet_cubit.dart';
 import '../../cubits/wallet/wallet_state.dart';
 import '../../cubits/market/market_cubit.dart';
@@ -34,7 +33,7 @@ class HomeScreen extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  context.read<AuthCubit>().logout();
+                  context.read<WalletCubit>().logout();
                 },
                 icon: const Icon(Icons.logout, color: Colors.white70),
                 tooltip: context.l10n.logoutTooltip,
@@ -46,16 +45,10 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: BlocBuilder<MarketCubit, MarketState>(
                 builder: (context, marketState) {
-                  CoinEntity? btc;
                   CoinEntity? eth;
                   CoinEntity? usdc;
 
                   try {
-                    btc = marketState.coins.firstWhere(
-                      (c) =>
-                          c.symbol.toLowerCase() ==
-                          AppConstants.bitcoinSymbol.toLowerCase(),
-                    );
                     eth = marketState.coins.firstWhere(
                       (c) =>
                           c.symbol.toLowerCase() ==
@@ -131,16 +124,6 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 30),
-                      AssetItem(
-                        icon: Icons.currency_bitcoin,
-                        name: AppConstants.bitcoinName,
-                        symbol: AppConstants.bitcoinSymbol,
-                        address: state.wallet?.btcAddress ?? 'Loading...',
-                        color: Colors.orange,
-                        imageUrl: btc?.image,
-                        price: btc?.currentPrice,
-                      ),
-                      const SizedBox(height: 15),
                       AssetItem(
                         icon: Icons.account_balance_wallet,
                         name: AppConstants.ethereumName,

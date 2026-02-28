@@ -5,7 +5,7 @@ part 'receive_state.freezed.dart';
 @freezed
 abstract class ReceiveState with _$ReceiveState {
   const factory ReceiveState({
-    @Default('BTC') String selectedNetwork,
+    @Default('ETH') String selectedNetwork,
     @Default('') String address,
     @Default('') String amount,
     String? errorMessage,

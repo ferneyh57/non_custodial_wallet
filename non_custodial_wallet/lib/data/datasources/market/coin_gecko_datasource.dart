@@ -11,6 +11,6 @@ abstract class CoinGeckoDataSource {
   @GET("coins/markets")
   Future<List<CoinModel>> getCoinsMarket({
     @Query("vs_currency") String vsCurrency = "usd",
-    @Query("ids") String ids = "bitcoin,ethereum,usd-coin",
+    @Query("ids") String ids = "ethereum,usd-coin",
   });
 }

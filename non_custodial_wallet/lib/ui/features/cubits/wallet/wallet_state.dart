@@ -6,7 +6,7 @@ part 'wallet_state.freezed.dart';
 @freezed
 abstract class WalletState with _$WalletState {
   const factory WalletState({
-    @Default(false) bool isLoading,
+    @Default(true) bool isLoading,
     WalletEntity? wallet,
     String? errorMessage,
     @Default(false) bool isAuthorized,

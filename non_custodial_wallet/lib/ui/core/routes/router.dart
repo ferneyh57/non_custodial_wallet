@@ -19,8 +19,8 @@ GoRouter createRouter(WalletCubit walletCubit) => GoRouter(
     final bool isLoading = walletCubit.state.isLoading;
     final String location = state.matchedLocation;
 
-    // During loading, we stay on the splash screen
-    if (isLoading && location == AppRoutes.splash) return null;
+    // During loading, stay on the current screen (don't redirect)
+    if (isLoading) return null;
 
     if (isAuthorized) {
       // If authorized, any attempt to go to onboarding screens redirects to home

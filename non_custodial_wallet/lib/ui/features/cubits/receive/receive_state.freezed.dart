@@ -209,7 +209,7 @@ return $default(_that.selectedNetwork,_that.address,_that.amount,_that.errorMess
 
 
 class _ReceiveState implements ReceiveState {
-  const _ReceiveState({this.selectedNetwork = 'BTC', this.address = '', this.amount = '', this.errorMessage});
+  const _ReceiveState({this.selectedNetwork = 'ETH', this.address = '', this.amount = '', this.errorMessage});
   
 
 @override@JsonKey() final  String selectedNetwork;

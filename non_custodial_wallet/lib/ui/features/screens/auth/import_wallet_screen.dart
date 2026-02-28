@@ -72,7 +72,10 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                     height: 55,
                     child: ElevatedButton(
                       onPressed: () {
-
+                        final mnemonic = _controller.text.trim();
+                        if (mnemonic.isNotEmpty) {
+                          context.read<WalletCubit>().importWallet(mnemonic);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,

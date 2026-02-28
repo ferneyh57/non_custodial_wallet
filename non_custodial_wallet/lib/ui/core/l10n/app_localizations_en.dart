@@ -12,8 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'Non Wallet';
 
   @override
-  String get welcomeSubtitle =>
-      'Your non-custodial gateway to BTC, ETH, and USDC.';
+  String get welcomeSubtitle => 'Your non-custodial gateway to ETH and USDC.';
 
   @override
   String get createWalletButton => 'CREATE A NEW WALLET';
