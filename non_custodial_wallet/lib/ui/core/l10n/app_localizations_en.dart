@@ -103,10 +103,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeToggleTooltip => 'Toggle theme';
 
   @override
-  String get nativeTab => 'Native';
+  String get networkTab => 'Networks';
 
   @override
-  String get stableTab => 'Token';
+  String get stableTab => 'Tokens';
 
   @override
   String get noStableFound => 'No tokens found';

@@ -278,16 +278,16 @@ abstract class AppLocalizations {
   /// **'Toggle theme'**
   String get themeToggleTooltip;
 
-  /// No description provided for @nativeTab.
+  /// No description provided for @networkTab.
   ///
   /// In en, this message translates to:
-  /// **'Native'**
-  String get nativeTab;
+  /// **'Networks'**
+  String get networkTab;
 
   /// No description provided for @stableTab.
   ///
   /// In en, this message translates to:
-  /// **'Token'**
+  /// **'Tokens'**
   String get stableTab;
 
   /// No description provided for @noStableFound.
