@@ -1,43 +1,38 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../ui/core/error/exceptions.dart';
 import '../../../ui/core/util/app_logger.dart';
 
+/// TODO: Replace with flutter_secure_storage when proper signing is configured.
+/// This is a temporary bypass using shared_preferences for local development.
 class SecureStorageDataSource {
-  final _storage = const FlutterSecureStorage();
-
   static const String _mnemonicKey = 'mnemonic';
 
   Future<void> saveMnemonic(String mnemonic) async {
     try {
-      await _storage.write(key: _mnemonicKey, value: mnemonic);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_mnemonicKey, mnemonic);
     } catch (e, stackTrace) {
-      AppLogger.error('Error saving mnemonic to secure storage', e, stackTrace);
+      AppLogger.error('Error saving mnemonic to storage', e, stackTrace);
       throw SecureStorageException('Failed to save mnemonic');
     }
   }
 
   Future<String?> getMnemonic() async {
     try {
-      return await _storage.read(key: _mnemonicKey);
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(_mnemonicKey);
     } catch (e, stackTrace) {
-      AppLogger.error(
-        'Error reading mnemonic from secure storage',
-        e,
-        stackTrace,
-      );
+      AppLogger.error('Error reading mnemonic from storage', e, stackTrace);
       throw SecureStorageException('Failed to read mnemonic');
     }
   }
 
   Future<void> deleteMnemonic() async {
     try {
-      await _storage.delete(key: _mnemonicKey);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_mnemonicKey);
     } catch (e, stackTrace) {
-      AppLogger.error(
-        'Error deleting mnemonic from secure storage',
-        e,
-        stackTrace,
-      );
+      AppLogger.error('Error deleting mnemonic from storage', e, stackTrace);
       throw SecureStorageException('Failed to delete mnemonic');
     }
   }
