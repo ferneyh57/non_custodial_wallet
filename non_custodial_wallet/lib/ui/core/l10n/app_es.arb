@@ -34,5 +34,6 @@
   "addressHint": "Dirección Destino",
   "amountHint": "Monto",
   "maxButton": "MÁX",
-  "sendAction": "Enviar"
+  "sendAction": "Enviar",
+  "themeToggleTooltip": "Cambiar tema"
 }

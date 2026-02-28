@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../cubits/wallet/wallet_cubit.dart';
 import '../../cubits/wallet/wallet_state.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -14,84 +15,177 @@ class ImportWalletScreen extends StatefulWidget {
 
 class _ImportWalletScreenState extends State<ImportWalletScreen> {
   final TextEditingController _controller = TextEditingController();
+  int _wordCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_updateWordCount);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_updateWordCount);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _updateWordCount() {
+    final text = _controller.text.trim();
+    setState(() {
+      _wordCount = text.isEmpty ? 0 : text.split(RegExp(r'\s+')).length;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isValidCount = _wordCount == 12 || _wordCount == 24;
+
     return BlocConsumer<WalletCubit, WalletState>(
       listener: (context, state) {
         if (state.errorMessage != null && !state.isLoading) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage!),
+              backgroundColor: context.colors.error,
+            ),
+          );
         }
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: const Color(0xFF0F2027),
           appBar: AppBar(
             title: Text(
               context.l10n.importWalletTitle,
-              style: GoogleFonts.poppins(),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
           ),
           body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   context.l10n.importWalletInstructions,
                   style: GoogleFonts.poppins(
-                    color: Colors.white70,
+                    color: context.appColors.subtitleText,
                     fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 20),
-                TextField(
-                  controller: _controller,
-                  maxLines: 4,
-                  style: GoogleFonts.poppins(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: context.l10n.mnemonicHint,
-                    hintStyle: const TextStyle(color: Colors.white30),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.05),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.white12),
+                // Mnemonic Input Card
+                Container(
+                  decoration: BoxDecoration(
+                    color: context.appColors.cardColor,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: context.appColors.cardBorder),
+                  ),
+                  child: TextField(
+                    controller: _controller,
+                    maxLines: 4,
+                    style: GoogleFonts.poppins(
+                      color: context.colors.onSurface,
+                      fontSize: 15,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: context.l10n.mnemonicHint,
+                      filled: false,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.all(16),
                     ),
                   ),
                 ),
+                const SizedBox(height: 12),
+                // Word count indicator
+                Row(
+                  children: [
+                    Icon(
+                      isValidCount
+                          ? Icons.check_circle_rounded
+                          : Icons.info_outline_rounded,
+                      size: 16,
+                      color: isValidCount
+                          ? context.colors.secondary
+                          : context.appColors.hintText,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '$_wordCount/12 words',
+                      style: GoogleFonts.poppins(
+                        color: isValidCount
+                            ? context.colors.secondary
+                            : context.appColors.hintText,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
                 const Spacer(),
                 if (state.isLoading)
-                  const CircularProgressIndicator()
+                  const Center(child: CircularProgressIndicator())
                 else
+                  // Import Button (gradient)
                   SizedBox(
                     width: double.infinity,
                     height: 55,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        final mnemonic = _controller.text.trim();
-                        if (mnemonic.isNotEmpty) {
-                          context.read<WalletCubit>().importWallet(mnemonic);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: isValidCount
+                            ? LinearGradient(
+                                colors: [
+                                  context.appColors.balanceCardGradientStart,
+                                  context.appColors.balanceCardGradientEnd,
+                                ],
+                              )
+                            : null,
+                        color: isValidCount
+                            ? null
+                            : context.appColors.containerFill,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: isValidCount
+                            ? [
+                                BoxShadow(
+                                  color: context.colors.primary
+                                      .withValues(alpha: 0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
+                            : null,
                       ),
-                      child: Text(
-                        context.l10n.importButton,
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                      child: ElevatedButton(
+                        onPressed: isValidCount
+                            ? () {
+                                final mnemonic = _controller.text.trim();
+                                context
+                                    .read<WalletCubit>()
+                                    .importWallet(mnemonic);
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          foregroundColor: Colors.white,
+                          disabledForegroundColor:
+                              context.appColors.hintText,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Text(
+                          context.l10n.importButton,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  )
+                      .animate()
+                      .fadeIn(delay: 200.ms, duration: 400.ms)
+                      .slideY(begin: 0.2, delay: 200.ms, duration: 400.ms),
               ],
             ),
           ),

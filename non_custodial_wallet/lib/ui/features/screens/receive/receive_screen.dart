@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../../ui/core/extensions/context_extension.dart';
-import '../../../../ui/core/mixins/social_mixin.dart';
 import '../../../../ui/core/di.dart';
 import '../../cubits/receive/receive_cubit.dart';
 import '../../cubits/receive/receive_state.dart';
+import '../../widgets/network_dropdown.dart';
 
 class ReceiveScreen extends StatelessWidget {
   const ReceiveScreen({super.key});
@@ -14,13 +16,13 @@ class ReceiveScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<ReceiveCubit>()..loadAddress('ETH'),
+      create: (_) => sl<ReceiveCubit>()..loadAddress(),
       child: const ReceiveScreenView(),
     );
   }
 }
 
-class ReceiveScreenView extends StatelessWidget with SocialMixin {
+class ReceiveScreenView extends StatelessWidget {
   const ReceiveScreenView({super.key});
 
   @override
@@ -29,7 +31,6 @@ class ReceiveScreenView extends StatelessWidget with SocialMixin {
 
     return BlocBuilder<ReceiveCubit, ReceiveState>(
       builder: (context, state) {
-        // Construct QR Data: address + ?amount=value if amount is set
         String qrData = state.address;
         if (state.amount.isNotEmpty &&
             double.tryParse(state.amount) != null &&
@@ -37,15 +38,16 @@ class ReceiveScreenView extends StatelessWidget with SocialMixin {
           qrData = 'ethereum:${state.address}?amount=${state.amount}';
         }
 
+        final truncatedAddress = state.address.length > 10
+            ? '${state.address.substring(0, 6)}...${state.address.substring(state.address.length - 4)}'
+            : state.address;
+
         return Scaffold(
-          backgroundColor: const Color(0xFF0F2027),
           appBar: AppBar(
             title: Text(
-              context.l10n.receiveButton, // Reuse receive translation
+              context.l10n.receiveButton,
               style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
             centerTitle: true,
           ),
           body: SingleChildScrollView(
@@ -59,112 +61,119 @@ class ReceiveScreenView extends StatelessWidget with SocialMixin {
                   child: Text(
                     context.l10n.networkLabel,
                     style: GoogleFonts.poppins(
-                      color: Colors.white70,
+                      color: context.appColors.subtitleText,
                       fontSize: 14,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
                 const SizedBox(height: 8),
+                NetworkDropdown(
+                  value: state.selectedNetwork,
+                  networks: cubit.networks,
+                  onChanged: (network) {
+                    if (network != null) cubit.updateNetwork(network);
+                  },
+                ),
+                const SizedBox(height: 32),
+
+                // QR Code Card
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white12),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: state.selectedNetwork,
-                      isExpanded: true,
-                      dropdownColor: const Color(0xFF1E2A32),
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.white70,
+                    color: context.appColors.cardColor,
+                    borderRadius: BorderRadius.circular(28),
+                    border: Border.all(color: context.appColors.cardBorder),
+                    boxShadow: [
+                      BoxShadow(
+                        color: context.colors.primary.withValues(alpha: 0.08),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
                       ),
-                      items: cubit.networks.map((String network) {
-                        return DropdownMenuItem<String>(
-                          value: network,
-                          child: Text(
-                            network,
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: QrImageView(
+                          data: qrData.isNotEmpty ? qrData : ' ',
+                          version: QrVersions.auto,
+                          size: 200.0,
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // Truncated address with copy button
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            truncatedAddress,
                             style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                              color: context.colors.onSurface,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.5,
                             ),
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          cubit.updateNetwork(newValue);
-                        }
-                      },
-                    ),
+                          const SizedBox(width: 8),
+                          InkWell(
+                            onTap: () => _copyAddress(context, state.address),
+                            borderRadius: BorderRadius.circular(8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Icon(
+                                Icons.copy_rounded,
+                                color: context.colors.primary,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 32),
 
-                // QR Code Container
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: QrImageView(
-                    data: qrData.isNotEmpty ? qrData : ' ',
-                    version: QrVersions.auto,
-                    size: 200.0,
-                    backgroundColor: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Address Text
-                Text(
-                  state.address,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 40),
-
-                // Action Buttons
+                // Action Buttons as Cards
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildActionButton(
-                      icon: Icons.copy,
-                      label: "Copy",
-                      onTap: () {
-                        if (state.address.isNotEmpty) {
-                          copyToClipboard(
-                            context,
-                            state.address,
-                            context.l10n.copiedToClipboard,
-                          );
-                        }
-                      },
+                    Expanded(
+                      child: ReceiveActionCard(
+                        icon: Icons.copy_rounded,
+                        label: context.l10n.copyTooltip,
+                        onTap: () => _copyAddress(context, state.address),
+                      ),
                     ),
-                    _buildActionButton(
-                      icon: Icons.edit,
-                      label: "Set Amount",
-                      onTap: () =>
-                          _showAmountDialog(context, cubit, state.amount),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ReceiveActionCard(
+                        icon: Icons.edit_rounded,
+                        label: context.l10n.amountHint,
+                        onTap: () =>
+                            _showAmountDialog(context, cubit, state.amount),
+                      ),
                     ),
-                    _buildActionButton(
-                      icon: Icons.share,
-                      label: "Share",
-                      onTap: () {
-                        if (state.address.isNotEmpty) {
-                          shareText(
-                            state.address,
-                            subject: "My Wallet Address",
-                          );
-                        }
-                      },
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ReceiveActionCard(
+                        icon: Icons.share_rounded,
+                        label: context.l10n.sendButton == 'Send'
+                            ? 'Share'
+                            : 'Compartir',
+                        onTap: () {
+                          if (state.address.isNotEmpty) {
+                            SharePlus.instance
+                                .share(ShareParams(text: state.address));
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -176,33 +185,14 @@ class ReceiveScreenView extends StatelessWidget with SocialMixin {
     );
   }
 
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.blueAccent.withOpacity(0.2),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: Colors.blueAccent, size: 24),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: GoogleFonts.poppins(color: Colors.white70, fontSize: 12),
-            ),
-          ],
-        ),
+  void _copyAddress(BuildContext context, String address) {
+    if (address.isEmpty) return;
+    Clipboard.setData(ClipboardData(text: address));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(context.l10n.copiedToClipboard),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -217,20 +207,23 @@ class ReceiveScreenView extends StatelessWidget with SocialMixin {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          backgroundColor: const Color(0xFF1E2A32),
+          backgroundColor: context.colors.surfaceContainerHighest,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Text(
-            "Set Amount",
-            style: GoogleFonts.poppins(color: Colors.white),
+            context.l10n.amountHint,
+            style: GoogleFonts.poppins(color: context.colors.onSurface),
           ),
           content: TextField(
             controller: cubit.amountController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            style: GoogleFonts.poppins(color: Colors.white),
+            keyboardType:
+                const TextInputType.numberWithOptions(decimal: true),
+            style: GoogleFonts.poppins(color: context.colors.onSurface),
             decoration: InputDecoration(
-              hintText: "0.00",
-              hintStyle: GoogleFonts.poppins(color: Colors.white38),
+              hintText: '0.00',
               filled: true,
-              fillColor: Colors.white.withOpacity(0.05),
+              fillColor: context.appColors.containerFill,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
@@ -241,13 +234,66 @@ class ReceiveScreenView extends StatelessWidget with SocialMixin {
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
               child: Text(
-                "Close",
-                style: GoogleFonts.poppins(color: Colors.blueAccent),
+                'OK',
+                style: GoogleFonts.poppins(color: context.colors.primary),
               ),
             ),
           ],
         );
       },
+    );
+  }
+}
+
+class ReceiveActionCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const ReceiveActionCard({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: context.appColors.cardColor,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: context.appColors.cardBorder),
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: context.colors.primary.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: context.colors.primary, size: 22),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                style: GoogleFonts.poppins(
+                  color: context.appColors.subtitleText,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

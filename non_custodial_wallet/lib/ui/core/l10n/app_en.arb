@@ -34,5 +34,6 @@
   "addressHint": "Recipient Address",
   "amountHint": "Amount",
   "maxButton": "MAX",
-  "sendAction": "Send"
+  "sendAction": "Send",
+  "themeToggleTooltip": "Toggle theme"
 }

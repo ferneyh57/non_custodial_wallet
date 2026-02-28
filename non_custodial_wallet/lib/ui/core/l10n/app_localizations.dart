@@ -271,6 +271,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send'**
   String get sendAction;
+
+  /// No description provided for @themeToggleTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle theme'**
+  String get themeToggleTooltip;
 }
 
 class _AppLocalizationsDelegate

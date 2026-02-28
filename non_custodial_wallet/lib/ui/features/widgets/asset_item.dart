@@ -1,137 +1,115 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import '../../../domain/entities/network/network_entity.dart';
 import '../../core/extensions/context_extension.dart';
-import '../../core/mixins/social_mixin.dart';
 
-class AssetItem extends StatelessWidget with SocialMixin {
-  final IconData icon;
-  final String name;
-  final String symbol;
-  final String address;
-  final Color color;
-  final String? imageUrl;
-  final double? price;
+class AssetItem extends StatelessWidget {
+  final NetworkEntity network;
   final double? balance;
+  final double? price;
+  final VoidCallback? onTap;
 
   const AssetItem({
     super.key,
-    required this.icon,
-    required this.name,
-    required this.symbol,
-    required this.address,
-    required this.color,
-    this.imageUrl,
-    this.price,
+    required this.network,
     this.balance,
+    this.price,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    final usdValue = (balance ?? 0) * (price ?? 0);
+
+    return Material(
+      color: context.appColors.cardColor,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: context.appColors.cardBorder),
+          ),
+          child: Row(
             children: [
+              // Network icon
               CircleAvatar(
-                backgroundColor: color.withValues(alpha: 0.2),
-                backgroundImage: imageUrl != null
-                    ? NetworkImage(imageUrl!)
+                radius: 22,
+                backgroundColor:
+                    context.colors.primary.withValues(alpha: 0.12),
+                backgroundImage: NetworkImage(network.iconUrl),
+                onBackgroundImageError: (_, _) {},
+                child: network.iconUrl.isEmpty
+                    ? Text(
+                        network.nativeSymbol[0],
+                        style: GoogleFonts.poppins(
+                          color: context.colors.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      )
                     : null,
-                child: imageUrl == null ? Icon(icon, color: color) : null,
               ),
-              const SizedBox(width: 15),
+              const SizedBox(width: 14),
+              // Name and symbol
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      network.shortName,
                       style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        color: context.colors.onSurface,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Text(
-                      symbol,
+                      network.nativeSymbol,
                       style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 12,
+                        color: context.appColors.subtitleText,
+                        fontSize: 13,
                       ),
                     ),
                   ],
                 ),
               ),
+              // Balance and USD value
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    balance?.toStringAsFixed(6) ?? '0.00',
+                    balance?.toStringAsFixed(4) ?? '0.00',
                     style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      color: context.colors.onSurface,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
                     ),
                   ),
-                  if (price != null)
-                    Text(
-                      NumberFormat.currency(symbol: '\$').format(price),
-                      style: GoogleFonts.poppins(
-                        color: Colors.white70,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  const SizedBox(height: 2),
+                  Text(
+                    NumberFormat.currency(symbol: '\$').format(usdValue),
+                    style: GoogleFonts.poppins(
+                      color: context.appColors.subtitleText,
+                      fontSize: 13,
                     ),
+                  ),
                 ],
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          const Divider(color: Colors.white10),
-          const SizedBox(height: 5),
-          Text(
-            context.l10n.addressLabel,
-            style: GoogleFonts.poppins(color: Colors.white60, fontSize: 10),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () => openBlockExplorer(context, address, symbol),
-                  child: Text(
-                    address,
-                    style: GoogleFonts.poppins(
-                      color: Colors.blueAccent,
-                      fontSize: 11,
-                      decoration: TextDecoration.underline,
-                      decorationColor: Colors.blueAccent,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  copyToClipboard(
-                    context,
-                    address,
-                    context.l10n.copiedToClipboard,
-                  );
-                },
-                icon: const Icon(Icons.copy, color: Colors.white, size: 16),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                tooltip: context.l10n.copyTooltip,
+              const SizedBox(width: 4),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: context.appColors.hintText,
+                size: 20,
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

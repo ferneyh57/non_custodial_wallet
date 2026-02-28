@@ -4,8 +4,9 @@ class NetworkConstants {
     defaultValue: '',
   );
 
-  static String get sepoliaRpcUrl =>
-      'https://eth-sepolia.g.alchemy.com/v2/$alchemyApiKey';
+  static const String alchemyPricesBaseUrl =
+      'https://api.g.alchemy.com/prices/v1/';
 
-  static const int sepoliaChainId = 11155111;
+  static String rpcUrl(String prefix) =>
+      'https://$prefix.g.alchemy.com/v2/$alchemyApiKey';
 }

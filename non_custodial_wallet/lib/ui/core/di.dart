@@ -6,6 +6,7 @@ import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource.dart'
 import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource_impl.dart';
 import 'package:non_custodial_wallet/data/datasources/transaction/transaction_datasource.dart';
 import 'package:non_custodial_wallet/data/datasources/wallet/wallet_datasource.dart';
+import 'package:non_custodial_wallet/data/datasources/market/alchemy_prices_datasource.dart';
 import 'package:non_custodial_wallet/data/repositories/auth/auth_repository_impl.dart';
 import 'package:non_custodial_wallet/domain/repositories/auth/i_auth_repository.dart';
 import 'package:non_custodial_wallet/domain/usecases/auth/delete_key_use_case.dart';
@@ -14,7 +15,6 @@ import 'package:non_custodial_wallet/domain/usecases/auth/get_key_use_case.dart'
 import 'package:non_custodial_wallet/domain/usecases/auth/save_key_use_case.dart';
 import 'package:non_custodial_wallet/domain/usecases/auth/validate_key_use_case.dart';
 import '../../data/datasources/storage/secure_storage_datasource.dart';
-import '../../data/datasources/market/coin_gecko_datasource.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
 import '../../data/repositories/market/market_repository_impl.dart';
 import '../../domain/repositories/wallet/i_wallet_repository.dart';
@@ -29,7 +29,9 @@ import '../features/cubits/wallet/wallet_cubit.dart';
 import '../features/cubits/market/market_cubit.dart';
 import '../features/cubits/send/send_cubit.dart';
 import '../features/cubits/receive/receive_cubit.dart';
+import '../features/cubits/theme/theme_cubit.dart';
 import '../core/constants/network_constants.dart';
+import '../core/constants/app_networks.dart';
 
 final sl = GetIt.instance;
 
@@ -60,14 +62,17 @@ void _initCubits() {
       getKeyUseCase: sl<GetKeyUseCase>(),
       getBalanceUseCase: sl<GetBalanceUseCase>(),
       getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+      networks: AppNetworks.all,
     ),
   );
   sl.registerFactory<ReceiveCubit>(
     () => ReceiveCubit(
       getKeyUseCase: sl<GetKeyUseCase>(),
       getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+      networks: AppNetworks.all,
     ),
   );
+  sl.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
 }
 
 void _initUseCases() {
@@ -108,7 +113,7 @@ void _initRepositories() {
     () => WalletRepositoryImpl(walletDataSource: sl<WalletDataSource>()),
   );
   sl.registerLazySingleton<IMarketRepository>(
-    () => MarketRepositoryImpl(sl<CoinGeckoDataSource>()),
+    () => MarketRepositoryImpl(sl<AlchemyPricesDatasource>()),
   );
   sl.registerLazySingleton<ITransactionRepository>(
     () => TransactionRepositoryImpl(dataSource: sl<ITransactionDataSource>()),
@@ -116,12 +121,15 @@ void _initRepositories() {
 }
 
 void _initDataSources() {
-  sl.registerLazySingleton<Web3Client>(
-    () => Web3Client(NetworkConstants.sepoliaRpcUrl, http.Client()),
-  );
+  final httpClient = http.Client();
+  final clientsMap = {
+    for (final network in AppNetworks.all)
+      network.chainId: Web3Client(network.rpcUrl, httpClient),
+  };
+  sl.registerLazySingleton<Map<int, Web3Client>>(() => clientsMap);
 
   sl.registerLazySingleton<WalletDataSource>(
-    () => WalletDataSourceImpl(web3client: sl<Web3Client>()),
+    () => WalletDataSourceImpl(clients: sl<Map<int, Web3Client>>()),
   );
 
   sl.registerLazySingleton<SecureStorageDataSource>(
@@ -132,13 +140,15 @@ void _initDataSources() {
     () => AuthDataSourceImpl(storageDataSource: sl<SecureStorageDataSource>()),
   );
 
-  sl.registerLazySingleton<Dio>(() => Dio());
-
-  sl.registerLazySingleton<CoinGeckoDataSource>(
-    () => CoinGeckoDataSource(sl<Dio>()),
+  final alchemyDio = Dio(BaseOptions(
+    baseUrl:
+        '${NetworkConstants.alchemyPricesBaseUrl}${NetworkConstants.alchemyApiKey}/',
+  ));
+  sl.registerLazySingleton<AlchemyPricesDatasource>(
+    () => AlchemyPricesDatasource(alchemyDio),
   );
 
   sl.registerLazySingleton<ITransactionDataSource>(
-    () => TransactionDataSourceImpl(web3client: sl<Web3Client>()),
+    () => TransactionDataSourceImpl(clients: sl<Map<int, Web3Client>>()),
   );
 }

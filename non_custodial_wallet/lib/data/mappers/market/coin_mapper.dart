@@ -1,19 +1,30 @@
 import '../../../domain/entities/market/coin_entity.dart';
-import '../../models/market/coin_model.dart';
+import '../../models/market/alchemy_prices_response_model.dart';
 
 class CoinMapper {
-  static CoinEntity toEntity(CoinModel model) {
+  static const _usdCurrency = 'usd';
+
+  static final _displayNames = {
+    'ETH': 'Ethereum',
+    'POL': 'Polygon',
+  };
+
+  static CoinEntity? toEntity(AlchemyTokenPriceModel model) {
+    final usdPrice = model.prices
+        .where((p) => p.currency.toLowerCase() == _usdCurrency)
+        .map((p) => double.tryParse(p.value) ?? 0.0)
+        .firstOrNull;
+
+    if (usdPrice == null) return null;
+
     return CoinEntity(
-      id: model.id,
-      symbol: model.symbol,
-      name: model.name,
-      image: model.image,
-      currentPrice: model.currentPrice,
-      priceChangePercentage24h: model.priceChangePercentage24h,
+      symbol: model.symbol.toUpperCase(),
+      name: _displayNames[model.symbol.toUpperCase()] ?? model.symbol,
+      currentPrice: usdPrice,
     );
   }
 
-  static List<CoinEntity> toEntityList(List<CoinModel> models) {
-    return models.map((e) => toEntity(e)).toList();
+  static List<CoinEntity> toEntityList(AlchemyPricesResponseModel response) {
+    return response.data.map(toEntity).whereType<CoinEntity>().toList();
   }
 }

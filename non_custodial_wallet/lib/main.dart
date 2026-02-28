@@ -8,6 +8,9 @@ import 'ui/core/di.dart' as di;
 import 'ui/core/di.dart';
 import 'ui/features/cubits/wallet/wallet_cubit.dart';
 import 'ui/features/cubits/market/market_cubit.dart';
+import 'ui/features/cubits/theme/theme_cubit.dart';
+import 'ui/features/cubits/theme/theme_state.dart';
+import 'ui/core/theme/app_theme.dart';
 import 'ui/core/routes/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -39,6 +42,7 @@ void main() async {
           providers: [
             BlocProvider(lazy: false, create: (context) => sl<WalletCubit>()..loadWallet()),
             BlocProvider(create: (context) => sl<MarketCubit>()..loadCoins()),
+            BlocProvider(create: (context) => sl<ThemeCubit>()..loadTheme()),
           ],
           child: const MyApp(),
         ),
@@ -55,22 +59,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Trust Wallet Clone',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
-      routerConfig: createRouter(sl<WalletCubit>()),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('en'), Locale('es')],
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, themeState) {
+        return MaterialApp.router(
+          title: 'Trust Wallet Clone',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
+          themeMode: themeState.themeMode,
+          routerConfig: createRouter(sl<WalletCubit>()),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('en'), Locale('es')],
+        );
+      },
     );
   }
 }

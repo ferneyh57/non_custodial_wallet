@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
-import '../constants/app_constants.dart';
+import '../../../domain/entities/network/network_entity.dart';
 
 mixin SocialMixin {
   Future<void> openBlockExplorer(
     BuildContext context,
     String address,
-    String symbol,
+    NetworkEntity network,
   ) async {
-    final urlStr = '${AppConstants.ethExplorerUrl}$address';
+    final urlStr = '${network.explorerBaseUrl}$address';
 
     final url = Uri.parse(urlStr);
     if (await canLaunchUrl(url)) {

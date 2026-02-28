@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../ui/core/extensions/context_extension.dart';
 import '../../../../ui/core/di.dart';
 import '../../cubits/send/send_cubit.dart';
 import '../../cubits/send/send_state.dart';
+import '../../widgets/network_dropdown.dart';
 
 class SendScreen extends StatelessWidget {
   const SendScreen({super.key});
@@ -38,23 +40,18 @@ class SendScreenView extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.errorMessage!),
-              backgroundColor: Colors.red,
+              backgroundColor: context.colors.error,
             ),
           );
         }
       },
       builder: (context, state) {
-        final isLoading = state.isLoading;
-
         return Scaffold(
-          backgroundColor: const Color(0xFF0F2027),
           appBar: AppBar(
             title: Text(
               context.l10n.sendTitle,
               style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
             centerTitle: true,
           ),
           body: SingleChildScrollView(
@@ -66,176 +63,196 @@ class SendScreenView extends StatelessWidget {
                 Text(
                   context.l10n.networkLabel,
                   style: GoogleFonts.poppins(
-                    color: Colors.white70,
+                    color: context.appColors.subtitleText,
                     fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                NetworkDropdown(
+                  value: state.selectedNetwork,
+                  networks: cubit.networks,
+                  onChanged: (network) {
+                    if (network != null) cubit.updateNetwork(network);
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                // Address Input Card
+                Text(
+                  context.l10n.addressHint,
+                  style: GoogleFonts.poppins(
+                    color: context.appColors.subtitleText,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
+                    color: context.appColors.cardColor,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white12),
+                    border: Border.all(color: context.appColors.cardBorder),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: state.selectedNetwork,
-                      isExpanded: true,
-                      dropdownColor: const Color(0xFF1E2A32),
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.white70,
+                  child: TextField(
+                    controller: cubit.addressController,
+                    style:
+                        GoogleFonts.poppins(color: context.colors.onSurface),
+                    decoration: InputDecoration(
+                      hintText: '0x...',
+                      filled: false,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
                       ),
-                      items: cubit.networks.map((String network) {
-                        return DropdownMenuItem<String>(
-                          value: network,
-                          child: Text(
-                            network,
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.content_paste_rounded,
+                              color: context.colors.primary,
+                              size: 20,
                             ),
+                            onPressed: () async {
+                              final data =
+                                  await Clipboard.getData('text/plain');
+                              if (data?.text != null) {
+                                cubit.addressController.text = data!.text!;
+                              }
+                            },
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          cubit.updateNetwork(newValue);
-                        }
-                      },
+                          IconButton(
+                            icon: Icon(
+                              Icons.qr_code_scanner_rounded,
+                              color: context.colors.primary,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              // TODO: Implement scanner logic
+                            },
+                          ),
+                          const SizedBox(width: 4),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 24),
 
-                // Address Input
-                Text(
-                  context.l10n.addressHint,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: cubit.addressController,
-                  style: GoogleFonts.poppins(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: context.l10n.addressHint,
-                    hintStyle: GoogleFonts.poppins(color: Colors.white38),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.05),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.paste, color: Colors.white70),
-                          onPressed: () {
-                            // TODO: Implement paste logic
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.qr_code_scanner,
-                            color: Colors.white70,
-                          ),
-                          onPressed: () {
-                            // TODO: Implement scanner logic
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Amount Input
+                // Amount Input Card
                 Text(
                   context.l10n.amountHint,
                   style: GoogleFonts.poppins(
-                    color: Colors.white70,
+                    color: context.appColors.subtitleText,
                     fontSize: 14,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 8),
-                TextField(
-                  controller: cubit.amountController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
+                Container(
+                  decoration: BoxDecoration(
+                    color: context.appColors.cardColor,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: context.appColors.cardBorder),
                   ),
-                  style: GoogleFonts.poppins(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: "0.00",
-                    hintStyle: GoogleFonts.poppins(color: Colors.white38),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.05),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
+                  child: TextField(
+                    controller: cubit.amountController,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
                     ),
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 8.0,
-                        top: 4.0,
-                        bottom: 4.0,
+                    style:
+                        GoogleFonts.poppins(color: context.colors.onSurface),
+                    decoration: InputDecoration(
+                      hintText: '0.00',
+                      filled: false,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
                       ),
-                      child: TextButton(
-                        onPressed: () {
-                          cubit.setMaxAmount();
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.blueAccent,
-                          textStyle: GoogleFonts.poppins(
-                            fontWeight: FontWeight.bold,
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: TextButton(
+                          onPressed: () => cubit.setMaxAmount(),
+                          style: TextButton.styleFrom(
+                            foregroundColor: context.colors.primary,
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: Text(
+                            context.l10n.maxButton,
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
-                        child: Text(context.l10n.maxButton),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 48),
 
-                // Send Button
+                // Send Button with gradient
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: isLoading
-                        ? null
-                        : () {
-                            cubit.sendTransaction();
-                          },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 0,
+                  height: 54,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: state.isLoading
+                          ? null
+                          : LinearGradient(
+                              colors: [
+                                context.appColors.balanceCardGradientStart,
+                                context.appColors.balanceCardGradientEnd,
+                              ],
+                            ),
+                      color: state.isLoading
+                          ? context.appColors.containerFill
+                          : null,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: state.isLoading
+                          ? null
+                          : [
+                              BoxShadow(
+                                color: context.colors.primary
+                                    .withValues(alpha: 0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                     ),
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
+                    child: ElevatedButton(
+                      onPressed:
+                          state.isLoading ? null : () => cubit.sendTransaction(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: state.isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : Text(
+                              context.l10n.sendAction,
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          )
-                        : Text(
-                            context.l10n.sendAction,
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                    ),
                   ),
                 ),
               ],

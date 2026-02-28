@@ -6,6 +6,7 @@ import '../../../../domain/usecases/auth/get_key_use_case.dart';
 import '../../../../domain/usecases/auth/delete_key_use_case.dart';
 import '../../../../domain/usecases/wallet/get_balance_use_case.dart';
 import '../../../../domain/usecases/wallet/get_eth_address_use_case.dart';
+import '../../../core/constants/app_networks.dart';
 import 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
@@ -127,12 +128,25 @@ class WalletCubit extends Cubit<WalletState> {
     final address = state.wallet?.ethAddress;
     if (address == null) return;
 
-    final result = await getBalanceUseCase(address);
-    if (result.isSuccess) {
-      emit(state.copyWith(
-        wallet: state.wallet?.copyWith(balanceInWei: result.data),
-      ));
+    final results = await Future.wait(
+      AppNetworks.all.map(
+        (network) => getBalanceUseCase(address, network)
+            .then((result) => MapEntry(network.chainId, result)),
+      ),
+    );
+
+    final newBalances = Map<int, BigInt>.from(
+      state.wallet?.balancesInWei ?? {},
+    );
+    for (final entry in results) {
+      if (entry.value.isSuccess && entry.value.data != null) {
+        newBalances[entry.key] = entry.value.data!;
+      }
     }
+
+    emit(state.copyWith(
+      wallet: state.wallet?.copyWith(balancesInWei: newBalances),
+    ));
   }
 
   Future<void> logout() async {

@@ -1,10 +1,12 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../core/constants/app_networks.dart';
 import '../../core/extensions/context_extension.dart';
 import '../cubits/wallet/wallet_state.dart';
 import '../cubits/market/market_state.dart';
 
-class BalanceCard extends StatelessWidget {
+class BalanceCard extends StatefulWidget {
   final WalletState state;
   final MarketState marketState;
 
@@ -15,65 +17,158 @@ class BalanceCard extends StatelessWidget {
   });
 
   @override
+  State<BalanceCard> createState() => _BalanceCardState();
+}
+
+class _BalanceCardState extends State<BalanceCard> {
+  bool _balanceVisible = true;
+
+  double _computeTotalUsd() {
+    final priceBySymbol = <String, double>{
+      for (final coin in widget.marketState.coins)
+        coin.symbol.toUpperCase(): coin.currentPrice,
+    };
+    double totalUsd = 0.0;
+    for (final network in AppNetworks.all) {
+      final balanceEth =
+          widget.state.wallet?.balanceInEth(network.chainId) ?? 0.0;
+      final price = priceBySymbol[network.nativeSymbol] ?? 0.0;
+      totalUsd += balanceEth * price;
+    }
+    return totalUsd;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final totalUsd = _computeTotalUsd();
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF00B4DB), Color(0xFF0083B0)],
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            context.appColors.balanceCardGradientStart,
+            context.appColors.balanceCardGradientEnd,
+          ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+            color: context.colors.primary.withValues(alpha: 0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n.totalBalanceLabel,
-            style: GoogleFonts.poppins(color: Colors.white70, fontSize: 16),
-          ),
-          const SizedBox(height: 5),
-          Builder(
-            builder: (context) {
-              final ethBalance = state.wallet?.balanceInEth ?? 0.0;
-              double ethPrice = 0.0;
-              try {
-                final ethCoin = marketState.coins.firstWhere(
-                  (c) => c.symbol.toLowerCase() == 'eth',
-                );
-                ethPrice = ethCoin.currentPrice;
-              } catch (_) {}
-              final usdValue = ethBalance * ethPrice;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '\$${usdValue.toStringAsFixed(2)} USD',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withValues(alpha: 0.1),
+                  Colors.white.withValues(alpha: 0.02),
+                ],
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.account_balance_wallet_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          context.l10n.totalBalanceLabel,
+                          style: GoogleFonts.poppins(
+                            color: Colors.white70,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
+                    GestureDetector(
+                      onTap: () =>
+                          setState(() => _balanceVisible = !_balanceVisible),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          _balanceVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: Colors.white70,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: totalUsd),
+                  duration: const Duration(milliseconds: 800),
+                  curve: Curves.easeOut,
+                  builder: (context, value, _) {
+                    return Text(
+                      _balanceVisible
+                          ? '\$${value.toStringAsFixed(2)}'
+                          : '\$••••••',
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  Text(
-                    '${ethBalance.toStringAsFixed(6)} ETH',
+                  child: Text(
+                    '${AppNetworks.all.length} networks',
                     style: GoogleFonts.poppins(
                       color: Colors.white70,
-                      fontSize: 14,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ],
-              );
-            },
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

@@ -1,28 +1,37 @@
 class WalletEntity {
   final String mnemonic;
   final String? ethAddress;
-  final BigInt? balanceInWei;
+  final Map<int, BigInt> balancesInWei;
 
   const WalletEntity({
     required this.mnemonic,
     this.ethAddress,
-    this.balanceInWei,
+    this.balancesInWei = const {},
   });
 
-  double get balanceInEth {
-    if (balanceInWei == null) return 0.0;
-    return balanceInWei! / BigInt.from(10).pow(18);
+  double balanceInEth(int chainId) {
+    final wei = balancesInWei[chainId];
+    if (wei == null) return 0.0;
+    return wei / BigInt.from(10).pow(18);
+  }
+
+  double get totalBalanceInEth {
+    if (balancesInWei.isEmpty) return 0.0;
+    return balancesInWei.values
+        .fold(BigInt.zero, (sum, wei) => sum + wei)
+        .toDouble() /
+        1e18;
   }
 
   WalletEntity copyWith({
     String? mnemonic,
     String? ethAddress,
-    BigInt? balanceInWei,
+    Map<int, BigInt>? balancesInWei,
   }) {
     return WalletEntity(
       mnemonic: mnemonic ?? this.mnemonic,
       ethAddress: ethAddress ?? this.ethAddress,
-      balanceInWei: balanceInWei ?? this.balanceInWei,
+      balancesInWei: balancesInWei ?? this.balancesInWei,
     );
   }
 }

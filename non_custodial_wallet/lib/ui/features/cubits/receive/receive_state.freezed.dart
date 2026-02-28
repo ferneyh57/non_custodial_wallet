@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReceiveState {
 
- String get selectedNetwork; String get address; String get amount; String? get errorMessage;
+ NetworkEntity? get selectedNetwork; String get address; String get amount; String? get errorMessage;
 /// Create a copy of ReceiveState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $ReceiveStateCopyWith<$Res>  {
   factory $ReceiveStateCopyWith(ReceiveState value, $Res Function(ReceiveState) _then) = _$ReceiveStateCopyWithImpl;
 @useResult
 $Res call({
- String selectedNetwork, String address, String amount, String? errorMessage
+ NetworkEntity? selectedNetwork, String address, String amount, String? errorMessage
 });
 
 
@@ -62,10 +62,10 @@ class _$ReceiveStateCopyWithImpl<$Res>
 
 /// Create a copy of ReceiveState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? selectedNetwork = null,Object? address = null,Object? amount = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? selectedNetwork = freezed,Object? address = null,Object? amount = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
-selectedNetwork: null == selectedNetwork ? _self.selectedNetwork : selectedNetwork // ignore: cast_nullable_to_non_nullable
-as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+selectedNetwork: freezed == selectedNetwork ? _self.selectedNetwork : selectedNetwork // ignore: cast_nullable_to_non_nullable
+as NetworkEntity?,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -153,7 +153,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String selectedNetwork,  String address,  String amount,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( NetworkEntity? selectedNetwork,  String address,  String amount,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ReceiveState() when $default != null:
 return $default(_that.selectedNetwork,_that.address,_that.amount,_that.errorMessage);case _:
@@ -174,7 +174,7 @@ return $default(_that.selectedNetwork,_that.address,_that.amount,_that.errorMess
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String selectedNetwork,  String address,  String amount,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( NetworkEntity? selectedNetwork,  String address,  String amount,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _ReceiveState():
 return $default(_that.selectedNetwork,_that.address,_that.amount,_that.errorMessage);case _:
@@ -194,7 +194,7 @@ return $default(_that.selectedNetwork,_that.address,_that.amount,_that.errorMess
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String selectedNetwork,  String address,  String amount,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( NetworkEntity? selectedNetwork,  String address,  String amount,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _ReceiveState() when $default != null:
 return $default(_that.selectedNetwork,_that.address,_that.amount,_that.errorMessage);case _:
@@ -209,10 +209,10 @@ return $default(_that.selectedNetwork,_that.address,_that.amount,_that.errorMess
 
 
 class _ReceiveState implements ReceiveState {
-  const _ReceiveState({this.selectedNetwork = 'ETH', this.address = '', this.amount = '', this.errorMessage});
+  const _ReceiveState({this.selectedNetwork, this.address = '', this.amount = '', this.errorMessage});
   
 
-@override@JsonKey() final  String selectedNetwork;
+@override final  NetworkEntity? selectedNetwork;
 @override@JsonKey() final  String address;
 @override@JsonKey() final  String amount;
 @override final  String? errorMessage;
@@ -247,7 +247,7 @@ abstract mixin class _$ReceiveStateCopyWith<$Res> implements $ReceiveStateCopyWi
   factory _$ReceiveStateCopyWith(_ReceiveState value, $Res Function(_ReceiveState) _then) = __$ReceiveStateCopyWithImpl;
 @override @useResult
 $Res call({
- String selectedNetwork, String address, String amount, String? errorMessage
+ NetworkEntity? selectedNetwork, String address, String amount, String? errorMessage
 });
 
 
@@ -264,10 +264,10 @@ class __$ReceiveStateCopyWithImpl<$Res>
 
 /// Create a copy of ReceiveState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? selectedNetwork = null,Object? address = null,Object? amount = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? selectedNetwork = freezed,Object? address = null,Object? amount = null,Object? errorMessage = freezed,}) {
   return _then(_ReceiveState(
-selectedNetwork: null == selectedNetwork ? _self.selectedNetwork : selectedNetwork // ignore: cast_nullable_to_non_nullable
-as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+selectedNetwork: freezed == selectedNetwork ? _self.selectedNetwork : selectedNetwork // ignore: cast_nullable_to_non_nullable
+as NetworkEntity?,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
