@@ -37,12 +37,13 @@
   "sendAction": "Send",
   "themeToggleTooltip": "Toggle theme",
   "nativeTab": "Native",
-  "stableTab": "Stable",
-  "noStableFound": "No stablecoins found",
+  "stableTab": "Token",
+  "noStableFound": "No tokens found",
   "allNetworksFilter": "All",
   "swapButton": "Swap",
   "buyButton": "Buy",
   "faucetButton": "Faucet",
   "faucetTitle": "Testnet Faucets",
-  "faucetSubtitle": "Get free testnet tokens to try the wallet"
+  "faucetSubtitle": "Get free testnet tokens to try the wallet",
+  "searchTokenHint": "Search token..."
 }

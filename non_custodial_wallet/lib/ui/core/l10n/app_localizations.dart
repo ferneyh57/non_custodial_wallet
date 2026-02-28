@@ -287,13 +287,13 @@ abstract class AppLocalizations {
   /// No description provided for @stableTab.
   ///
   /// In en, this message translates to:
-  /// **'Stable'**
+  /// **'Token'**
   String get stableTab;
 
   /// No description provided for @noStableFound.
   ///
   /// In en, this message translates to:
-  /// **'No stablecoins found'**
+  /// **'No tokens found'**
   String get noStableFound;
 
   /// No description provided for @allNetworksFilter.
@@ -331,6 +331,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get free testnet tokens to try the wallet'**
   String get faucetSubtitle;
+
+  /// No description provided for @searchTokenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search token...'**
+  String get searchTokenHint;
 }
 
 class _AppLocalizationsDelegate

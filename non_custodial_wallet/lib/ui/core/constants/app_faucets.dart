@@ -24,8 +24,17 @@ class AppFaucets {
       'https://assets.coingecko.com/coins/images/6319/small/usdc.png';
   static const _linkIcon =
       'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png';
+  static const _opIcon =
+      'https://assets.coingecko.com/coins/images/25244/small/Optimism.png';
+  static const _arbIcon =
+      'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg';
+  static const _baseIcon =
+      'https://assets.coingecko.com/coins/images/279/small/ethereum.png';
+  static const _polIcon =
+      'https://assets.coingecko.com/coins/images/14073/small/matic.png';
 
   static const List<FaucetLink> sepolia = [
+    // ETH Sepolia
     FaucetLink(
       name: 'Alchemy — ETH Sepolia',
       url: 'https://www.alchemy.com/faucets/ethereum-sepolia',
@@ -36,15 +45,38 @@ class AppFaucets {
       url: 'https://cloud.google.com/application/web3/faucet/ethereum/sepolia',
       iconUrl: _ethIcon,
     ),
+    // Stablecoins
     FaucetLink(
       name: 'Circle — USDC Testnet',
       url: 'https://faucet.circle.com/',
       iconUrl: _usdcIcon,
     ),
+    // LINK
     FaucetLink(
       name: 'Chainlink — LINK Sepolia',
       url: 'https://faucets.chain.link/sepolia',
       iconUrl: _linkIcon,
+    ),
+    // L2 Faucets
+    FaucetLink(
+      name: 'Alchemy — Base Sepolia',
+      url: 'https://www.alchemy.com/faucets/base-sepolia',
+      iconUrl: _baseIcon,
+    ),
+    FaucetLink(
+      name: 'Alchemy — Arbitrum Sepolia',
+      url: 'https://www.alchemy.com/faucets/arbitrum-sepolia',
+      iconUrl: _arbIcon,
+    ),
+    FaucetLink(
+      name: 'Alchemy — Optimism Sepolia',
+      url: 'https://www.alchemy.com/faucets/optimism-sepolia',
+      iconUrl: _opIcon,
+    ),
+    FaucetLink(
+      name: 'Alchemy — Polygon Amoy',
+      url: 'https://www.alchemy.com/faucets/polygon-amoy',
+      iconUrl: _polIcon,
     ),
   ];
 }

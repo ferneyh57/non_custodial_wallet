@@ -108,6 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 coin.symbol.toUpperCase():
                                     coin.currentPrice,
                             };
+                            // Alias bridged tokens to share price
+                            final usdcPrice = priceBySymbol['USDC'];
+                            if (usdcPrice != null) {
+                              priceBySymbol['USDC.E'] = usdcPrice;
+                            }
 
                             return BlocBuilder<TokenCubit, TokenState>(
                               builder: (context, tokenState) {

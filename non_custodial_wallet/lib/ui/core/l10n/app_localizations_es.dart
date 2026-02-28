@@ -107,10 +107,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nativeTab => 'Nativo';
 
   @override
-  String get stableTab => 'Stable';
+  String get stableTab => 'Token';
 
   @override
-  String get noStableFound => 'No se encontraron stablecoins';
+  String get noStableFound => 'No se encontraron tokens';
 
   @override
   String get allNetworksFilter => 'Todas';
@@ -130,4 +130,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get faucetSubtitle =>
       'Obtén tokens de prueba gratis para probar la wallet';
+
+  @override
+  String get searchTokenHint => 'Buscar token...';
 }

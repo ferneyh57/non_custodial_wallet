@@ -10,14 +10,35 @@ class CoinMapper {
     'MATIC': 'POL',
   };
 
+  /// Maps token symbols used in the app to the symbol Alchemy returns for
+  /// price lookup. Tokens like USDC.e share the USDC price.
+  static const _priceSymbolMap = {
+    'USDC.e': 'USDC',
+  };
+
+  /// Returns the price-lookup symbol for a given token symbol.
+  static String priceSymbol(String symbol) =>
+      _priceSymbolMap[symbol] ?? symbol;
+
   static final _displayNames = {
     'ETH': 'Ethereum',
     'POL': 'Polygon',
     'USDC': 'USD Coin',
     'USDT': 'Tether USD',
+    'DAI': 'Dai Stablecoin',
     'LINK': 'Chainlink',
     'WETH': 'Wrapped Ether',
+    'WBTC': 'Wrapped Bitcoin',
     'EURC': 'Euro Coin',
+    'UNI': 'Uniswap',
+    'AAVE': 'Aave',
+    'ARB': 'Arbitrum',
+    'OP': 'Optimism',
+    'GMX': 'GMX',
+    'STETH': 'Lido Staked Ether',
+    'CBETH': 'Coinbase Wrapped Staked Ether',
+    'WSTETH': 'Wrapped Lido Staked Ether',
+    'WMATIC': 'Wrapped Matic',
   };
 
   static CoinEntity? toEntity(AlchemyTokenPriceModel model) {

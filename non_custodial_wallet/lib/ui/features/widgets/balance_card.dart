@@ -31,6 +31,11 @@ class _BalanceCardState extends State<BalanceCard> {
       for (final coin in widget.marketState.coins)
         coin.symbol.toUpperCase(): coin.currentPrice,
     };
+    // Alias bridged tokens to share price
+    final usdcPrice = priceBySymbol['USDC'];
+    if (usdcPrice != null) {
+      priceBySymbol['USDC.E'] = usdcPrice;
+    }
     double totalUsd = 0.0;
     for (final network in AppNetworks.all) {
       final balanceEth =
@@ -40,7 +45,8 @@ class _BalanceCardState extends State<BalanceCard> {
     }
     // Add token balances
     for (final tb in widget.tokenBalances) {
-      final tokenPrice = priceBySymbol[tb.token.symbol] ?? 0.0;
+      final tokenPrice =
+          priceBySymbol[tb.token.symbol.toUpperCase()] ?? 0.0;
       totalUsd += tb.balanceFormatted * tokenPrice;
     }
     return totalUsd;
