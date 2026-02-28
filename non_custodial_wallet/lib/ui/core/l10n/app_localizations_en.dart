@@ -131,4 +131,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchTokenHint => 'Search token...';
+
+  @override
+  String get assetLabel => 'Asset';
+
+  @override
+  String get nativeAsset => 'Native';
+
+  @override
+  String get errorEmptyAddress => 'Address cannot be empty';
+
+  @override
+  String get errorInvalidAddress => 'Invalid address';
+
+  @override
+  String get errorInvalidAmount => 'Amount must be greater than zero';
+
+  @override
+  String get errorInsufficientBalance => 'Insufficient balance';
+
+  @override
+  String get errorLoadWallet => 'Failed to load wallet';
+
+  @override
+  String get txSentSuccess => 'Transaction Sent!';
 }

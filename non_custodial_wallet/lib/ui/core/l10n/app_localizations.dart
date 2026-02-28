@@ -337,6 +337,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search token...'**
   String get searchTokenHint;
+
+  /// No description provided for @assetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Asset'**
+  String get assetLabel;
+
+  /// No description provided for @nativeAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Native'**
+  String get nativeAsset;
+
+  /// No description provided for @errorEmptyAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address cannot be empty'**
+  String get errorEmptyAddress;
+
+  /// No description provided for @errorInvalidAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid address'**
+  String get errorInvalidAddress;
+
+  /// No description provided for @errorInvalidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount must be greater than zero'**
+  String get errorInvalidAmount;
+
+  /// No description provided for @errorInsufficientBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient balance'**
+  String get errorInsufficientBalance;
+
+  /// No description provided for @errorLoadWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load wallet'**
+  String get errorLoadWallet;
+
+  /// No description provided for @txSentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Sent!'**
+  String get txSentSuccess;
 }
 
 class _AppLocalizationsDelegate

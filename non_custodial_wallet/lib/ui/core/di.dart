@@ -29,6 +29,7 @@ import '../../domain/usecases/wallet/get_eth_address_use_case.dart';
 import '../../domain/repositories/transaction/i_transaction_repository.dart';
 import '../../data/repositories/transaction/transaction_repository_impl.dart';
 import '../../domain/usecases/transaction/send_transaction_use_case.dart';
+import '../../domain/usecases/transaction/send_token_transaction_use_case.dart';
 import '../../domain/usecases/token/get_token_balances_use_case.dart';
 import '../features/cubits/wallet/wallet_cubit.dart';
 import '../features/cubits/market/market_cubit.dart';
@@ -65,9 +66,11 @@ void _initCubits() {
   sl.registerFactory<SendCubit>(
     () => SendCubit(
       sendTransactionUseCase: sl<SendTransactionUseCase>(),
+      sendTokenTransactionUseCase: sl<SendTokenTransactionUseCase>(),
       getKeyUseCase: sl<GetKeyUseCase>(),
       getBalanceUseCase: sl<GetBalanceUseCase>(),
       getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+      getTokenBalancesUseCase: sl<GetTokenBalancesUseCase>(),
       networks: AppNetworks.all,
     ),
   );
@@ -107,6 +110,9 @@ void _initUseCases() {
   );
   sl.registerLazySingleton<SendTransactionUseCase>(
     () => SendTransactionUseCase(sl<ITransactionRepository>()),
+  );
+  sl.registerLazySingleton<SendTokenTransactionUseCase>(
+    () => SendTokenTransactionUseCase(sl<ITransactionRepository>()),
   );
   sl.registerLazySingleton<GetBalanceUseCase>(
     () => GetBalanceUseCase(sl<IWalletRepository>()),

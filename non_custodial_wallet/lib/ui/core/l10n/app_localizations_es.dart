@@ -133,4 +133,28 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get searchTokenHint => 'Buscar token...';
+
+  @override
+  String get assetLabel => 'Activo';
+
+  @override
+  String get nativeAsset => 'Nativo';
+
+  @override
+  String get errorEmptyAddress => 'La dirección no puede estar vacía';
+
+  @override
+  String get errorInvalidAddress => 'Dirección inválida';
+
+  @override
+  String get errorInvalidAmount => 'El monto debe ser mayor a cero';
+
+  @override
+  String get errorInsufficientBalance => 'Saldo insuficiente';
+
+  @override
+  String get errorLoadWallet => 'Error al cargar la billetera';
+
+  @override
+  String get txSentSuccess => '¡Transacción enviada!';
 }

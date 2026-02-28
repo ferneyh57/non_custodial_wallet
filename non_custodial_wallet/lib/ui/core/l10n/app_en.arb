@@ -45,5 +45,13 @@
   "faucetButton": "Faucet",
   "faucetTitle": "Testnet Faucets",
   "faucetSubtitle": "Get free testnet tokens to try the wallet",
-  "searchTokenHint": "Search token..."
+  "searchTokenHint": "Search token...",
+  "assetLabel": "Asset",
+  "nativeAsset": "Native",
+  "errorEmptyAddress": "Address cannot be empty",
+  "errorInvalidAddress": "Invalid address",
+  "errorInvalidAmount": "Amount must be greater than zero",
+  "errorInsufficientBalance": "Insufficient balance",
+  "errorLoadWallet": "Failed to load wallet",
+  "txSentSuccess": "Transaction Sent!"
 }

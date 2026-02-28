@@ -45,5 +45,13 @@
   "faucetButton": "Faucet",
   "faucetTitle": "Faucets de Testnet",
   "faucetSubtitle": "Obtén tokens de prueba gratis para probar la wallet",
-  "searchTokenHint": "Buscar token..."
+  "searchTokenHint": "Buscar token...",
+  "assetLabel": "Activo",
+  "nativeAsset": "Nativo",
+  "errorEmptyAddress": "La dirección no puede estar vacía",
+  "errorInvalidAddress": "Dirección inválida",
+  "errorInvalidAmount": "El monto debe ser mayor a cero",
+  "errorInsufficientBalance": "Saldo insuficiente",
+  "errorLoadWallet": "Error al cargar la billetera",
+  "txSentSuccess": "¡Transacción enviada!"
 }
