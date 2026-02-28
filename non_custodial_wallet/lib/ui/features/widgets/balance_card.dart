@@ -40,13 +40,38 @@ class BalanceCard extends StatelessWidget {
             style: GoogleFonts.poppins(color: Colors.white70, fontSize: 16),
           ),
           const SizedBox(height: 5),
-          Text(
-            '\$0.00 USD', // In a real app, calculate: (btcAmount * btcPrice) + (ethAmount * ethPrice) ...
-            style: GoogleFonts.poppins(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
+          Builder(
+            builder: (context) {
+              final ethBalance = state.wallet?.balanceInEth ?? 0.0;
+              double ethPrice = 0.0;
+              try {
+                final ethCoin = marketState.coins.firstWhere(
+                  (c) => c.symbol.toLowerCase() == 'eth',
+                );
+                ethPrice = ethCoin.currentPrice;
+              } catch (_) {}
+              final usdValue = ethBalance * ethPrice;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '\$${usdValue.toStringAsFixed(2)} USD',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '${ethBalance.toStringAsFixed(6)} ETH',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),

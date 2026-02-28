@@ -14,7 +14,7 @@ class ReceiveScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<ReceiveCubit>()..init('ETH'),
+      create: (_) => sl<ReceiveCubit>()..loadAddress('ETH'),
       child: const ReceiveScreenView(),
     );
   }

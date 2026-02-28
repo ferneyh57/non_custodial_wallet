@@ -132,6 +132,7 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.blue,
                         imageUrl: eth?.image,
                         price: eth?.currentPrice,
+                        balance: state.wallet?.balanceInEth,
                       ),
                       const SizedBox(height: 15),
                       AssetItem(

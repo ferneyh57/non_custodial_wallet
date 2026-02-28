@@ -12,7 +12,7 @@ class SendScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<SendCubit>(),
+      create: (_) => sl<SendCubit>()..loadWalletData(),
       child: const SendScreenView(),
     );
   }

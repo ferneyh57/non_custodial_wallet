@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
+import 'package:web3dart/web3dart.dart';
 import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource.dart';
 import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource_impl.dart';
 import 'package:non_custodial_wallet/data/datasources/transaction/transaction_datasource.dart';
@@ -18,6 +20,8 @@ import '../../data/repositories/market/market_repository_impl.dart';
 import '../../domain/repositories/wallet/i_wallet_repository.dart';
 import '../../domain/repositories/market/i_market_repository.dart';
 import '../../domain/usecases/market/get_coins_market_use_case.dart';
+import '../../domain/usecases/wallet/get_balance_use_case.dart';
+import '../../domain/usecases/wallet/get_eth_address_use_case.dart';
 import '../../domain/repositories/transaction/i_transaction_repository.dart';
 import '../../data/repositories/transaction/transaction_repository_impl.dart';
 import '../../domain/usecases/transaction/send_transaction_use_case.dart';
@@ -25,6 +29,7 @@ import '../features/cubits/wallet/wallet_cubit.dart';
 import '../features/cubits/market/market_cubit.dart';
 import '../features/cubits/send/send_cubit.dart';
 import '../features/cubits/receive/receive_cubit.dart';
+import '../core/constants/network_constants.dart';
 
 final sl = GetIt.instance;
 
@@ -42,17 +47,26 @@ void _initCubits() {
       saveKeyUseCase: sl<SaveKeyUseCase>(),
       getKeyUseCase: sl<GetKeyUseCase>(),
       deleteKeyUseCase: sl<DeleteKeyUseCase>(),
-      walletRepository: sl<IWalletRepository>(),
+      getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+      getBalanceUseCase: sl<GetBalanceUseCase>(),
     ),
   );
   sl.registerLazySingleton<MarketCubit>(
     () => MarketCubit(getCoinsMarketUseCase: sl<GetCoinsMarketUseCase>()),
   );
   sl.registerFactory<SendCubit>(
-    () => SendCubit(sendTransactionUseCase: sl<SendTransactionUseCase>()),
+    () => SendCubit(
+      sendTransactionUseCase: sl<SendTransactionUseCase>(),
+      getKeyUseCase: sl<GetKeyUseCase>(),
+      getBalanceUseCase: sl<GetBalanceUseCase>(),
+      getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+    ),
   );
   sl.registerFactory<ReceiveCubit>(
-    () => ReceiveCubit(walletRepository: sl<IWalletRepository>()),
+    () => ReceiveCubit(
+      getKeyUseCase: sl<GetKeyUseCase>(),
+      getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+    ),
   );
 }
 
@@ -78,6 +92,12 @@ void _initUseCases() {
   sl.registerLazySingleton<SendTransactionUseCase>(
     () => SendTransactionUseCase(sl<ITransactionRepository>()),
   );
+  sl.registerLazySingleton<GetBalanceUseCase>(
+    () => GetBalanceUseCase(sl<IWalletRepository>()),
+  );
+  sl.registerLazySingleton<GetEthAddressUseCase>(
+    () => GetEthAddressUseCase(sl<IWalletRepository>()),
+  );
 }
 
 void _initRepositories() {
@@ -96,7 +116,13 @@ void _initRepositories() {
 }
 
 void _initDataSources() {
-  sl.registerLazySingleton<WalletDataSource>(() => WalletDataSourceImpl());
+  sl.registerLazySingleton<Web3Client>(
+    () => Web3Client(NetworkConstants.sepoliaRpcUrl, http.Client()),
+  );
+
+  sl.registerLazySingleton<WalletDataSource>(
+    () => WalletDataSourceImpl(web3client: sl<Web3Client>()),
+  );
 
   sl.registerLazySingleton<SecureStorageDataSource>(
     () => SecureStorageDataSource(),
@@ -113,6 +139,6 @@ void _initDataSources() {
   );
 
   sl.registerLazySingleton<ITransactionDataSource>(
-    () => TransactionDataSourceImpl(),
+    () => TransactionDataSourceImpl(web3client: sl<Web3Client>()),
   );
 }

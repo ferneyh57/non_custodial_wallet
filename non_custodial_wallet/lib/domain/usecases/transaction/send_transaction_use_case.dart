@@ -7,14 +7,14 @@ class SendTransactionUseCase {
   SendTransactionUseCase(this._repository);
 
   Future<Result<String>> call({
-    required String network,
-    required String address,
-    required double amount,
+    required String mnemonic,
+    required String toAddress,
+    required BigInt amountInWei,
   }) {
     return _repository.sendTransaction(
-      network: network,
-      address: address,
-      amount: amount,
+      mnemonic: mnemonic,
+      toAddress: toAddress,
+      amountInWei: amountInWei,
     );
   }
 }

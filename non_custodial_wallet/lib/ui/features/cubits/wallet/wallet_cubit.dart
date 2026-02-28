@@ -4,7 +4,8 @@ import '../../../../domain/usecases/auth/generate_key_use_case.dart';
 import '../../../../domain/usecases/auth/save_key_use_case.dart';
 import '../../../../domain/usecases/auth/get_key_use_case.dart';
 import '../../../../domain/usecases/auth/delete_key_use_case.dart';
-import '../../../../domain/repositories/wallet/i_wallet_repository.dart';
+import '../../../../domain/usecases/wallet/get_balance_use_case.dart';
+import '../../../../domain/usecases/wallet/get_eth_address_use_case.dart';
 import 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
@@ -12,27 +13,30 @@ class WalletCubit extends Cubit<WalletState> {
   final SaveKeyUseCase saveKeyUseCase;
   final GetKeyUseCase getKeyUseCase;
   final DeleteKeyUseCase deleteKeyUseCase;
-  final IWalletRepository walletRepository;
+  final GetEthAddressUseCase getEthAddressUseCase;
+  final GetBalanceUseCase getBalanceUseCase;
 
   WalletCubit({
     required this.generateKeyUseCase,
     required this.saveKeyUseCase,
     required this.getKeyUseCase,
     required this.deleteKeyUseCase,
-    required this.walletRepository,
+    required this.getEthAddressUseCase,
+    required this.getBalanceUseCase,
   }) : super(const WalletState());
 
   Future<void> createWallet() async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
     try {
       final mnemonic = await generateKeyUseCase();
-      final ethResult = await walletRepository.getEthAddress(mnemonic);
+      final ethResult = await getEthAddressUseCase(mnemonic);
 
       if (ethResult.isSuccess) {
         emit(state.copyWith(
           isLoading: false,
           wallet: WalletEntity(mnemonic: mnemonic, ethAddress: ethResult.data),
         ));
+        await fetchBalance();
       } else {
         emit(state.copyWith(
           isLoading: false,
@@ -60,7 +64,7 @@ class WalletCubit extends Cubit<WalletState> {
   Future<void> importWallet(String mnemonic) async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
     try {
-      final ethResult = await walletRepository.getEthAddress(mnemonic);
+      final ethResult = await getEthAddressUseCase(mnemonic);
 
       if (ethResult.isFailure) {
         emit(state.copyWith(
@@ -78,6 +82,7 @@ class WalletCubit extends Cubit<WalletState> {
       final saveResult = await saveKeyUseCase(mnemonic);
       if (saveResult.isSuccess) {
         emit(state.copyWith(isAuthorized: true));
+        await fetchBalance();
       } else {
         emit(state.copyWith(errorMessage: saveResult.failure?.message));
       }
@@ -97,7 +102,7 @@ class WalletCubit extends Cubit<WalletState> {
       }
 
       final mnemonic = result.data!;
-      final ethResult = await walletRepository.getEthAddress(mnemonic);
+      final ethResult = await getEthAddressUseCase(mnemonic);
 
       if (ethResult.isSuccess) {
         emit(state.copyWith(
@@ -105,6 +110,7 @@ class WalletCubit extends Cubit<WalletState> {
           isAuthorized: true,
           wallet: WalletEntity(mnemonic: mnemonic, ethAddress: ethResult.data),
         ));
+        await fetchBalance();
       } else {
         emit(state.copyWith(
           isLoading: false,
@@ -114,6 +120,18 @@ class WalletCubit extends Cubit<WalletState> {
       }
     } catch (e) {
       emit(state.copyWith(isLoading: false, isAuthorized: false));
+    }
+  }
+
+  Future<void> fetchBalance() async {
+    final address = state.wallet?.ethAddress;
+    if (address == null) return;
+
+    final result = await getBalanceUseCase(address);
+    if (result.isSuccess) {
+      emit(state.copyWith(
+        wallet: state.wallet?.copyWith(balanceInWei: result.data),
+      ));
     }
   }
 

@@ -12,6 +12,7 @@ class AssetItem extends StatelessWidget with SocialMixin {
   final Color color;
   final String? imageUrl;
   final double? price;
+  final double? balance;
 
   const AssetItem({
     super.key,
@@ -22,6 +23,7 @@ class AssetItem extends StatelessWidget with SocialMixin {
     required this.color,
     this.imageUrl,
     this.price,
+    this.balance,
   });
 
   @override
@@ -71,7 +73,7 @@ class AssetItem extends StatelessWidget with SocialMixin {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '0.00',
+                    balance?.toStringAsFixed(6) ?? '0.00',
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

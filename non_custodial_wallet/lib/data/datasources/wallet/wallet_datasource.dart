@@ -9,9 +9,14 @@ import '../../../../ui/core/util/result.dart';
 
 abstract class WalletDataSource {
   Future<Result<String>> getEthAddress(String mnemonic);
+  Future<Result<BigInt>> getBalance(String address);
 }
 
 class WalletDataSourceImpl implements WalletDataSource {
+  final Web3Client web3client;
+
+  WalletDataSourceImpl({required this.web3client});
+
   @override
   Future<Result<String>> getEthAddress(String mnemonic) async {
     try {
@@ -24,6 +29,18 @@ class WalletDataSourceImpl implements WalletDataSource {
     } catch (e, stackTrace) {
       AppLogger.error('Error deriving ETH address', e, stackTrace);
       return Result.failure(ServerFailure('Failed to derive ETH address'));
+    }
+  }
+
+  @override
+  Future<Result<BigInt>> getBalance(String address) async {
+    try {
+      final ethAddress = EthereumAddress.fromHex(address);
+      final balance = await web3client.getBalance(ethAddress);
+      return Result.success(balance.getInWei);
+    } catch (e, stackTrace) {
+      AppLogger.error('Error fetching ETH balance', e, stackTrace);
+      return Result.failure(ServerFailure('Failed to fetch balance'));
     }
   }
 }

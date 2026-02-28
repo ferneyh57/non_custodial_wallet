@@ -1,31 +1,52 @@
+import 'package:bip39/bip39.dart' as bip39;
+import 'package:bip32/bip32.dart' as bip32;
+import 'package:hex/hex.dart';
+import 'package:web3dart/web3dart.dart';
+import 'dart:typed_data';
+import 'package:non_custodial_wallet/ui/core/constants/network_constants.dart';
 import 'package:non_custodial_wallet/ui/core/error/failures.dart';
+import 'package:non_custodial_wallet/ui/core/util/app_logger.dart';
 import 'package:non_custodial_wallet/ui/core/util/result.dart';
 
 abstract class ITransactionDataSource {
   Future<Result<String>> sendTransaction({
-    required String network,
-    required String address,
-    required double amount,
+    required String mnemonic,
+    required String toAddress,
+    required BigInt amountInWei,
   });
 }
 
 class TransactionDataSourceImpl implements ITransactionDataSource {
+  final Web3Client web3client;
+
+  TransactionDataSourceImpl({required this.web3client});
+
   @override
   Future<Result<String>> sendTransaction({
-    required String network,
-    required String address,
-    required double amount,
+    required String mnemonic,
+    required String toAddress,
+    required BigInt amountInWei,
   }) async {
     try {
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 2));
+      final seed = bip39.mnemonicToSeed(mnemonic);
+      final root = bip32.BIP32.fromSeed(seed);
+      final child = root.derivePath("m/44'/60'/0'/0/0");
+      final privateKey = Uint8List.fromList(child.privateKey!);
+      final credentials = EthPrivateKey.fromHex(HEX.encode(privateKey));
 
-      // Simulate success hash
-      final fakeTxHash =
-          "0x${DateTime.now().millisecondsSinceEpoch.toRadixString(16)}";
-      return Result.success(fakeTxHash);
-    } catch (e) {
-      return Result.failure(ServerFailure(e.toString()));
+      final txHash = await web3client.sendTransaction(
+        credentials,
+        Transaction(
+          to: EthereumAddress.fromHex(toAddress),
+          value: EtherAmount.inWei(amountInWei),
+        ),
+        chainId: NetworkConstants.sepoliaChainId,
+      );
+
+      return Result.success(txHash);
+    } catch (e, stackTrace) {
+      AppLogger.error('Error sending transaction', e, stackTrace);
+      return Result.failure(ServerFailure('Transaction failed: ${e.toString()}'));
     }
   }
 }
