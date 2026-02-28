@@ -6,6 +6,7 @@ import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource.dart'
 import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource_impl.dart';
 import 'package:non_custodial_wallet/data/datasources/transaction/transaction_datasource.dart';
 import 'package:non_custodial_wallet/data/datasources/wallet/wallet_datasource.dart';
+import 'package:non_custodial_wallet/data/datasources/token/token_datasource.dart';
 import 'package:non_custodial_wallet/data/datasources/market/alchemy_prices_datasource.dart';
 import 'package:non_custodial_wallet/data/repositories/auth/auth_repository_impl.dart';
 import 'package:non_custodial_wallet/domain/repositories/auth/i_auth_repository.dart';
@@ -17,19 +18,23 @@ import 'package:non_custodial_wallet/domain/usecases/auth/validate_key_use_case.
 import '../../data/datasources/storage/secure_storage_datasource.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
 import '../../data/repositories/market/market_repository_impl.dart';
+import '../../data/repositories/token/token_repository_impl.dart';
 import '../../domain/repositories/wallet/i_wallet_repository.dart';
 import '../../domain/repositories/market/i_market_repository.dart';
+import '../../domain/repositories/token/i_token_repository.dart';
 import '../../domain/usecases/market/get_coins_market_use_case.dart';
 import '../../domain/usecases/wallet/get_balance_use_case.dart';
 import '../../domain/usecases/wallet/get_eth_address_use_case.dart';
 import '../../domain/repositories/transaction/i_transaction_repository.dart';
 import '../../data/repositories/transaction/transaction_repository_impl.dart';
 import '../../domain/usecases/transaction/send_transaction_use_case.dart';
+import '../../domain/usecases/token/get_token_balances_use_case.dart';
 import '../features/cubits/wallet/wallet_cubit.dart';
 import '../features/cubits/market/market_cubit.dart';
 import '../features/cubits/send/send_cubit.dart';
 import '../features/cubits/receive/receive_cubit.dart';
 import '../features/cubits/theme/theme_cubit.dart';
+import '../features/cubits/token/token_cubit.dart';
 import '../core/constants/network_constants.dart';
 import '../core/constants/app_networks.dart';
 
@@ -73,6 +78,11 @@ void _initCubits() {
     ),
   );
   sl.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
+  sl.registerLazySingleton<TokenCubit>(
+    () => TokenCubit(
+      getTokenBalancesUseCase: sl<GetTokenBalancesUseCase>(),
+    ),
+  );
 }
 
 void _initUseCases() {
@@ -103,6 +113,9 @@ void _initUseCases() {
   sl.registerLazySingleton<GetEthAddressUseCase>(
     () => GetEthAddressUseCase(sl<IWalletRepository>()),
   );
+  sl.registerLazySingleton<GetTokenBalancesUseCase>(
+    () => GetTokenBalancesUseCase(sl<ITokenRepository>()),
+  );
 }
 
 void _initRepositories() {
@@ -117,6 +130,9 @@ void _initRepositories() {
   );
   sl.registerLazySingleton<ITransactionRepository>(
     () => TransactionRepositoryImpl(dataSource: sl<ITransactionDataSource>()),
+  );
+  sl.registerLazySingleton<ITokenRepository>(
+    () => TokenRepositoryImpl(tokenDataSource: sl<TokenDataSource>()),
   );
 }
 
@@ -150,5 +166,9 @@ void _initDataSources() {
 
   sl.registerLazySingleton<ITransactionDataSource>(
     () => TransactionDataSourceImpl(clients: sl<Map<int, Web3Client>>()),
+  );
+
+  sl.registerLazySingleton<TokenDataSource>(
+    () => TokenDataSourceImpl(clients: sl<Map<int, Web3Client>>()),
   );
 }

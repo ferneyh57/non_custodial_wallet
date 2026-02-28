@@ -14,7 +14,7 @@ class MarketRepositoryImpl implements IMarketRepository {
   Future<Result<List<CoinEntity>>> getCoinsMarket() async {
     try {
       final response = await dataSource.getTokenPricesBySymbol(
-        symbols: ['ETH', 'POL'],
+        symbols: ['ETH', 'POL', 'USDC', 'USDT', 'LINK', 'WETH', 'EURC'],
       );
       return Result.success(CoinMapper.toEntityList(response));
     } catch (e) {

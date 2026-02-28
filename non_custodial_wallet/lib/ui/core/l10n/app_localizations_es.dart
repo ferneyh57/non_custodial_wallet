@@ -102,4 +102,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get themeToggleTooltip => 'Cambiar tema';
+
+  @override
+  String get assetsTab => 'Activos';
+
+  @override
+  String get tokensTab => 'Tokens';
+
+  @override
+  String get noTokensFound => 'No se encontraron tokens';
+
+  @override
+  String get swapButton => 'Intercambiar';
+
+  @override
+  String get buyButton => 'Comprar';
+
+  @override
+  String get faucetButton => 'Faucet';
+
+  @override
+  String get faucetTitle => 'Faucets de Testnet';
+
+  @override
+  String get faucetSubtitle =>
+      'Obtén tokens de prueba gratis para probar la wallet';
 }

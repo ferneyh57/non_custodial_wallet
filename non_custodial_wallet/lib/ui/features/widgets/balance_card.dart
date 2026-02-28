@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_networks.dart';
 import '../../core/extensions/context_extension.dart';
+import '../../../domain/entities/token/token_balance_entity.dart';
 import '../cubits/wallet/wallet_state.dart';
 import '../cubits/market/market_state.dart';
 
 class BalanceCard extends StatefulWidget {
   final WalletState state;
   final MarketState marketState;
+  final List<TokenBalanceEntity> tokenBalances;
 
   const BalanceCard({
     super.key,
     required this.state,
     required this.marketState,
+    this.tokenBalances = const [],
   });
 
   @override
@@ -34,6 +37,11 @@ class _BalanceCardState extends State<BalanceCard> {
           widget.state.wallet?.balanceInEth(network.chainId) ?? 0.0;
       final price = priceBySymbol[network.nativeSymbol] ?? 0.0;
       totalUsd += balanceEth * price;
+    }
+    // Add token balances
+    for (final tb in widget.tokenBalances) {
+      final tokenPrice = priceBySymbol[tb.token.symbol] ?? 0.0;
+      totalUsd += tb.balanceFormatted * tokenPrice;
     }
     return totalUsd;
   }

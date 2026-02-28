@@ -277,6 +277,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Toggle theme'**
   String get themeToggleTooltip;
+
+  /// No description provided for @assetsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Assets'**
+  String get assetsTab;
+
+  /// No description provided for @tokensTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokens'**
+  String get tokensTab;
+
+  /// No description provided for @noTokensFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No tokens found'**
+  String get noTokensFound;
+
+  /// No description provided for @swapButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap'**
+  String get swapButton;
+
+  /// No description provided for @buyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get buyButton;
+
+  /// No description provided for @faucetButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Faucet'**
+  String get faucetButton;
+
+  /// No description provided for @faucetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Testnet Faucets'**
+  String get faucetTitle;
+
+  /// No description provided for @faucetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get free testnet tokens to try the wallet'**
+  String get faucetSubtitle;
 }
 
 class _AppLocalizationsDelegate

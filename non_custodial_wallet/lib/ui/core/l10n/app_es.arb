@@ -35,5 +35,13 @@
   "amountHint": "Monto",
   "maxButton": "MÁX",
   "sendAction": "Enviar",
-  "themeToggleTooltip": "Cambiar tema"
+  "themeToggleTooltip": "Cambiar tema",
+  "assetsTab": "Activos",
+  "tokensTab": "Tokens",
+  "noTokensFound": "No se encontraron tokens",
+  "swapButton": "Intercambiar",
+  "buyButton": "Comprar",
+  "faucetButton": "Faucet",
+  "faucetTitle": "Faucets de Testnet",
+  "faucetSubtitle": "Obtén tokens de prueba gratis para probar la wallet"
 }

@@ -7,6 +7,11 @@ class CoinMapper {
   static final _displayNames = {
     'ETH': 'Ethereum',
     'POL': 'Polygon',
+    'USDC': 'USD Coin',
+    'USDT': 'Tether USD',
+'LINK': 'Chainlink',
+    'WETH': 'Wrapped Ether',
+    'EURC': 'Euro Coin',
   };
 
   static CoinEntity? toEntity(AlchemyTokenPriceModel model) {
