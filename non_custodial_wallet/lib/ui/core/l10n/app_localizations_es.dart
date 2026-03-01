@@ -190,4 +190,44 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noTransactionsFound => 'No se encontraron transacciones';
+
+  @override
+  String get swapTitle => 'Intercambiar';
+
+  @override
+  String get fromNetworkLabel => 'Red de origen';
+
+  @override
+  String get toNetworkLabel => 'Red de destino';
+
+  @override
+  String get fromTokenLabel => 'Token de origen';
+
+  @override
+  String get toTokenLabel => 'Token de destino';
+
+  @override
+  String get getQuoteButton => 'Obtener cotización';
+
+  @override
+  String get swapAction => 'Intercambiar';
+
+  @override
+  String get swapConfirmTitle => 'Confirmar intercambio';
+
+  @override
+  String get minimumReceived => 'Mín. recibido';
+
+  @override
+  String get swapFeeLabel => 'Comisión';
+
+  @override
+  String get swapSponsored => 'Patrocinado';
+
+  @override
+  String get swapNotSponsored => 'Estándar';
+
+  @override
+  String get swapSponsoredRequired =>
+      'Esta red aún no soporta intercambios. Prueba con otra red.';
 }

@@ -166,7 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             icon:
                                                 Icons.swap_horiz_rounded,
                                             label: context.l10n.swapButton,
-                                            enabled: false,
+                                            onTap: () => context
+                                                .push(AppRoutes.swap),
                                           ),
                                           if (AppFaucets.isAvailable)
                                             QuickActionButton(

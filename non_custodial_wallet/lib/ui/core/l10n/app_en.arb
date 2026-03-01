@@ -64,5 +64,18 @@
   "cancelButton": "Cancel",
   "confirmButton": "Confirm",
   "activityTab": "Activity",
-  "noTransactionsFound": "No transactions found"
+  "noTransactionsFound": "No transactions found",
+  "swapTitle": "Swap",
+  "fromNetworkLabel": "From Network",
+  "toNetworkLabel": "To Network",
+  "fromTokenLabel": "From Token",
+  "toTokenLabel": "To Token",
+  "getQuoteButton": "Get Quote",
+  "swapAction": "Swap",
+  "swapConfirmTitle": "Confirm Swap",
+  "minimumReceived": "Min. received",
+  "swapFeeLabel": "Fee",
+  "swapSponsored": "Sponsored",
+  "swapNotSponsored": "Standard",
+  "swapSponsoredRequired": "This network does not support swaps yet. Try a different network."
 }

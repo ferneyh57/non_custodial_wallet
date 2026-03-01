@@ -41,6 +41,13 @@ import '../features/cubits/send/send_cubit.dart';
 import '../features/cubits/receive/receive_cubit.dart';
 import '../features/cubits/theme/theme_cubit.dart';
 import '../features/cubits/token/token_cubit.dart';
+import '../features/cubits/swap/swap_cubit.dart';
+import 'package:non_custodial_wallet/data/datasources/swap/swap_datasource.dart';
+import 'package:non_custodial_wallet/data/repositories/swap/swap_repository_impl.dart';
+import 'package:non_custodial_wallet/domain/repositories/swap/i_swap_repository.dart';
+import 'package:non_custodial_wallet/domain/usecases/swap/request_swap_quote_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/swap/execute_swap_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/swap/get_swap_status_use_case.dart';
 import '../core/constants/network_constants.dart';
 import '../core/constants/app_networks.dart';
 
@@ -98,6 +105,16 @@ void _initCubits() {
       networks: AppNetworks.all,
     ),
   );
+  sl.registerFactory<SwapCubit>(
+    () => SwapCubit(
+      requestSwapQuoteUseCase: sl<RequestSwapQuoteUseCase>(),
+      executeSwapUseCase: sl<ExecuteSwapUseCase>(),
+      getSwapStatusUseCase: sl<GetSwapStatusUseCase>(),
+      getKeyUseCase: sl<GetKeyUseCase>(),
+      getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+      networks: AppNetworks.all,
+    ),
+  );
 }
 
 void _initUseCases() {
@@ -140,6 +157,15 @@ void _initUseCases() {
   sl.registerLazySingleton<GetTransferHistoryUseCase>(
     () => GetTransferHistoryUseCase(sl<ITransactionRepository>()),
   );
+  sl.registerLazySingleton<RequestSwapQuoteUseCase>(
+    () => RequestSwapQuoteUseCase(sl<ISwapRepository>()),
+  );
+  sl.registerLazySingleton<ExecuteSwapUseCase>(
+    () => ExecuteSwapUseCase(sl<ISwapRepository>()),
+  );
+  sl.registerLazySingleton<GetSwapStatusUseCase>(
+    () => GetSwapStatusUseCase(sl<ISwapRepository>()),
+  );
 }
 
 void _initRepositories() {
@@ -160,6 +186,9 @@ void _initRepositories() {
   );
   sl.registerLazySingleton<ITokenRepository>(
     () => TokenRepositoryImpl(tokenDataSource: sl<TokenDataSource>()),
+  );
+  sl.registerLazySingleton<ISwapRepository>(
+    () => SwapRepositoryImpl(dataSource: sl<ISwapDataSource>()),
   );
 }
 
@@ -208,5 +237,9 @@ void _initDataSources() {
 
   sl.registerLazySingleton<TransferHistoryDataSource>(
     () => TransferHistoryDataSourceImpl(httpClient: httpClient),
+  );
+
+  sl.registerLazySingleton<ISwapDataSource>(
+    () => SwapDataSourceImpl(httpClient: httpClient),
   );
 }

@@ -451,6 +451,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No transactions found'**
   String get noTransactionsFound;
+
+  /// No description provided for @swapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap'**
+  String get swapTitle;
+
+  /// No description provided for @fromNetworkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'From Network'**
+  String get fromNetworkLabel;
+
+  /// No description provided for @toNetworkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'To Network'**
+  String get toNetworkLabel;
+
+  /// No description provided for @fromTokenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'From Token'**
+  String get fromTokenLabel;
+
+  /// No description provided for @toTokenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'To Token'**
+  String get toTokenLabel;
+
+  /// No description provided for @getQuoteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Quote'**
+  String get getQuoteButton;
+
+  /// No description provided for @swapAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap'**
+  String get swapAction;
+
+  /// No description provided for @swapConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Swap'**
+  String get swapConfirmTitle;
+
+  /// No description provided for @minimumReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Min. received'**
+  String get minimumReceived;
+
+  /// No description provided for @swapFeeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee'**
+  String get swapFeeLabel;
+
+  /// No description provided for @swapSponsored.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsored'**
+  String get swapSponsored;
+
+  /// No description provided for @swapNotSponsored.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get swapNotSponsored;
+
+  /// No description provided for @swapSponsoredRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This network does not support swaps yet. Try a different network.'**
+  String get swapSponsoredRequired;
 }
 
 class _AppLocalizationsDelegate

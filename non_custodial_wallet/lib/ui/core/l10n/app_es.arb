@@ -64,5 +64,18 @@
   "cancelButton": "Cancelar",
   "confirmButton": "Confirmar",
   "activityTab": "Actividad",
-  "noTransactionsFound": "No se encontraron transacciones"
+  "noTransactionsFound": "No se encontraron transacciones",
+  "swapTitle": "Intercambiar",
+  "fromNetworkLabel": "Red de origen",
+  "toNetworkLabel": "Red de destino",
+  "fromTokenLabel": "Token de origen",
+  "toTokenLabel": "Token de destino",
+  "getQuoteButton": "Obtener cotización",
+  "swapAction": "Intercambiar",
+  "swapConfirmTitle": "Confirmar intercambio",
+  "minimumReceived": "Mín. recibido",
+  "swapFeeLabel": "Comisión",
+  "swapSponsored": "Patrocinado",
+  "swapNotSponsored": "Estándar",
+  "swapSponsoredRequired": "Esta red aún no soporta intercambios. Prueba con otra red."
 }

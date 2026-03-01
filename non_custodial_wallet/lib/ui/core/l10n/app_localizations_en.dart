@@ -188,4 +188,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noTransactionsFound => 'No transactions found';
+
+  @override
+  String get swapTitle => 'Swap';
+
+  @override
+  String get fromNetworkLabel => 'From Network';
+
+  @override
+  String get toNetworkLabel => 'To Network';
+
+  @override
+  String get fromTokenLabel => 'From Token';
+
+  @override
+  String get toTokenLabel => 'To Token';
+
+  @override
+  String get getQuoteButton => 'Get Quote';
+
+  @override
+  String get swapAction => 'Swap';
+
+  @override
+  String get swapConfirmTitle => 'Confirm Swap';
+
+  @override
+  String get minimumReceived => 'Min. received';
+
+  @override
+  String get swapFeeLabel => 'Fee';
+
+  @override
+  String get swapSponsored => 'Sponsored';
+
+  @override
+  String get swapNotSponsored => 'Standard';
+
+  @override
+  String get swapSponsoredRequired =>
+      'This network does not support swaps yet. Try a different network.';
 }

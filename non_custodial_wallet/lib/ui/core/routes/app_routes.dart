@@ -8,4 +8,5 @@ class AppRoutes {
   static const String receive = '/receive';
   static const String faucet = '/faucet';
   static const String tokenDetail = '/token-detail';
+  static const String swap = '/swap';
 }
