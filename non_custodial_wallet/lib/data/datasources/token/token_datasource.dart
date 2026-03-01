@@ -1,4 +1,5 @@
-import 'package:web3dart/web3dart.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
 import '../../../domain/entities/token/token_balance_entity.dart';
@@ -14,16 +15,13 @@ abstract class TokenDataSource {
   });
 }
 
+/// Uses Alchemy's `alchemy_getTokenBalances` batch API to fetch all token
+/// balances for a wallet in a single RPC call per chain, instead of one
+/// `balanceOf` call per token.
 class TokenDataSourceImpl implements TokenDataSource {
-  final Map<int, Web3Client> clients;
+  final http.Client httpClient;
 
-  // Minimal ERC-20 ABI: only balanceOf(address) → uint256
-  static final _erc20Abi = ContractAbi.fromJson(
-    '[{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"}]',
-    'ERC20',
-  );
-
-  TokenDataSourceImpl({required this.clients});
+  TokenDataSourceImpl({required this.httpClient});
 
   @override
   Future<Result<List<TokenBalanceEntity>>> getTokenBalances({
@@ -31,49 +29,79 @@ class TokenDataSourceImpl implements TokenDataSource {
     required List<TokenEntity> tokens,
     required NetworkEntity network,
   }) async {
-    final client = clients[network.chainId];
-    if (client == null) {
-      return Result.failure(
-        ServerFailure('No client for ${network.shortName}'),
-      );
+    if (tokens.isEmpty) {
+      return Result.success([]);
     }
 
     try {
-      final owner = EthereumAddress.fromHex(walletAddress);
+      final contractAddresses =
+          tokens.map((t) => t.contractAddress).toList();
+
+      final response = await httpClient.post(
+        Uri.parse(network.rpcUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'jsonrpc': '2.0',
+          'method': 'alchemy_getTokenBalances',
+          'params': [walletAddress, contractAddresses],
+          'id': 1,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        return Result.failure(
+          ServerFailure(
+            'Token balances request failed: ${response.statusCode}',
+          ),
+        );
+      }
+
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+      if (json.containsKey('error')) {
+        final error = json['error'] as Map<String, dynamic>;
+        return Result.failure(
+          ServerFailure('RPC error: ${error['message']}'),
+        );
+      }
+
+      final result = json['result'] as Map<String, dynamic>;
+      final tokenBalances = result['tokenBalances'] as List<dynamic>;
+
+      // Map contract address (lowercase) → token for fast lookup
+      final tokenMap = {
+        for (final token in tokens)
+          token.contractAddress.toLowerCase(): token,
+      };
+
       final results = <TokenBalanceEntity>[];
+      for (final tb in tokenBalances) {
+        final contractAddress =
+            (tb['contractAddress'] as String).toLowerCase();
+        final token = tokenMap[contractAddress];
+        if (token == null) continue;
 
-      for (final token in tokens) {
-        try {
-          final contract = DeployedContract(
-            _erc20Abi,
-            EthereumAddress.fromHex(token.contractAddress),
-          );
-          final balanceOf = contract.function('balanceOf');
-          final response = await client.call(
-            contract: contract,
-            function: balanceOf,
-            params: [owner],
-          );
+        // Alchemy returns null or error field for failed lookups
+        final hasError = tb['error'] != null;
+        final balanceHex = tb['tokenBalance'] as String?;
 
-          final balance = response.first as BigInt;
-          results.add(TokenBalanceEntity(
-            token: token,
-            chainId: network.chainId,
-            balanceRaw: balance,
-          ));
-        } catch (e) {
-          AppLogger.error(
-            'Error fetching ${token.symbol} on ${network.shortName}',
-            e,
-            StackTrace.current,
-          );
-          // Add zero balance on error so the token still appears
-          results.add(TokenBalanceEntity(
-            token: token,
-            chainId: network.chainId,
-            balanceRaw: BigInt.zero,
-          ));
+        BigInt balance;
+        if (hasError ||
+            balanceHex == null ||
+            balanceHex == '0x' ||
+            balanceHex.isEmpty) {
+          balance = BigInt.zero;
+        } else {
+          final hex =
+              balanceHex.startsWith('0x') ? balanceHex.substring(2) : balanceHex;
+          balance = hex.isEmpty ? BigInt.zero : BigInt.parse(hex, radix: 16);
         }
+
+        results.add(TokenBalanceEntity(
+          token: token,
+          chainId: network.chainId,
+          balanceRaw: balance,
+        ));
       }
 
       return Result.success(results);

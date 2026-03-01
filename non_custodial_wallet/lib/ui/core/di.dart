@@ -188,6 +188,6 @@ void _initDataSources() {
   );
 
   sl.registerLazySingleton<TokenDataSource>(
-    () => TokenDataSourceImpl(clients: sl<Map<int, Web3Client>>()),
+    () => TokenDataSourceImpl(httpClient: httpClient),
   );
 }
