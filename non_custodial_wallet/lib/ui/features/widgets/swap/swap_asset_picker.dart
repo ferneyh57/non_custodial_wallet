@@ -164,28 +164,30 @@ class _SwapAssetPickerState extends State<SwapAssetPicker> {
           ),
           const SizedBox(height: 12),
           // Network filter chips
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                _NetworkChip(
-                  label: context.l10n.allNetworksFilter,
-                  isSelected: _selectedNetwork == null,
-                  onTap: () => setState(() => _selectedNetwork = null),
-                ),
-                for (final network in widget.networks) ...[
-                  const SizedBox(width: 8),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
                   _NetworkChip(
-                    label: network.shortName,
-                    iconUrl: network.iconUrl,
-                    isSelected:
-                        _selectedNetwork?.chainId == network.chainId,
-                    onTap: () =>
-                        setState(() => _selectedNetwork = network),
+                    label: context.l10n.allNetworksFilter,
+                    isSelected: _selectedNetwork == null,
+                    onTap: () => setState(() => _selectedNetwork = null),
                   ),
+                  for (final network in widget.networks) ...[
+                    const SizedBox(width: 8),
+                    _NetworkChip(
+                      label: network.shortName,
+                      iconUrl: network.iconUrl,
+                      isSelected:
+                          _selectedNetwork?.chainId == network.chainId,
+                      onTap: () =>
+                          setState(() => _selectedNetwork = network),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
           const SizedBox(height: 12),
