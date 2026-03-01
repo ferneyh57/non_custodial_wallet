@@ -10,23 +10,22 @@ Built with Clean Architecture (Domain / Data / Presentation layers), the project
 
 ---
 
-## Screenshots
+## App Preview
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/296af32e-f1b1-436a-a7d0-a1771f825900" width="230" alt="Welcome" />
-  <img src="https://github.com/user-attachments/assets/aa7f496a-1574-4a62-8e60-fac04b7587d1" width="230" alt="PIN Lock" />
-  <img src="https://github.com/user-attachments/assets/05e4c3e5-3f1e-48b0-8f95-9398a306b977" width="230" alt="Home - Networks" />
-</p>
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4c15cfcd-ee40-47e4-930f-6ceabfda7828" width="230" alt="Settings" />
-  <img src="https://github.com/user-attachments/assets/f320e187-892a-4bdd-9a29-fc74a7829ef5" width="230" alt="Tokens" />
-  <img src="https://github.com/user-attachments/assets/a13d1d04-f0ea-42cb-b1d6-f7f6d8c665e4" width="230" alt="Swap" />
-  <img src="https://github.com/user-attachments/assets/2362a8c6-9e93-4a30-9951-268f35e6239f" width="230" alt="Receive QR" />
-</p>
-
-<p align="center">
-  <em>Welcome &nbsp;|&nbsp; PIN Lock &nbsp;|&nbsp; Home &nbsp;|&nbsp; Settings &nbsp;|&nbsp; Tokens &nbsp;|&nbsp; Swap &nbsp;|&nbsp; Receive</em>
-</p>
+<table align="center">
+  <tr>
+    <td align="center"><img src="https://github.com/user-attachments/assets/296af32e-f1b1-436a-a7d0-a1771f825900" width="200" /><br /><sub><b>Welcome</b></sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/aa7f496a-1574-4a62-8e60-fac04b7587d1" width="200" /><br /><sub><b>PIN Lock</b></sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/05e4c3e5-3f1e-48b0-8f95-9398a306b977" width="200" /><br /><sub><b>Home</b></sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/4c15cfcd-ee40-47e4-930f-6ceabfda7828" width="200" /><br /><sub><b>Settings</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://github.com/user-attachments/assets/f320e187-892a-4bdd-9a29-fc74a7829ef5" width="200" /><br /><sub><b>Tokens</b></sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/a13d1d04-f0ea-42cb-b1d6-f7f6d8c665e4" width="200" /><br /><sub><b>Swap</b></sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/2362a8c6-9e93-4a30-9951-268f35e6239f" width="200" /><br /><sub><b>Receive</b></sub></td>
+    <td></td>
+  </tr>
+</table>
 
 ---
 
