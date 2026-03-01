@@ -29,6 +29,26 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTab = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialData();
+  }
+
+  /// Loads balance, market, tokens and history if not already cached.
+  /// TTL checks inside each cubit prevent redundant calls when coming
+  /// from splash (data already loaded).
+  void _loadInitialData() {
+    final address =
+        context.read<WalletCubit>().state.wallet?.ethAddress ?? '';
+    if (address.isEmpty) return;
+
+    context.read<WalletCubit>().fetchBalance();
+    context.read<MarketCubit>().loadCoins();
+    context.read<TokenCubit>().fetchTokenBalances(address);
+    context.read<TransferHistoryCubit>().loadAll(address);
+  }
+
   bool _onScroll(ScrollNotification notification) {
     if (_selectedTab != 2) return false;
     if (notification is! ScrollUpdateNotification) return false;
