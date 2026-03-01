@@ -272,4 +272,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pinResetButton => 'Restablecer Billetera';
+
+  @override
+  String get qrScannerTitle => 'Escanear Codigo QR';
+
+  @override
+  String get cameraPermissionDenied =>
+      'Se requiere permiso de camara para escanear codigos QR';
 }

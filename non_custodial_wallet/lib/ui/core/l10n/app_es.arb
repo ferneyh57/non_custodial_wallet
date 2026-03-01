@@ -90,5 +90,7 @@
   "pinForgotButton": "¿Olvidaste tu PIN?",
   "pinForgotTitle": "Olvidé mi PIN",
   "pinForgotMessage": "Esto eliminará todos los datos de la billetera. Necesitarás tu frase de recuperación para restaurar el acceso.",
-  "pinResetButton": "Restablecer Billetera"
+  "pinResetButton": "Restablecer Billetera",
+  "qrScannerTitle": "Escanear Codigo QR",
+  "cameraPermissionDenied": "Se requiere permiso de camara para escanear codigos QR"
 }

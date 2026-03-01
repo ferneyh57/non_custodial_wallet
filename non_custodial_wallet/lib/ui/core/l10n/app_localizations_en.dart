@@ -268,4 +268,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pinResetButton => 'Reset Wallet';
+
+  @override
+  String get qrScannerTitle => 'Scan QR Code';
+
+  @override
+  String get cameraPermissionDenied =>
+      'Camera permission is required to scan QR codes';
 }

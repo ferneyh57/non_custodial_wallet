@@ -607,6 +607,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset Wallet'**
   String get pinResetButton;
+
+  /// No description provided for @qrScannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR Code'**
+  String get qrScannerTitle;
+
+  /// No description provided for @cameraPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission is required to scan QR codes'**
+  String get cameraPermissionDenied;
 }
 
 class _AppLocalizationsDelegate

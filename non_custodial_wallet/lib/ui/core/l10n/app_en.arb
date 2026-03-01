@@ -90,5 +90,7 @@
   "pinForgotButton": "Forgot PIN?",
   "pinForgotTitle": "Forgot PIN",
   "pinForgotMessage": "This will delete all wallet data. You will need your recovery phrase to restore access.",
-  "pinResetButton": "Reset Wallet"
+  "pinResetButton": "Reset Wallet",
+  "qrScannerTitle": "Scan QR Code",
+  "cameraPermissionDenied": "Camera permission is required to scan QR codes"
 }

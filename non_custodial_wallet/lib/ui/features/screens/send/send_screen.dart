@@ -10,6 +10,7 @@ import '../../cubits/send/send_cubit.dart';
 import '../../cubits/send/send_state.dart';
 import '../../widgets/network_dropdown.dart';
 import '../../widgets/send/send_confirmation_sheet.dart';
+import '../qr_scanner/qr_scanner_screen.dart';
 
 class SendScreen extends StatelessWidget {
   final NetworkEntity? initialNetwork;
@@ -169,16 +170,21 @@ class SendScreenView extends StatelessWidget {
                               }
                             },
                           ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.qr_code_scanner_rounded,
-                              color: context.colors.primary,
-                              size: 20,
+                          if (QrScannerScreen.isSupported)
+                            IconButton(
+                              icon: Icon(
+                                Icons.qr_code_scanner_rounded,
+                                color: context.colors.primary,
+                                size: 20,
+                              ),
+                              onPressed: () async {
+                                final result =
+                                    await QrScannerScreen.show(context);
+                                if (result != null) {
+                                  cubit.addressController.text = result;
+                                }
+                              },
                             ),
-                            onPressed: () {
-                              // TODO: Implement scanner logic
-                            },
-                          ),
                           const SizedBox(width: 4),
                         ],
                       ),
