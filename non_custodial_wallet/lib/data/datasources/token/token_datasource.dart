@@ -1,11 +1,10 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
 import '../../../domain/entities/token/token_balance_entity.dart';
 import '../../../ui/core/error/failures.dart';
 import '../../../ui/core/util/result.dart';
 import '../../../ui/core/util/app_logger.dart';
+import '../shared/alchemy_rpc_client.dart';
 
 abstract class TokenDataSource {
   Future<Result<List<TokenBalanceEntity>>> getTokenBalances({
@@ -16,12 +15,11 @@ abstract class TokenDataSource {
 }
 
 /// Uses Alchemy's `alchemy_getTokenBalances` batch API to fetch all token
-/// balances for a wallet in a single RPC call per chain, instead of one
-/// `balanceOf` call per token.
+/// balances for a wallet in a single RPC call per chain.
 class TokenDataSourceImpl implements TokenDataSource {
-  final http.Client httpClient;
+  final AlchemyRpcClient rpcClient;
 
-  TokenDataSourceImpl({required this.httpClient});
+  TokenDataSourceImpl({required this.rpcClient});
 
   @override
   Future<Result<List<TokenBalanceEntity>>> getTokenBalances({
@@ -37,35 +35,12 @@ class TokenDataSourceImpl implements TokenDataSource {
       final contractAddresses =
           tokens.map((t) => t.contractAddress).toList();
 
-      final response = await httpClient.post(
-        Uri.parse(network.rpcUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'jsonrpc': '2.0',
-          'method': 'alchemy_getTokenBalances',
-          'params': [walletAddress, contractAddresses],
-          'id': 1,
-        }),
+      final result = await rpcClient.call(
+        method: 'alchemy_getTokenBalances',
+        params: [walletAddress, contractAddresses],
+        url: network.rpcUrl,
       );
 
-      if (response.statusCode != 200) {
-        return Result.failure(
-          ServerFailure(
-            'Token balances request failed: ${response.statusCode}',
-          ),
-        );
-      }
-
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-
-      if (json.containsKey('error')) {
-        final error = json['error'] as Map<String, dynamic>;
-        return Result.failure(
-          ServerFailure('RPC error: ${error['message']}'),
-        );
-      }
-
-      final result = json['result'] as Map<String, dynamic>;
       final tokenBalances = result['tokenBalances'] as List<dynamic>;
 
       // Map contract address (lowercase) → token for fast lookup

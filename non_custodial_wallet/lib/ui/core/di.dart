@@ -20,6 +20,8 @@ import 'package:non_custodial_wallet/domain/usecases/auth/get_key_use_case.dart'
 import 'package:non_custodial_wallet/domain/usecases/auth/save_key_use_case.dart';
 import 'package:non_custodial_wallet/domain/usecases/auth/validate_key_use_case.dart';
 import '../../data/datasources/storage/secure_storage_datasource.dart';
+import '../../data/datasources/shared/wallet_key_deriver.dart';
+import '../../data/datasources/shared/alchemy_rpc_client.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
 import '../../data/repositories/market/market_repository_impl.dart';
 import '../../data/repositories/token/token_repository_impl.dart';
@@ -193,6 +195,7 @@ void _initRepositories() {
 }
 
 void _initDataSources() {
+  // http.Client still needed for Web3Client
   final httpClient = http.Client();
   final clientsMap = {
     for (final network in AppNetworks.all)
@@ -200,8 +203,31 @@ void _initDataSources() {
   };
   sl.registerLazySingleton<Map<int, Web3Client>>(() => clientsMap);
 
+  // Shared utilities
+  sl.registerLazySingleton<WalletKeyDeriver>(
+    () => const WalletKeyDeriver(),
+  );
+
+  // Dio for JSON-RPC calls (replaces raw http.Client usage)
+  final rpcDio = Dio();
+  if (kDebugMode) {
+    rpcDio.interceptors.add(LogInterceptor(
+      requestHeader: false,
+      requestBody: true,
+      responseBody: true,
+    ));
+  }
+
+  // RPC client without baseUrl (for token + transfer_history with per-network URLs)
+  sl.registerLazySingleton<AlchemyRpcClient>(
+    () => AlchemyRpcClient(rpcDio),
+  );
+
   sl.registerLazySingleton<WalletDataSource>(
-    () => WalletDataSourceImpl(clients: sl<Map<int, Web3Client>>()),
+    () => WalletDataSourceImpl(
+      clients: sl<Map<int, Web3Client>>(),
+      keyDeriver: sl<WalletKeyDeriver>(),
+    ),
   );
 
   sl.registerLazySingleton<SecureStorageDataSource>(
@@ -212,6 +238,7 @@ void _initDataSources() {
     () => AuthDataSourceImpl(storageDataSource: sl<SecureStorageDataSource>()),
   );
 
+  // Alchemy Prices API (Retrofit + Dio)
   final alchemyDio = Dio(BaseOptions(
     baseUrl:
         '${NetworkConstants.alchemyPricesBaseUrl}${NetworkConstants.alchemyApiKey}/',
@@ -228,18 +255,27 @@ void _initDataSources() {
   );
 
   sl.registerLazySingleton<ITransactionDataSource>(
-    () => TransactionDataSourceImpl(clients: sl<Map<int, Web3Client>>()),
+    () => TransactionDataSourceImpl(
+      clients: sl<Map<int, Web3Client>>(),
+      keyDeriver: sl<WalletKeyDeriver>(),
+    ),
   );
 
   sl.registerLazySingleton<TokenDataSource>(
-    () => TokenDataSourceImpl(httpClient: httpClient),
+    () => TokenDataSourceImpl(rpcClient: sl<AlchemyRpcClient>()),
   );
 
   sl.registerLazySingleton<TransferHistoryDataSource>(
-    () => TransferHistoryDataSourceImpl(httpClient: httpClient),
+    () => TransferHistoryDataSourceImpl(rpcClient: sl<AlchemyRpcClient>()),
   );
 
+  // Swap uses a fixed base URL
+  final swapBaseUrl =
+      'https://api.g.alchemy.com/v2/${NetworkConstants.alchemyApiKey}';
   sl.registerLazySingleton<ISwapDataSource>(
-    () => SwapDataSourceImpl(httpClient: httpClient),
+    () => SwapDataSourceImpl(
+      rpcClient: AlchemyRpcClient(rpcDio, baseUrl: swapBaseUrl),
+      keyDeriver: sl<WalletKeyDeriver>(),
+    ),
   );
 }

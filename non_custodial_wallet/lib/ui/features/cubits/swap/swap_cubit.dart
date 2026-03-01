@@ -39,6 +39,7 @@ class SwapCubit extends Cubit<SwapState> {
   String _mnemonic = '';
   String _address = '';
   Timer? _statusTimer;
+  bool _swapInProgress = false;
 
   SwapCubit({
     required this.requestSwapQuoteUseCase,
@@ -204,9 +205,11 @@ class SwapCubit extends Cubit<SwapState> {
   }
 
   Future<void> executeSwap() async {
+    if (_swapInProgress) return;
     final quote = state.quote;
-    if (quote == null || _mnemonic.isEmpty || state.isExecuting) return;
+    if (quote == null || _mnemonic.isEmpty) return;
 
+    _swapInProgress = true;
     emit(state.copyWith(isExecuting: true, errorMessage: null));
 
     final result = await executeSwapUseCase(
@@ -218,10 +221,15 @@ class SwapCubit extends Cubit<SwapState> {
 
     result.fold(
       (callId) {
-        emit(state.copyWith(isExecuting: false, isTrackingStatus: true));
+        emit(state.copyWith(
+          isExecuting: false,
+          isTrackingStatus: true,
+          quote: null,
+        ));
         _pollSwapStatus(callId);
       },
       (failure) {
+        _swapInProgress = false;
         emit(state.copyWith(
           isExecuting: false,
           errorMessage: failure.message,
@@ -261,6 +269,7 @@ class SwapCubit extends Cubit<SwapState> {
 
   void resetSwap() {
     _statusTimer?.cancel();
+    _swapInProgress = false;
     emit(SwapState(fromNetwork: state.fromNetwork));
   }
 

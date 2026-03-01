@@ -34,7 +34,7 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
       networks.map((network) => getTransferHistoryUseCase(
             walletAddress: walletAddress,
             network: network,
-            maxCount: 2,
+            maxCount: maxCount,
           )),
     );
 

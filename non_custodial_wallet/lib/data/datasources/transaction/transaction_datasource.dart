@@ -1,14 +1,11 @@
-import 'package:bip39/bip39.dart' as bip39;
-import 'package:bip32/bip32.dart' as bip32;
-import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
-import 'dart:typed_data';
 import 'package:non_custodial_wallet/domain/entities/network/network_entity.dart';
 import 'package:non_custodial_wallet/domain/entities/token/token_entity.dart';
 import 'package:non_custodial_wallet/ui/core/error/failures.dart';
 import 'package:non_custodial_wallet/ui/core/util/app_logger.dart';
 import 'package:non_custodial_wallet/domain/entities/transaction/gas_estimate_entity.dart';
 import 'package:non_custodial_wallet/ui/core/util/result.dart';
+import '../shared/wallet_key_deriver.dart';
 
 abstract class ITransactionDataSource {
   Future<Result<String>> sendTransaction({
@@ -37,6 +34,7 @@ abstract class ITransactionDataSource {
 
 class TransactionDataSourceImpl implements ITransactionDataSource {
   final Map<int, Web3Client> clients;
+  final WalletKeyDeriver keyDeriver;
 
   // Minimal ERC-20 ABI: transfer(address,uint256) → bool
   static final _erc20Abi = ContractAbi.fromJson(
@@ -44,15 +42,10 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
     'ERC20',
   );
 
-  TransactionDataSourceImpl({required this.clients});
-
-  EthPrivateKey _deriveCredentials(String mnemonic) {
-    final seed = bip39.mnemonicToSeed(mnemonic);
-    final root = bip32.BIP32.fromSeed(seed);
-    final child = root.derivePath("m/44'/60'/0'/0/0");
-    final privateKey = Uint8List.fromList(child.privateKey!);
-    return EthPrivateKey.fromHex(HEX.encode(privateKey));
-  }
+  TransactionDataSourceImpl({
+    required this.clients,
+    required this.keyDeriver,
+  });
 
   @override
   Future<Result<String>> sendTransaction({
@@ -68,7 +61,7 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
       );
     }
     try {
-      final credentials = _deriveCredentials(mnemonic);
+      final credentials = keyDeriver.deriveCredentials(mnemonic);
 
       final txHash = await client.sendTransaction(
         credentials,
@@ -107,7 +100,7 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
       );
     }
     try {
-      final credentials = _deriveCredentials(mnemonic);
+      final credentials = keyDeriver.deriveCredentials(mnemonic);
 
       final contract = DeployedContract(
         _erc20Abi,

@@ -1,10 +1,9 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/transaction/transfer_entity.dart';
 import '../../../ui/core/error/failures.dart';
 import '../../../ui/core/util/result.dart';
 import '../../../ui/core/util/app_logger.dart';
+import '../shared/alchemy_rpc_client.dart';
 
 abstract class TransferHistoryDataSource {
   Future<Result<List<TransferEntity>>> getTransfers({
@@ -17,9 +16,9 @@ abstract class TransferHistoryDataSource {
 }
 
 class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
-  final http.Client httpClient;
+  final AlchemyRpcClient rpcClient;
 
-  TransferHistoryDataSourceImpl({required this.httpClient});
+  TransferHistoryDataSourceImpl({required this.rpcClient});
 
   @override
   Future<Result<List<TransferEntity>>> getTransfers({
@@ -110,27 +109,17 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
       params['contractAddresses'] = [contractAddress];
     }
 
-    final response = await httpClient.post(
-      Uri.parse(rpcUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'jsonrpc': '2.0',
-        'method': 'alchemy_getAssetTransfers',
-        'params': [params],
-        'id': 1,
-      }),
-    );
-
-    if (response.statusCode != 200) return [];
-
-    final json = jsonDecode(response.body) as Map<String, dynamic>;
-    if (json.containsKey('error')) return [];
-
-    final result = json['result'] as Map<String, dynamic>?;
-    if (result == null) return [];
-
-    final transfers = result['transfers'] as List<dynamic>?;
-    return transfers?.cast<Map<String, dynamic>>() ?? [];
+    try {
+      final result = await rpcClient.call(
+        method: 'alchemy_getAssetTransfers',
+        params: [params],
+        url: rpcUrl,
+      );
+      final transfers = result['transfers'] as List<dynamic>?;
+      return transfers?.cast<Map<String, dynamic>>() ?? [];
+    } catch (_) {
+      return [];
+    }
   }
 
   TransferEntity _toEntity(

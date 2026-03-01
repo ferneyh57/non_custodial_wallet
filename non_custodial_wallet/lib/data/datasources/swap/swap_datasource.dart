@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:bip39/bip39.dart' as bip39;
-import 'package:bip32/bip32.dart' as bip32;
 import 'package:hex/hex.dart';
-import 'package:http/http.dart' as http;
 import 'package:web3dart/web3dart.dart';
 import 'package:web3dart/crypto.dart' as crypto;
 import '../../../domain/entities/network/network_entity.dart';
@@ -12,7 +9,8 @@ import '../../../domain/entities/swap/swap_status_entity.dart';
 import '../../../ui/core/error/failures.dart';
 import '../../../ui/core/util/result.dart';
 import '../../../ui/core/util/app_logger.dart';
-import '../../../ui/core/constants/network_constants.dart';
+import '../shared/alchemy_rpc_client.dart';
+import '../shared/wallet_key_deriver.dart';
 
 abstract class ISwapDataSource {
   Future<Result<SwapQuoteEntity>> requestQuote({
@@ -33,20 +31,13 @@ abstract class ISwapDataSource {
 }
 
 class SwapDataSourceImpl implements ISwapDataSource {
-  final http.Client httpClient;
+  final AlchemyRpcClient rpcClient;
+  final WalletKeyDeriver keyDeriver;
 
-  static final String _baseUrl =
-      'https://api.g.alchemy.com/v2/${NetworkConstants.alchemyApiKey}';
-
-  SwapDataSourceImpl({required this.httpClient});
-
-  EthPrivateKey _deriveCredentials(String mnemonic) {
-    final seed = bip39.mnemonicToSeed(mnemonic);
-    final root = bip32.BIP32.fromSeed(seed);
-    final child = root.derivePath("m/44'/60'/0'/0/0");
-    final privateKey = Uint8List.fromList(child.privateKey!);
-    return EthPrivateKey.fromHex(HEX.encode(privateKey));
-  }
+  SwapDataSourceImpl({
+    required this.rpcClient,
+    required this.keyDeriver,
+  });
 
   String _toHex(BigInt value) => '0x${value.toRadixString(16)}';
 
@@ -66,41 +57,6 @@ class SwapDataSourceImpl implements ISwapDataSource {
     return padded;
   }
 
-  Future<Map<String, dynamic>> _rpcCall(
-    String method,
-    List<dynamic> params,
-  ) async {
-    final response = await httpClient.post(
-      Uri.parse(_baseUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'jsonrpc': '2.0',
-        'id': 1,
-        'method': method,
-        'params': params,
-      }),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('RPC request failed: ${response.statusCode}');
-    }
-
-    final json = jsonDecode(response.body) as Map<String, dynamic>;
-
-    AppLogger.info('RPC [$method] response body: ${response.body}');
-
-    if (json.containsKey('error')) {
-      final error = json['error'] as Map<String, dynamic>;
-      final message = error['message'] as String? ?? 'Unknown error';
-      if (message.contains('sponsored operations')) {
-        throw Exception('SPONSORED_REQUIRED:$message');
-      }
-      throw Exception('RPC error: $message');
-    }
-
-    return json['result'] as Map<String, dynamic>;
-  }
-
   @override
   Future<Result<SwapQuoteEntity>> requestQuote({
     required String fromAddress,
@@ -111,16 +67,19 @@ class SwapDataSourceImpl implements ISwapDataSource {
     required BigInt fromAmount,
   }) async {
     try {
-      final result = await _rpcCall('wallet_requestQuote_v0', [
-        {
-          'from': fromAddress,
-          'chainId': _chainIdToHex(fromNetwork.chainId),
-          'toChainId': _chainIdToHex(toNetwork.chainId),
-          'fromToken': fromTokenAddress,
-          'toToken': toTokenAddress,
-          'fromAmount': _toHex(fromAmount),
-        },
-      ]);
+      final result = await rpcClient.call(
+        method: 'wallet_requestQuote_v0',
+        params: [
+          {
+            'from': fromAddress,
+            'chainId': _chainIdToHex(fromNetwork.chainId),
+            'toChainId': _chainIdToHex(toNetwork.chainId),
+            'fromToken': fromTokenAddress,
+            'toToken': toTokenAddress,
+            'fromAmount': _toHex(fromAmount),
+          },
+        ],
+      );
 
       final quote = result['quote'] as Map<String, dynamic>?;
       final rawData = result['data'];
@@ -130,8 +89,6 @@ class SwapDataSourceImpl implements ISwapDataSource {
       if (rawData is List) {
         dataArray = rawData;
       } else if (rawData is Map) {
-        // Non-array: data contains the operation fields directly.
-        // Reconstruct a complete item with type/data/chainId from top-level.
         final wrappedItem = <String, dynamic>{
           'type': result['type'] as String,
           'data': rawData,
@@ -150,7 +107,6 @@ class SwapDataSourceImpl implements ISwapDataSource {
         throw Exception('Invalid quote response: missing quote or data');
       }
 
-      // Extract signature requests and feePayment from each data item
       final signatureRequests = <SwapSignatureRequest>[];
       bool isSponsored = false;
 
@@ -166,7 +122,6 @@ class SwapDataSourceImpl implements ISwapDataSource {
             final sigData = sigReq['data'] as Map<String, dynamic>;
             rawPayload = sigData['raw'] as String;
           } else {
-            // eip7702Auth and others use rawPayload directly
             rawPayload = sigReq['rawPayload'] as String;
           }
 
@@ -192,6 +147,16 @@ class SwapDataSourceImpl implements ISwapDataSource {
         isSponsored: isSponsored,
         signatureRequests: signatureRequests,
       ));
+    } on RpcException catch (e, stackTrace) {
+      AppLogger.error('Error requesting swap quote', e, stackTrace);
+      if (e.isSponsoredRequired) {
+        return Result.failure(
+          ServerFailure('SPONSORED_REQUIRED:${e.message}'),
+        );
+      }
+      return Result.failure(
+        ServerFailure('Failed to get swap quote: ${e.message}'),
+      );
     } catch (e, stackTrace) {
       AppLogger.error('Error requesting swap quote', e, stackTrace);
       return Result.failure(
@@ -218,7 +183,6 @@ class SwapDataSourceImpl implements ISwapDataSource {
       sigBytes.setRange(0, 32, r);
       sigBytes.setRange(32, 64, s);
       sigBytes[64] = v;
-      // SDK uses "secp256k1" type for all signatures, including eip7702Auth
       return {'type': 'secp256k1', 'data': _bytesToHex(sigBytes)};
     }
 
@@ -231,10 +195,9 @@ class SwapDataSourceImpl implements ISwapDataSource {
     required SwapQuoteEntity quote,
   }) async {
     try {
-      final credentials = _deriveCredentials(mnemonic);
+      final credentials = keyDeriver.deriveCredentials(mnemonic);
       final dataArray = jsonDecode(quote.preparedDataJson) as List<dynamic>;
 
-      // Sign each data item and embed the signature, replacing signatureRequest.
       int sigIndex = 0;
       final signedItems = <Map<String, dynamic>>[];
 
@@ -242,10 +205,8 @@ class SwapDataSourceImpl implements ISwapDataSource {
         final itemMap = Map<String, dynamic>.from(item as Map);
         final hasSigReq = itemMap.containsKey('signatureRequest');
 
-        // Remove signatureRequest (replaced by signature), keep feePayment
         itemMap.remove('signatureRequest');
 
-        // Add signature for items that had a signatureRequest
         if (hasSigReq && sigIndex < quote.signatureRequests.length) {
           itemMap['signature'] =
               _signRequest(quote.signatureRequests[sigIndex], credentials);
@@ -255,7 +216,6 @@ class SwapDataSourceImpl implements ISwapDataSource {
         signedItems.add(itemMap);
       }
 
-      // Always send as array type
       final requestParams = [
         {
           'type': 'array',
@@ -263,10 +223,10 @@ class SwapDataSourceImpl implements ISwapDataSource {
         },
       ];
 
-      AppLogger.info(
-          'sendPreparedCalls request: ${jsonEncode(requestParams)}');
-
-      final result = await _rpcCall('wallet_sendPreparedCalls', requestParams);
+      final result = await rpcClient.call(
+        method: 'wallet_sendPreparedCalls',
+        params: requestParams,
+      );
 
       final callId = result['id'] as String;
       return Result.success(callId);
@@ -281,7 +241,10 @@ class SwapDataSourceImpl implements ISwapDataSource {
   @override
   Future<Result<SwapStatusEntity>> getSwapStatus(String callId) async {
     try {
-      final result = await _rpcCall('wallet_getCallsStatus', [callId]);
+      final result = await rpcClient.call(
+        method: 'wallet_getCallsStatus',
+        params: [callId],
+      );
 
       final status = result['status'] as int;
       final receipts = result['receipts'] as List<dynamic>?;
