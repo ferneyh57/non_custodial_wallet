@@ -91,12 +91,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
               );
             },
           ),
-          Center(
-            child: CustomPaint(
-              size: const Size(260, 260),
-              painter: _ScanOverlayPainter(
-                color: context.colors.primary,
-              ),
+          CustomPaint(
+            size: Size.infinite,
+            painter: _ScanOverlayPainter(
+              color: context.colors.primary,
+              scanSize: 260,
             ),
           ),
         ],
@@ -107,59 +106,78 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
 
 class _ScanOverlayPainter extends CustomPainter {
   final Color color;
+  final double scanSize;
 
-  _ScanOverlayPainter({required this.color});
+  _ScanOverlayPainter({required this.color, required this.scanSize});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
+    const cornerLength = 32.0;
+    const radius = 16.0;
+
+    final left = (size.width - scanSize) / 2;
+    final top = (size.height - scanSize) / 2;
+    final scanRect = Rect.fromLTWH(left, top, scanSize, scanSize);
+    final scanRRect =
+        RRect.fromRectAndRadius(scanRect, const Radius.circular(radius));
+
+    // Dark overlay with cutout
+    final overlayPath = Path()
+      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
+      ..addRRect(scanRRect)
+      ..fillType = PathFillType.evenOdd;
+    canvas.drawPath(
+      overlayPath,
+      Paint()..color = Colors.black.withValues(alpha: 0.6),
+    );
+
+    // Corner brackets
+    final cornerPaint = Paint()
       ..color = color
       ..strokeWidth = 4
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    const cornerLength = 32.0;
-    const radius = 16.0;
+    final r = scanRect;
 
     // Top-left
     canvas.drawPath(
       Path()
-        ..moveTo(0, cornerLength)
-        ..lineTo(0, radius)
-        ..quadraticBezierTo(0, 0, radius, 0)
-        ..lineTo(cornerLength, 0),
-      paint,
+        ..moveTo(r.left, r.top + cornerLength)
+        ..lineTo(r.left, r.top + radius)
+        ..quadraticBezierTo(r.left, r.top, r.left + radius, r.top)
+        ..lineTo(r.left + cornerLength, r.top),
+      cornerPaint,
     );
 
     // Top-right
     canvas.drawPath(
       Path()
-        ..moveTo(size.width - cornerLength, 0)
-        ..lineTo(size.width - radius, 0)
-        ..quadraticBezierTo(size.width, 0, size.width, radius)
-        ..lineTo(size.width, cornerLength),
-      paint,
+        ..moveTo(r.right - cornerLength, r.top)
+        ..lineTo(r.right - radius, r.top)
+        ..quadraticBezierTo(r.right, r.top, r.right, r.top + radius)
+        ..lineTo(r.right, r.top + cornerLength),
+      cornerPaint,
     );
 
     // Bottom-left
     canvas.drawPath(
       Path()
-        ..moveTo(0, size.height - cornerLength)
-        ..lineTo(0, size.height - radius)
-        ..quadraticBezierTo(0, size.height, radius, size.height)
-        ..lineTo(cornerLength, size.height),
-      paint,
+        ..moveTo(r.left, r.bottom - cornerLength)
+        ..lineTo(r.left, r.bottom - radius)
+        ..quadraticBezierTo(r.left, r.bottom, r.left + radius, r.bottom)
+        ..lineTo(r.left + cornerLength, r.bottom),
+      cornerPaint,
     );
 
     // Bottom-right
     canvas.drawPath(
       Path()
-        ..moveTo(size.width - cornerLength, size.height)
-        ..lineTo(size.width - radius, size.height)
-        ..quadraticBezierTo(
-            size.width, size.height, size.width, size.height - radius)
-        ..lineTo(size.width, size.height - cornerLength),
-      paint,
+        ..moveTo(r.right - cornerLength, r.bottom)
+        ..lineTo(r.right - radius, r.bottom)
+        ..quadraticBezierTo(r.right, r.bottom, r.right, r.bottom - radius)
+        ..lineTo(r.right, r.bottom - cornerLength),
+      cornerPaint,
     );
   }
 
