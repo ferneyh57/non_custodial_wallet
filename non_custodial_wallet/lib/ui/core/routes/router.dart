@@ -1,23 +1,23 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../features/screens/welcome/welcome_screen.dart';
-import '../../features/screens/home/home_screen.dart';
-import '../../features/screens/auth/create_wallet_screen.dart';
-import '../../features/screens/auth/import_wallet_screen.dart';
-import '../../features/screens/send/send_screen.dart';
-import '../../features/screens/receive/receive_screen.dart';
-import '../../features/screens/faucet/faucet_screen.dart';
-import '../../features/screens/token_detail/token_detail_screen.dart';
-import '../../features/screens/swap/swap_screen.dart';
-import '../../features/screens/splash/splash_screen.dart';
-import '../../features/screens/pin/pin_screen.dart';
-import '../../features/screens/settings/settings_screen.dart';
+import '../../features/welcome/welcome_screen.dart';
+import '../../features/home/home_screen.dart';
+import '../../features/auth/create_wallet_screen.dart';
+import '../../features/auth/import_wallet_screen.dart';
+import '../../features/send/send_screen.dart';
+import '../../features/receive/receive_screen.dart';
+import '../../features/faucet/faucet_screen.dart';
+import '../../features/token_detail/token_detail_screen.dart';
+import '../../features/swap/swap_screen.dart';
+import '../../features/splash/splash_screen.dart';
+import '../../features/pin/pin_screen.dart';
+import '../../features/settings/settings_screen.dart';
 import '../../../domain/entities/token_detail/token_detail_args.dart';
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
-import '../../features/cubits/wallet/wallet_cubit.dart';
-import '../../features/cubits/pin/pin_cubit.dart';
+import '../../commons/cubits/wallet/wallet_cubit.dart';
+import '../../commons/cubits/pin/pin_cubit.dart';
 import 'app_routes.dart';
 
 GoRouter createRouter(WalletCubit walletCubit, PinCubit pinCubit) => GoRouter(
