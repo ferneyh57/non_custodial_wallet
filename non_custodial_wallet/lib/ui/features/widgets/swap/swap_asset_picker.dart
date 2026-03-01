@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../domain/entities/network/network_entity.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../cubits/swap/swap_cubit.dart';
 
 class SwapAssetPicker extends StatefulWidget {
   final List<SwapAsset> assets;
+  final List<NetworkEntity> networks;
   final String title;
 
   const SwapAssetPicker({
     super.key,
     required this.assets,
+    required this.networks,
     required this.title,
   });
 
@@ -18,13 +21,18 @@ class SwapAssetPicker extends StatefulWidget {
   static Future<SwapAsset?> show(
     BuildContext context, {
     required List<SwapAsset> assets,
+    required List<NetworkEntity> networks,
     required String title,
   }) {
     return showModalBottomSheet<SwapAsset>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => SwapAssetPicker(assets: assets, title: title),
+      builder: (_) => SwapAssetPicker(
+        assets: assets,
+        networks: networks,
+        title: title,
+      ),
     );
   }
 
@@ -35,6 +43,7 @@ class SwapAssetPicker extends StatefulWidget {
 class _SwapAssetPickerState extends State<SwapAssetPicker> {
   final _searchController = TextEditingController();
   String _query = '';
+  NetworkEntity? _selectedNetwork;
 
   @override
   void dispose() {
@@ -43,13 +52,24 @@ class _SwapAssetPickerState extends State<SwapAssetPicker> {
   }
 
   List<SwapAsset> get _filtered {
-    if (_query.isEmpty) return widget.assets;
-    final q = _query.toLowerCase();
-    return widget.assets.where((a) {
-      return a.symbol.toLowerCase().contains(q) ||
-          a.name.toLowerCase().contains(q) ||
-          a.networkName.toLowerCase().contains(q);
-    }).toList();
+    var list = widget.assets;
+
+    if (_selectedNetwork != null) {
+      list = list
+          .where((a) => a.network.chainId == _selectedNetwork!.chainId)
+          .toList();
+    }
+
+    if (_query.isNotEmpty) {
+      final q = _query.toLowerCase();
+      list = list.where((a) {
+        return a.symbol.toLowerCase().contains(q) ||
+            a.name.toLowerCase().contains(q) ||
+            a.networkName.toLowerCase().contains(q);
+      }).toList();
+    }
+
+    return list;
   }
 
   @override
@@ -143,6 +163,32 @@ class _SwapAssetPickerState extends State<SwapAssetPicker> {
             ),
           ),
           const SizedBox(height: 12),
+          // Network filter chips
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                _NetworkChip(
+                  label: context.l10n.allNetworksFilter,
+                  isSelected: _selectedNetwork == null,
+                  onTap: () => setState(() => _selectedNetwork = null),
+                ),
+                for (final network in widget.networks) ...[
+                  const SizedBox(width: 8),
+                  _NetworkChip(
+                    label: network.shortName,
+                    iconUrl: network.iconUrl,
+                    isSelected:
+                        _selectedNetwork?.chainId == network.chainId,
+                    onTap: () =>
+                        setState(() => _selectedNetwork = network),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
           // Asset list
           Flexible(
             child: filtered.isEmpty
@@ -187,6 +233,65 @@ class _SwapAssetPickerState extends State<SwapAssetPicker> {
                   ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _NetworkChip extends StatelessWidget {
+  final String label;
+  final String? iconUrl;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _NetworkChip({
+    required this.label,
+    this.iconUrl,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? context.colors.primary
+              : context.appColors.cardColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected
+                ? context.colors.primary
+                : context.appColors.cardBorder,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (iconUrl != null && iconUrl!.isNotEmpty) ...[
+              CircleAvatar(
+                radius: 10,
+                backgroundColor: Colors.transparent,
+                backgroundImage: NetworkImage(iconUrl!),
+                onBackgroundImageError: (_, _) {},
+              ),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              label,
+              style: GoogleFonts.poppins(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: isSelected
+                    ? context.colors.onPrimary
+                    : context.colors.onSurface,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

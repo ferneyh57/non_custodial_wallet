@@ -35,10 +35,12 @@ class SwapConfirmationSheet extends StatelessWidget {
         final cubit = context.read<SwapCubit>();
         final quote = state.quote;
         final isProcessing = state.isExecuting || state.isTrackingStatus;
-        final fromSymbol =
-            state.fromToken?.symbol ?? state.fromNetwork?.nativeSymbol ?? '';
-        final toSymbol =
-            state.toToken?.symbol ?? state.toNetwork?.nativeSymbol ?? '';
+        final fromSymbol = state.fromSymbol;
+        final toSymbol = state.toSymbol;
+        final minReceived = quote != null
+            ? _formatHexAmount(
+                quote.minimumToAmount, state.toToken?.decimals ?? 18)
+            : '';
 
         return Container(
           decoration: BoxDecoration(
@@ -74,7 +76,7 @@ class SwapConfirmationSheet extends StatelessWidget {
               ),
               const SizedBox(height: 24),
 
-              // Details card
+              // From / To asset cards
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
@@ -86,30 +88,86 @@ class SwapConfirmationSheet extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _SwapDetailRow(
-                        label: context.l10n.fromNetworkLabel,
-                        value: state.fromNetwork?.shortName ?? '',
-                        iconUrl: state.fromNetwork?.iconUrl ?? '',
+                      // From asset row (debit)
+                      _SwapAssetRow(
+                        iconUrl: state.fromIconUrl,
+                        networkIconUrl: state.fromNetwork?.iconUrl ?? '',
+                        symbol: fromSymbol,
+                        networkName: state.fromNetwork?.shortName ?? '',
+                        amount: '-${state.amount}',
+                        color: context.colors.error,
+                        arrowIcon: Icons.arrow_upward_rounded,
                       ),
-                      const SizedBox(height: 12),
-                      _SwapDetailRow(
-                        label: context.l10n.toNetworkLabel,
-                        value: state.toNetwork?.shortName ?? '',
-                        iconUrl: state.toNetwork?.iconUrl ?? '',
+
+                      // Swap direction indicator
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: context.appColors.cardBorder,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Container(
+                                width: 32,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  color: context.colors.primary
+                                      .withValues(alpha: 0.12),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.swap_vert_rounded,
+                                  color: context.colors.primary,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                color: context.appColors.cardBorder,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Divider(height: 1),
+
+                      // To asset row (credit)
+                      _SwapAssetRow(
+                        iconUrl: state.toIconUrl,
+                        networkIconUrl: state.toNetwork?.iconUrl ?? '',
+                        symbol: toSymbol,
+                        networkName: state.toNetwork?.shortName ?? '',
+                        amount: '+$minReceived',
+                        color: Colors.green,
+                        arrowIcon: Icons.arrow_downward_rounded,
                       ),
-                      _TextRow(
-                        label: context.l10n.amountHint,
-                        value: '${state.amount} $fromSymbol',
-                      ),
-                      if (quote != null) ...[
-                        const SizedBox(height: 12),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Detail rows
+              if (quote != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: context.appColors.cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: context.appColors.cardBorder),
+                    ),
+                    child: Column(
+                      children: [
                         _TextRow(
                           label: context.l10n.minimumReceived,
-                          value: '${_formatHexAmount(quote.minimumToAmount, state.toToken?.decimals ?? 18)} $toSymbol',
+                          value: '$minReceived $toSymbol',
                         ),
                         const SizedBox(height: 12),
                         _TextRow(
@@ -119,18 +177,30 @@ class SwapConfirmationSheet extends StatelessWidget {
                               : context.l10n.swapNotSponsored,
                         ),
                       ],
-                      if (state.isTrackingStatus &&
-                          state.swapStatus != null) ...[
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Divider(height: 1),
-                        ),
-                        _StatusRow(status: state.swapStatus!.statusLabel),
-                      ],
-                    ],
+                    ),
                   ),
                 ),
-              ),
+
+              // Status tracking
+              if (state.isTrackingStatus && state.swapStatus != null) ...[
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: context.colors.primary.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: context.colors.primary.withValues(alpha: 0.2),
+                      ),
+                    ),
+                    child:
+                        _StatusRow(status: state.swapStatus!.statusLabel),
+                  ),
+                ),
+              ],
+
               const SizedBox(height: 24),
 
               // Buttons
@@ -142,8 +212,9 @@ class SwapConfirmationSheet extends StatelessWidget {
                       child: SizedBox(
                         height: 50,
                         child: OutlinedButton(
-                          onPressed:
-                              isProcessing ? null : () => Navigator.of(context).pop(),
+                          onPressed: isProcessing
+                              ? null
+                              : () => Navigator.of(context).pop(),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: context.colors.onSurface,
                             side: BorderSide(
@@ -184,8 +255,9 @@ class SwapConfirmationSheet extends StatelessWidget {
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: ElevatedButton(
-                            onPressed:
-                                isProcessing ? null : () => cubit.executeSwap(),
+                            onPressed: isProcessing
+                                ? null
+                                : () => cubit.executeSwap(),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               shadowColor: Colors.transparent,
@@ -234,66 +306,138 @@ class SwapConfirmationSheet extends StatelessWidget {
     final whole = raw ~/ divisor;
     final fraction = raw % divisor;
     if (fraction == BigInt.zero) return whole.toString();
-    final fractionStr =
-        fraction.toString().padLeft(decimals, '0').replaceAll(RegExp(r'0+$'), '');
+    final fractionStr = fraction
+        .toString()
+        .padLeft(decimals, '0')
+        .replaceAll(RegExp(r'0+$'), '');
     return '$whole.$fractionStr';
   }
 }
 
-class _SwapDetailRow extends StatelessWidget {
-  final String label;
-  final String value;
+class _SwapAssetRow extends StatelessWidget {
   final String iconUrl;
+  final String networkIconUrl;
+  final String symbol;
+  final String networkName;
+  final String amount;
+  final Color color;
+  final IconData arrowIcon;
 
-  const _SwapDetailRow({
-    required this.label,
-    required this.value,
+  const _SwapAssetRow({
     required this.iconUrl,
+    required this.networkIconUrl,
+    required this.symbol,
+    required this.networkName,
+    required this.amount,
+    required this.color,
+    required this.arrowIcon,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            color: context.appColors.subtitleText,
-            fontSize: 14,
+        // Asset icon with direction badge
+        SizedBox(
+          width: 48,
+          height: 48,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              CircleAvatar(
+                radius: 22,
+                backgroundColor:
+                    context.colors.primary.withValues(alpha: 0.12),
+                backgroundImage:
+                    iconUrl.isNotEmpty ? NetworkImage(iconUrl) : null,
+                onBackgroundImageError:
+                    iconUrl.isNotEmpty ? (_, _) {} : null,
+                child: iconUrl.isEmpty
+                    ? Text(
+                        symbol.isNotEmpty ? symbol[0] : '?',
+                        style: GoogleFonts.poppins(
+                          color: context.colors.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      )
+                    : null,
+              ),
+              // Direction arrow badge
+              Positioned(
+                right: -2,
+                bottom: -2,
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: context.appColors.cardColor,
+                      width: 2,
+                    ),
+                  ),
+                  child: Icon(arrowIcon, color: Colors.white, size: 12),
+                ),
+              ),
+              // Network badge
+              if (networkIconUrl.isNotEmpty)
+                Positioned(
+                  left: -2,
+                  bottom: -2,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: context.appColors.cardColor,
+                        width: 2,
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 8,
+                      backgroundColor: context.appColors.cardColor,
+                      backgroundImage: NetworkImage(networkIconUrl),
+                      onBackgroundImageError: (_, _) {},
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 10,
-              backgroundColor:
-                  context.colors.primary.withValues(alpha: 0.12),
-              backgroundImage:
-                  iconUrl.isNotEmpty ? NetworkImage(iconUrl) : null,
-              onBackgroundImageError:
-                  iconUrl.isNotEmpty ? (_, _) {} : null,
-              child: iconUrl.isEmpty
-                  ? Text(
-                      value.isNotEmpty ? value[0] : '?',
-                      style: GoogleFonts.poppins(
-                        color: context.colors.primary,
-                        fontSize: 9,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : null,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              value,
-              style: GoogleFonts.poppins(
-                color: context.colors.onSurface,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+        const SizedBox(width: 14),
+        // Symbol + network name
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                symbol,
+                style: GoogleFonts.poppins(
+                  color: context.colors.onSurface,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 2),
+              Text(
+                networkName,
+                style: GoogleFonts.poppins(
+                  color: context.appColors.subtitleText,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Amount with sign
+        Text(
+          amount,
+          style: GoogleFonts.poppins(
+            color: color,
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+          ),
         ),
       ],
     );
@@ -344,10 +488,13 @@ class _StatusRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(
+        SizedBox(
           width: 16,
           height: 16,
-          child: CircularProgressIndicator(strokeWidth: 2),
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: context.colors.primary,
+          ),
         ),
         const SizedBox(width: 10),
         Text(
