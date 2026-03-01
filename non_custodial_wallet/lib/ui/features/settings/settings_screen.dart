@@ -18,9 +18,10 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           context.l10n.settingsTitle,
-          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
         ),
       ),
       body: ListView(
@@ -48,13 +49,13 @@ class _NetworkModeSection extends StatelessWidget {
           ),
           title: Text(
             context.l10n.settingsNetworkMode,
-            style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(
             state.isMainnet
                 ? context.l10n.settingsNetworkModeMainnet
                 : context.l10n.settingsNetworkModeTestnet,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: context.appColors.subtitleText,
               fontSize: 13,
             ),
@@ -81,13 +82,13 @@ class _ThemeSection extends StatelessWidget {
           ),
           title: Text(
             context.l10n.settingsTheme,
-            style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(
             isDark
                 ? context.l10n.settingsThemeDark
                 : context.l10n.settingsThemeLight,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: context.appColors.subtitleText,
               fontSize: 13,
             ),
@@ -107,11 +108,11 @@ class _CopySeedSection extends StatelessWidget {
       leading: Icon(Icons.key_rounded, color: context.appColors.subtitleText),
       title: Text(
         context.l10n.settingsCopySeed,
-        style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+        style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         context.l10n.settingsCopySeedSubtitle,
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.spaceGrotesk(
           color: context.appColors.subtitleText,
           fontSize: 13,
         ),
@@ -138,14 +139,14 @@ class _LogoutSection extends StatelessWidget {
       leading: const Icon(Icons.logout_rounded, color: Colors.red),
       title: Text(
         context.l10n.settingsLogout,
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.spaceGrotesk(
           fontWeight: FontWeight.w500,
           color: Colors.red,
         ),
       ),
       subtitle: Text(
         context.l10n.settingsLogoutSubtitle,
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.spaceGrotesk(
           color: context.appColors.subtitleText,
           fontSize: 13,
         ),
@@ -160,11 +161,11 @@ class _LogoutSection extends StatelessWidget {
       builder: (dialogContext) => AlertDialog(
         title: Text(
           context.l10n.settingsLogoutConfirmTitle,
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
         ),
         content: Text(
           context.l10n.settingsLogoutConfirmMessage,
-          style: GoogleFonts.poppins(),
+          style: GoogleFonts.spaceGrotesk(),
         ),
         actions: [
           TextButton(

@@ -80,7 +80,7 @@ class SwapActionButton extends StatelessWidget {
                 hasQuote
                     ? context.l10n.swapAction
                     : context.l10n.getQuoteButton,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),

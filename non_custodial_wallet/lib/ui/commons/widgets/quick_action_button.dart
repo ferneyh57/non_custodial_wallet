@@ -66,7 +66,7 @@ class QuickActionButton extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             label,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: context.colors.onSurface,
               fontSize: 12,
               fontWeight: FontWeight.w600,

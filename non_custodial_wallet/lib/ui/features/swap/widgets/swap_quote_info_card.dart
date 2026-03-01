@@ -48,7 +48,7 @@ class SwapQuoteInfoCard extends StatelessWidget {
           Expanded(
             child: Text(
               '${context.l10n.minimumReceived}: ${_formatHexAmount(quote.minimumToAmount, state.toToken?.decimals ?? 18)} ${state.toSymbol}',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.spaceGrotesk(
                 color: context.colors.primary,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,

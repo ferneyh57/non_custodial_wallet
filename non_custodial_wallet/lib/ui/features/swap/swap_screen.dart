@@ -114,7 +114,7 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
           appBar: AppBar(
             title: Text(
               context.l10n.swapTitle,
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
           ),
@@ -147,7 +147,7 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
                           Expanded(
                             child: Text(
                               context.l10n.swapTestnetDisclaimer,
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.spaceGrotesk(
                                 color: Colors.orange,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
@@ -247,7 +247,7 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                         SingleDotFormatter(),
                       ],
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         color: context.colors.onSurface,
                       ),
                       decoration: InputDecoration(
@@ -277,7 +277,7 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
                                           horizontal: 8, vertical: 4),
                                       child: Text(
                                         context.l10n.maxButton,
-                                        style: GoogleFonts.poppins(
+                                        style: GoogleFonts.spaceGrotesk(
                                           color: context.colors.primary,
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600,

@@ -44,7 +44,7 @@ class FaucetItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   faucet.name,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.spaceGrotesk(
                     color: context.colors.onSurface,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,

@@ -24,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _initializeApp() async {
     final walletCubit = context.read<WalletCubit>();
+    final minSplash = Future.delayed(const Duration(seconds: 2));
 
     await walletCubit.loadWallet();
     if (!mounted) return;
@@ -40,6 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
 
+    await minSplash;
     if (!mounted) return;
     walletCubit.setReady();
   }
@@ -65,16 +67,12 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: context.colors.primary.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.account_balance_wallet_rounded,
-                  size: 80,
-                  color: context.colors.primary,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Image.asset(
+                  'assets/app-icon.png',
+                  width: 120,
+                  height: 120,
                 ),
               )
                   .animate()
@@ -88,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen> {
               const SizedBox(height: 24),
               Text(
                 context.l10n.appName,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: context.colors.onSurface,

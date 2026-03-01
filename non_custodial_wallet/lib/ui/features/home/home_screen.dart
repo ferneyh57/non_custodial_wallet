@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
               isMainnet
                   ? context.l10n.settingsNetworkModeMainnet
                   : context.l10n.settingsNetworkModeTestnet,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.spaceGrotesk(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: isMainnet ? Colors.green : Colors.orange,

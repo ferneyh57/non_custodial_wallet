@@ -72,7 +72,7 @@ class PinScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     Text(
                       errorText,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         color: context.colors.error,
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
@@ -91,7 +91,7 @@ class PinScreen extends StatelessWidget {
                       onPressed: () => _showResetDialog(context),
                       child: Text(
                         context.l10n.pinForgotButton,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: context.appColors.subtitleText,
                           fontSize: 14,
                         ),
@@ -114,18 +114,18 @@ class PinScreen extends StatelessWidget {
       builder: (dialogContext) => AlertDialog(
         title: Text(
           context.l10n.pinForgotTitle,
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
         ),
         content: Text(
           context.l10n.pinForgotMessage,
-          style: GoogleFonts.poppins(),
+          style: GoogleFonts.spaceGrotesk(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(
               context.l10n.cancelButton,
-              style: GoogleFonts.poppins(),
+              style: GoogleFonts.spaceGrotesk(),
             ),
           ),
           TextButton(
@@ -136,7 +136,7 @@ class PinScreen extends StatelessWidget {
             },
             child: Text(
               context.l10n.pinResetButton,
-              style: GoogleFonts.poppins(color: context.colors.error),
+              style: GoogleFonts.spaceGrotesk(color: context.colors.error),
             ),
           ),
         ],

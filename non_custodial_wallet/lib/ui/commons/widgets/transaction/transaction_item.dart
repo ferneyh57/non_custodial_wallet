@@ -63,7 +63,7 @@ class TransactionItem extends StatelessWidget {
                               transfer.asset.isNotEmpty
                                   ? transfer.asset[0]
                                   : '?',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.spaceGrotesk(
                                 color: context.colors.primary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -101,7 +101,7 @@ class TransactionItem extends StatelessWidget {
                       children: [
                         Text(
                           transfer.asset,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.spaceGrotesk(
                             color: context.colors.onSurface,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -121,7 +121,7 @@ class TransactionItem extends StatelessWidget {
                             ),
                             child: Text(
                               network!.shortName,
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.spaceGrotesk(
                                 color: context.colors.primary,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
@@ -134,7 +134,7 @@ class TransactionItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       shortAddress,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         color: context.appColors.subtitleText,
                         fontSize: 12,
                       ),
@@ -148,7 +148,7 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   Text(
                     '$sign${_formatValue(transfer.value)}',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       color: iconColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -157,7 +157,7 @@ class TransactionItem extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     _timeAgo(transfer.timestamp),
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       color: context.appColors.subtitleText,
                       fontSize: 11,
                     ),

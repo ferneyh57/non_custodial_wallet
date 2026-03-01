@@ -47,7 +47,7 @@ class PinKeypad extends StatelessWidget {
                     onTap: () => onDigit(key),
                     child: Text(
                       key,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         color: context.colors.onSurface,

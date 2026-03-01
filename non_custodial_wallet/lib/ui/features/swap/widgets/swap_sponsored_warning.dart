@@ -24,7 +24,7 @@ class SwapSponsoredWarning extends StatelessWidget {
           Expanded(
             child: Text(
               context.l10n.swapSponsoredRequired,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.spaceGrotesk(
                 color: context.colors.error,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,

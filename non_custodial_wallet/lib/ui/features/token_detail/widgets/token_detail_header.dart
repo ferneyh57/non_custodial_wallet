@@ -28,7 +28,7 @@ class TokenDetailHeader extends StatelessWidget {
           child: iconUrl.isEmpty
               ? Text(
                   symbol[0],
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.spaceGrotesk(
                     color: context.colors.primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 28,
@@ -39,7 +39,7 @@ class TokenDetailHeader extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           name,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.spaceGrotesk(
             color: context.colors.onSurface,
             fontWeight: FontWeight.w600,
             fontSize: 20,
@@ -48,7 +48,7 @@ class TokenDetailHeader extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           symbol,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.spaceGrotesk(
             color: context.appColors.subtitleText,
             fontSize: 14,
           ),

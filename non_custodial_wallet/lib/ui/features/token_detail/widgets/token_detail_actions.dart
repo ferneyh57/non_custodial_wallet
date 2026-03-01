@@ -67,7 +67,7 @@ class TokenDetailActions extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   context.l10n.viewOnExplorer,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.spaceGrotesk(
                     color: context.colors.primary,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,

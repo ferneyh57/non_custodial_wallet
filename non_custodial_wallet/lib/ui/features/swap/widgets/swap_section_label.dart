@@ -10,7 +10,7 @@ class SwapSectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label,
-      style: GoogleFonts.poppins(
+      style: GoogleFonts.spaceGrotesk(
         color: context.appColors.subtitleText,
         fontSize: 14,
         fontWeight: FontWeight.w500,

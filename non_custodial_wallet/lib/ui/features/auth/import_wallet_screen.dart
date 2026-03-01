@@ -55,9 +55,10 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             title: Text(
               context.l10n.importWalletTitle,
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
             ),
           ),
           body: SafeArea(
@@ -69,7 +70,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                 children: [
                   Text(
                     context.l10n.importWalletInstructions,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       color: context.appColors.subtitleText,
                       fontSize: 14,
                     ),
@@ -85,7 +86,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                     child: TextField(
                       controller: _controller,
                       maxLines: 4,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         color: context.colors.onSurface,
                         fontSize: 15,
                       ),
@@ -113,7 +114,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                       const SizedBox(width: 6),
                       Text(
                         '$_wordCount/12 words',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: isValidCount
                               ? context.colors.secondary
                               : context.appColors.hintText,
@@ -177,7 +178,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                           ),
                           child: Text(
                             context.l10n.importButton,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.spaceGrotesk(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),

@@ -86,7 +86,7 @@ class _PinVerifySheetState extends State<PinVerifySheet> {
               const SizedBox(height: 24),
               Text(
                 context.l10n.pinVerifyTitle,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
@@ -94,7 +94,7 @@ class _PinVerifySheetState extends State<PinVerifySheet> {
               const SizedBox(height: 8),
               Text(
                 context.l10n.pinVerifySubtitle,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   color: context.appColors.subtitleText,
                   fontSize: 14,
                 ),
@@ -109,7 +109,7 @@ class _PinVerifySheetState extends State<PinVerifySheet> {
                 const SizedBox(height: 16),
                 Text(
                   _error!,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.spaceGrotesk(
                     color: context.colors.error,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,

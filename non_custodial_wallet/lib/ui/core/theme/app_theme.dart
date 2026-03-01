@@ -24,7 +24,7 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        titleTextStyle: GoogleFonts.poppins(
+        titleTextStyle: GoogleFonts.spaceGrotesk(
           fontWeight: FontWeight.bold,
           fontSize: 20,
           color: Colors.white,
@@ -49,7 +49,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
-        hintStyle: GoogleFonts.poppins(color: const Color(0x61FFFFFF)),
+        hintStyle: GoogleFonts.spaceGrotesk(color: const Color(0x61FFFFFF)),
       ),
       extensions: const <ThemeExtension<dynamic>>[
         AppThemeExtension.dark,
@@ -79,7 +79,7 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        titleTextStyle: GoogleFonts.poppins(
+        titleTextStyle: GoogleFonts.spaceGrotesk(
           fontWeight: FontWeight.bold,
           fontSize: 20,
           color: const Color(0xFF1A1A2E),
@@ -104,7 +104,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
-        hintStyle: GoogleFonts.poppins(color: const Color(0xFF9CA3AF)),
+        hintStyle: GoogleFonts.spaceGrotesk(color: const Color(0xFF9CA3AF)),
       ),
       extensions: const <ThemeExtension<dynamic>>[
         AppThemeExtension.light,

@@ -64,7 +64,7 @@ class SwapAssetSelectorCard extends StatelessWidget {
                         child: iconUrl.isEmpty
                             ? Text(
                                 symbol[0],
-                                style: GoogleFonts.poppins(
+                                style: GoogleFonts.spaceGrotesk(
                                   color: context.colors.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -102,7 +102,7 @@ class SwapAssetSelectorCard extends StatelessWidget {
                     children: [
                       Text(
                         symbol,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: context.colors.onSurface,
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
@@ -112,7 +112,7 @@ class SwapAssetSelectorCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           networkName!,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.spaceGrotesk(
                             color: context.appColors.subtitleText,
                             fontSize: 13,
                           ),
@@ -127,7 +127,7 @@ class SwapAssetSelectorCard extends StatelessWidget {
                     children: [
                       Text(
                         balance!.toStringAsFixed(4),
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: context.colors.onSurface,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
@@ -136,7 +136,7 @@ class SwapAssetSelectorCard extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         currencyFormat.format(usdValue),
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: context.appColors.subtitleText,
                           fontSize: 12,
                         ),
@@ -160,7 +160,7 @@ class SwapAssetSelectorCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     context.l10n.searchTokenHint,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       color: context.appColors.subtitleText,
                       fontSize: 15,
                     ),

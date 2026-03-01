@@ -15,6 +15,11 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   @override
+  Future<String> generateMnemonicAsync() {
+    return authDataSource.generateMnemonicAsync();
+  }
+
+  @override
   bool validateMnemonic(String mnemonic) {
     return authDataSource.validateMnemonic(mnemonic);
   }

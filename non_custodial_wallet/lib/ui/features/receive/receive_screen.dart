@@ -57,7 +57,7 @@ class ReceiveScreenView extends StatelessWidget {
             appBar: AppBar(
               title: Text(
                 context.l10n.receiveButton,
-                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
               ),
               centerTitle: true,
             ),
@@ -73,7 +73,7 @@ class ReceiveScreenView extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         context.l10n.networkLabel,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: context.appColors.subtitleText,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -127,7 +127,7 @@ class ReceiveScreenView extends StatelessWidget {
                             children: [
                               Text(
                                 truncatedAddress,
-                                style: GoogleFonts.poppins(
+                                style: GoogleFonts.spaceGrotesk(
                                   color: context.colors.onSurface,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -229,12 +229,12 @@ class ReceiveScreenView extends StatelessWidget {
           ),
           title: Text(
             context.l10n.amountHint,
-            style: GoogleFonts.poppins(color: context.colors.onSurface),
+            style: GoogleFonts.spaceGrotesk(color: context.colors.onSurface),
           ),
           content: TextField(
             controller: cubit.amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            style: GoogleFonts.poppins(color: context.colors.onSurface),
+            style: GoogleFonts.spaceGrotesk(color: context.colors.onSurface),
             decoration: InputDecoration(
               hintText: '0.00',
               filled: true,
@@ -250,7 +250,7 @@ class ReceiveScreenView extends StatelessWidget {
               onPressed: () => Navigator.of(ctx).pop(),
               child: Text(
                 'OK',
-                style: GoogleFonts.poppins(color: context.colors.primary),
+                style: GoogleFonts.spaceGrotesk(color: context.colors.primary),
               ),
             ),
           ],
@@ -299,7 +299,7 @@ class ReceiveActionCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 label,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   color: context.appColors.subtitleText,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,

@@ -5,7 +5,7 @@ class GenerateKeyUseCase {
 
   GenerateKeyUseCase({required this.authRepository});
 
-  Future<String> call() async {
-    return authRepository.generateMnemonic();
+  Future<String> call() {
+    return authRepository.generateMnemonicAsync();
   }
 }

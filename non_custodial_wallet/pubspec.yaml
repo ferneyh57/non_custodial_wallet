@@ -77,6 +77,22 @@ dev_dependencies:
   json_serializable: ^6.13.0
   freezed: ^3.2.5
   build_runner: ^2.11.1
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app-icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  adaptive_icon_foreground: "assets/app-icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  web:
+    generate: true
+    image_path: "assets/app-icon.png"
+  macos:
+    generate: true
+    image_path: "assets/app-icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -89,6 +105,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   generate: true
+
+  assets:
+    - assets/app-icon.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

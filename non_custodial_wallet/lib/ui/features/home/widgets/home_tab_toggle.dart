@@ -64,7 +64,7 @@ class _TabButton extends StatelessWidget {
             child: Text(
               label,
               textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.spaceGrotesk(
                 color: isSelected
                     ? context.colors.primary
                     : context.appColors.subtitleText,

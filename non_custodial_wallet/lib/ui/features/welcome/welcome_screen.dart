@@ -32,17 +32,12 @@ class WelcomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Spacer(),
-                  // Wallet Icon
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: context.colors.primary.withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.account_balance_wallet_rounded,
-                      size: 64,
-                      color: context.colors.primary,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: Image.asset(
+                      'assets/app-icon.png',
+                      width: 110,
+                      height: 110,
                     ),
                   )
                       .animate()
@@ -57,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                   // App Name
                   Text(
                     context.l10n.appName,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: context.colors.onSurface,
@@ -71,7 +66,7 @@ class WelcomeScreen extends StatelessWidget {
                   Text(
                     context.l10n.welcomeSubtitle,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       fontSize: 16,
                       color: context.appColors.subtitleText,
                     ),
@@ -114,7 +109,7 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                         child: Text(
                           context.l10n.createWalletButton,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.spaceGrotesk(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -142,7 +137,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       child: Text(
                         context.l10n.importWalletButton,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: context.colors.primary,
                           fontWeight: FontWeight.w600,
                         ),

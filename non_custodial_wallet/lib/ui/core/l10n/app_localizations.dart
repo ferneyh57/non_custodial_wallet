@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your non-custodial gateway to ETH and USDC.'**
+  /// **'Your non-custodial gateway to ETH and ERC-20 tokens.'**
   String get welcomeSubtitle;
 
   /// No description provided for @createWalletButton.

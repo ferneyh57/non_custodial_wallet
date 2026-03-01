@@ -51,7 +51,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         foregroundColor: Colors.white,
         title: Text(
           context.l10n.qrScannerTitle,
-          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -82,7 +82,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   child: Text(
                     context.l10n.cameraPermissionDenied,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       color: Colors.white70,
                       fontSize: 16,
                     ),

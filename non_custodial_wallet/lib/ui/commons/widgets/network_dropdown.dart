@@ -47,7 +47,7 @@ class NetworkDropdown extends StatelessWidget {
                     child: network.iconUrl.isEmpty
                         ? Text(
                             network.nativeSymbol[0],
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.spaceGrotesk(
                               color: context.colors.primary,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class NetworkDropdown extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     network.shortName,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       color: context.colors.onSurface,
                       fontWeight: FontWeight.w500,
                     ),

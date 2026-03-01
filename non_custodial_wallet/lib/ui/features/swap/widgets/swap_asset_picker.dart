@@ -98,7 +98,7 @@ class _SwapAssetPickerState extends State<SwapAssetPicker> {
           const SizedBox(height: 16),
           Text(
             widget.title,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: context.colors.onSurface,
@@ -111,13 +111,13 @@ class _SwapAssetPickerState extends State<SwapAssetPicker> {
             child: TextField(
               controller: _searchController,
               onChanged: (value) => setState(() => _query = value),
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.spaceGrotesk(
                 color: context.colors.onSurface,
                 fontSize: 14,
               ),
               decoration: InputDecoration(
                 hintText: context.l10n.searchTokenHint,
-                hintStyle: GoogleFonts.poppins(
+                hintStyle: GoogleFonts.spaceGrotesk(
                   color: context.appColors.subtitleText,
                   fontSize: 14,
                 ),
@@ -198,7 +198,7 @@ class _SwapAssetPickerState extends State<SwapAssetPicker> {
                     padding: const EdgeInsets.symmetric(vertical: 40),
                     child: Text(
                       context.l10n.noStableFound,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         color: context.appColors.subtitleText,
                         fontSize: 14,
                       ),
@@ -284,7 +284,7 @@ class _NetworkChip extends StatelessWidget {
             ],
             Text(
               label,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.spaceGrotesk(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: isSelected
@@ -340,7 +340,7 @@ class _AssetListItem extends StatelessWidget {
                       child: asset.iconUrl.isEmpty
                           ? Text(
                               asset.symbol[0],
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.spaceGrotesk(
                                 color: context.colors.primary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -382,7 +382,7 @@ class _AssetListItem extends StatelessWidget {
                   children: [
                     Text(
                       asset.symbol,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         color: context.colors.onSurface,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
@@ -391,7 +391,7 @@ class _AssetListItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       asset.networkName,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         color: context.appColors.subtitleText,
                         fontSize: 13,
                       ),

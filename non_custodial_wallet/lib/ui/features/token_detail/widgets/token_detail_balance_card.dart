@@ -59,7 +59,7 @@ class TokenDetailBalanceCard extends StatelessWidget {
             ),
           Text(
             context.l10n.totalBalanceLabel,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: Colors.white70,
               fontSize: 13,
             ),
@@ -67,7 +67,7 @@ class TokenDetailBalanceCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             '${balance.toStringAsFixed(6)} $symbol',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 24,
@@ -76,7 +76,7 @@ class TokenDetailBalanceCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             currencyFormat.format(usdValue),
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: Colors.white70,
               fontSize: 16,
             ),
@@ -94,7 +94,7 @@ class TokenDetailBalanceCard extends StatelessWidget {
               ),
               child: Text(
                 '1 $symbol = ${currencyFormat.format(price)}',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   color: Colors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,

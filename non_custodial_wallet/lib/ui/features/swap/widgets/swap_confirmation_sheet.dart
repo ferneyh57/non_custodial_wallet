@@ -68,7 +68,7 @@ class SwapConfirmationSheet extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 context.l10n.swapConfirmTitle,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: context.colors.onSurface,
@@ -226,7 +226,7 @@ class SwapConfirmationSheet extends StatelessWidget {
                           ),
                           child: Text(
                             context.l10n.cancelButton,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.spaceGrotesk(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -279,7 +279,7 @@ class SwapConfirmationSheet extends StatelessWidget {
                                   )
                                 : Text(
                                     context.l10n.confirmButton,
-                                    style: GoogleFonts.poppins(
+                                    style: GoogleFonts.spaceGrotesk(
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -355,7 +355,7 @@ class _SwapAssetRow extends StatelessWidget {
                 child: iconUrl.isEmpty
                     ? Text(
                         symbol.isNotEmpty ? symbol[0] : '?',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: context.colors.primary,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -413,7 +413,7 @@ class _SwapAssetRow extends StatelessWidget {
             children: [
               Text(
                 symbol,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   color: context.colors.onSurface,
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
@@ -422,7 +422,7 @@ class _SwapAssetRow extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 networkName,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   color: context.appColors.subtitleText,
                   fontSize: 13,
                 ),
@@ -433,7 +433,7 @@ class _SwapAssetRow extends StatelessWidget {
         // Amount with sign
         Text(
           amount,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.spaceGrotesk(
             color: color,
             fontWeight: FontWeight.w700,
             fontSize: 16,
@@ -457,7 +457,7 @@ class _TextRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.spaceGrotesk(
             color: context.appColors.subtitleText,
             fontSize: 14,
           ),
@@ -465,7 +465,7 @@ class _TextRow extends StatelessWidget {
         Flexible(
           child: Text(
             value,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: context.colors.onSurface,
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -499,7 +499,7 @@ class _StatusRow extends StatelessWidget {
         const SizedBox(width: 10),
         Text(
           status,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.spaceGrotesk(
             color: context.colors.primary,
             fontSize: 14,
             fontWeight: FontWeight.w600,

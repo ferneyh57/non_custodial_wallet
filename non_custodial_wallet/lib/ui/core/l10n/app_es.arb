@@ -1,6 +1,6 @@
 {
   "appName": "Non Wallet",
-  "welcomeSubtitle": "Tu puerta de entrada no-custodial a ETH y USDC.",
+  "welcomeSubtitle": "Tu puerta de entrada no-custodial a ETH y tokens ERC-20.",
   "createWalletButton": "CREAR UNA NUEVA BILLETERA",
   "importWalletButton": "Ya tengo una billetera",
   "homeTitle": "Mi Billetera",
@@ -107,5 +107,9 @@
   "settingsLogoutConfirmTitle": "Cerrar Sesión",
   "settingsLogoutConfirmMessage": "Esto eliminará todos los datos de la billetera de este dispositivo. Asegúrate de haber respaldado tu frase de recuperación.",
   "settingsLogoutConfirmButton": "Cerrar Sesión",
-  "swapTestnetDisclaimer": "Swap no está disponible en testnet. Cambia a Mainnet en Configuración para usar esta función."
+  "swapTestnetDisclaimer": "Swap no está disponible en testnet. Cambia a Mainnet en Configuración para usar esta función.",
+  "phraseDisclaimerTitle": "¿Guardaste tu frase?",
+  "phraseDisclaimerMessage": "Si pierdes tu frase de recuperación, perderás permanentemente el acceso a tus fondos. Asegúrate de haberla guardado en un lugar seguro.",
+  "phraseDisclaimerConfirm": "Sí, la guardé",
+  "cancel": "Cancelar"
 }

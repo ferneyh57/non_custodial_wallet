@@ -59,7 +59,7 @@ class _HomeTokensListState extends State<HomeTokensList> {
         child: Center(
           child: Text(
             context.l10n.noStableFound,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: context.appColors.subtitleText,
               fontSize: 14,
             ),
@@ -152,13 +152,13 @@ class TokenSearchField extends StatelessWidget {
     return TextField(
       controller: controller,
       onChanged: onChanged,
-      style: GoogleFonts.poppins(
+      style: GoogleFonts.spaceGrotesk(
         color: context.colors.onSurface,
         fontSize: 14,
       ),
       decoration: InputDecoration(
         hintText: context.l10n.searchTokenHint,
-        hintStyle: GoogleFonts.poppins(
+        hintStyle: GoogleFonts.spaceGrotesk(
           color: context.appColors.subtitleText,
           fontSize: 14,
         ),

@@ -19,7 +19,7 @@ class WalletDataSourceImpl implements WalletDataSource {
   @override
   Future<Result<String>> getEthAddress(String mnemonic) async {
     try {
-      final address = keyDeriver.deriveAddress(mnemonic);
+      final address = await keyDeriver.deriveAddressAsync(mnemonic);
       return Result.success(address);
     } catch (e, stackTrace) {
       AppLogger.error('Error deriving ETH address', e, stackTrace);

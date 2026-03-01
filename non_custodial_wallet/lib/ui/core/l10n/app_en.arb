@@ -1,6 +1,6 @@
 {
   "appName": "Non Wallet",
-  "welcomeSubtitle": "Your non-custodial gateway to ETH and USDC.",
+  "welcomeSubtitle": "Your non-custodial gateway to ETH and ERC-20 tokens.",
   "createWalletButton": "CREATE A NEW WALLET",
   "importWalletButton": "I already have a wallet",
   "homeTitle": "My Wallet",
@@ -107,5 +107,9 @@
   "settingsLogoutConfirmTitle": "Log Out",
   "settingsLogoutConfirmMessage": "This will delete all wallet data from this device. Make sure you have backed up your recovery phrase.",
   "settingsLogoutConfirmButton": "Log Out",
-  "swapTestnetDisclaimer": "Swap is not available on testnet. Switch to Mainnet in Settings to use this feature."
+  "swapTestnetDisclaimer": "Swap is not available on testnet. Switch to Mainnet in Settings to use this feature.",
+  "phraseDisclaimerTitle": "Did you save your phrase?",
+  "phraseDisclaimerMessage": "If you lose your recovery phrase, you will permanently lose access to your funds. Make sure you saved it in a safe place.",
+  "phraseDisclaimerConfirm": "Yes, I saved it",
+  "cancel": "Cancel"
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../commons/cubits/wallet/wallet_cubit.dart';
 import '../../core/constants/app_faucets.dart';
 import '../../core/extensions/context_extension.dart';
 import 'widgets/faucet_item.dart';
@@ -12,9 +15,10 @@ class FaucetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           context.l10n.faucetTitle,
-          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -26,7 +30,7 @@ class FaucetScreen extends StatelessWidget {
             children: [
               Text(
                 context.l10n.faucetSubtitle,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   color: context.appColors.subtitleText,
                   fontSize: 14,
                 ),
@@ -40,7 +44,7 @@ class FaucetScreen extends StatelessWidget {
                     final faucet = AppFaucets.current[index];
                     return FaucetItem(
                       faucet: faucet,
-                      onTap: () => _openFaucet(faucet.url),
+                      onTap: () => _openFaucet(context, faucet.url),
                     );
                   },
                 ),
@@ -52,7 +56,20 @@ class FaucetScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _openFaucet(String url) async {
+  Future<void> _openFaucet(BuildContext context, String url) async {
+    final address =
+        context.read<WalletCubit>().state.wallet?.ethAddress ?? '';
+    if (address.isNotEmpty) {
+      await Clipboard.setData(ClipboardData(text: address));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.l10n.copiedToClipboard),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);

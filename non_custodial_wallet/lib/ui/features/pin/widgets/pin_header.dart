@@ -29,7 +29,7 @@ class PinHeader extends StatelessWidget {
         const SizedBox(height: 24),
         Text(
           title,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.spaceGrotesk(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: context.colors.onSurface,
@@ -41,7 +41,7 @@ class PinHeader extends StatelessWidget {
           child: Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               fontSize: 14,
               color: context.appColors.subtitleText,
             ),

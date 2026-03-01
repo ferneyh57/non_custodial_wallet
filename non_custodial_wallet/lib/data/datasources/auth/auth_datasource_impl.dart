@@ -1,9 +1,12 @@
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:flutter/foundation.dart';
 import 'auth_datasource.dart';
 import '../../../../ui/core/util/result.dart';
 import '../../../../ui/core/error/exceptions.dart';
 import '../../../../ui/core/error/failures.dart';
 import '../storage/secure_storage_datasource.dart';
+
+String _generateMnemonicIsolate(_) => bip39.generateMnemonic();
 
 class AuthDataSourceImpl implements AuthDataSource {
   final SecureStorageDataSource storageDataSource;
@@ -13,6 +16,11 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   String generateMnemonic() {
     return bip39.generateMnemonic();
+  }
+
+  @override
+  Future<String> generateMnemonicAsync() {
+    return compute(_generateMnemonicIsolate, null);
   }
 
   @override

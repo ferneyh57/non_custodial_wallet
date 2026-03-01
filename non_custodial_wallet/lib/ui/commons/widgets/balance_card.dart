@@ -92,7 +92,7 @@ class _BalanceCardState extends State<BalanceCard> {
               children: [
                 Text(
                   context.l10n.totalBalanceLabel,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.spaceGrotesk(
                     color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -138,7 +138,7 @@ class _BalanceCardState extends State<BalanceCard> {
                   ),
                   child: Text(
                     '${widget.networks.length} networks',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
@@ -170,7 +170,7 @@ class _BalanceCardState extends State<BalanceCard> {
                           children: [
                             Text(
                               _truncateAddress(address),
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.spaceGrotesk(
                                 color: Colors.white.withValues(alpha: 0.5),
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
@@ -215,7 +215,7 @@ class _BalanceAmount extends StatelessWidget {
           children: [
             Text(
               '\$',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.spaceGrotesk(
                 color: Colors.white.withValues(alpha: 0.7),
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
@@ -224,7 +224,7 @@ class _BalanceAmount extends StatelessWidget {
             const SizedBox(width: 2),
             Text(
               visible ? value.toStringAsFixed(2) : '••••••',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.spaceGrotesk(
                 color: Colors.white,
                 fontSize: 38,
                 fontWeight: FontWeight.bold,

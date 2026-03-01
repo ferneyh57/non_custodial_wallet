@@ -49,7 +49,7 @@ class TokenDetailInfoSection extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   networkName,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.spaceGrotesk(
                     color: context.colors.onSurface,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
@@ -67,7 +67,7 @@ class TokenDetailInfoSection extends StatelessWidget {
                 Expanded(
                   child: Text(
                     _truncateAddress(walletAddress),
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.spaceGrotesk(
                       color: context.colors.onSurface,
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
@@ -106,7 +106,7 @@ class TokenDetailInfoSection extends StatelessWidget {
                   Expanded(
                     child: Text(
                       _truncateAddress(contractAddress!),
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.spaceGrotesk(
                         color: context.colors.onSurface,
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
@@ -160,7 +160,7 @@ class _InfoRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.spaceGrotesk(
             color: context.appColors.subtitleText,
             fontSize: 12,
             fontWeight: FontWeight.w500,

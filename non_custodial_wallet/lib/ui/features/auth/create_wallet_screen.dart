@@ -16,11 +16,19 @@ class CreateWalletScreen extends StatefulWidget {
 
 class _CreateWalletScreenState extends State<CreateWalletScreen> {
   bool _copied = false;
+  bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
     context.read<WalletCubit>().createWallet();
+  }
+
+  Future<void> _onDonePressed() async {
+    if (_isSaving) return;
+    setState(() => _isSaving = true);
+    await context.read<WalletCubit>().saveAndAuthorize();
+    if (mounted) setState(() => _isSaving = false);
   }
 
   @override
@@ -29,9 +37,10 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             title: Text(
               context.l10n.secretPhraseTitle,
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
             ),
           ),
           body: SafeArea(
@@ -61,7 +70,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                         Expanded(
                           child: Text(
                             context.l10n.secretPhraseInstructions,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.spaceGrotesk(
                               color: context.colors.onSurface,
                               fontSize: 13,
                               height: 1.4,
@@ -77,7 +86,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                       child: Center(child: CircularProgressIndicator()),
                     )
                   else if (state.wallet?.mnemonic != null) ...[
-                    // Mnemonic Chips
+                    // Mnemonic Grid
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.all(16),
@@ -87,51 +96,79 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                           border:
                               Border.all(color: context.appColors.cardBorder),
                         ),
-                        child: Wrap(
-                          spacing: 8.0,
-                          runSpacing: 10.0,
-                          children: List.generate(
-                            state.wallet!.mnemonic.split(' ').length,
-                            (index) {
-                              final word =
-                                  state.wallet!.mnemonic.split(' ')[index];
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 10,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: context.appColors.containerFill,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: context.appColors.cardBorder,
-                                  ),
-                                ),
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: '${index + 1}. ',
-                                        style: GoogleFonts.poppins(
-                                          color: context.appColors.hintText,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: word,
-                                        style: GoogleFonts.poppins(
-                                          color: context.colors.onSurface,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                        child: GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            childAspectRatio: 2.6,
                           ),
+                          itemCount:
+                              state.wallet!.mnemonic.split(' ').length,
+                          itemBuilder: (context, index) {
+                            final word =
+                                state.wallet!.mnemonic.split(' ')[index];
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: context.appColors.containerFill,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: context.colors.primary
+                                      .withValues(alpha: 0.15),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 28,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: context.colors.primary
+                                          .withValues(alpha: 0.1),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(11),
+                                        bottomLeft: Radius.circular(11),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      '${index + 1}',
+                                      style: GoogleFonts.spaceGrotesk(
+                                        color: context.colors.primary,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        word,
+                                        style: GoogleFonts.spaceGrotesk(
+                                          color: context.colors.onSurface,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.3,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                                .animate()
+                                .fadeIn(
+                                  delay: (50 * index).ms,
+                                  duration: 300.ms,
+                                )
+                                .slideY(
+                                  begin: 0.3,
+                                  delay: (50 * index).ms,
+                                  duration: 300.ms,
+                                  curve: Curves.easeOut,
+                                );
+                          },
                         ),
                       ),
                     ),
@@ -167,7 +204,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                         _copied
                             ? context.l10n.mnemonicCopied
                             : context.l10n.copyMnemonic,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.spaceGrotesk(
                           color: _copied
                               ? context.colors.secondary
                               : context.colors.primary,
@@ -215,10 +252,9 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                             : null,
                       ),
                       child: ElevatedButton(
-                        onPressed: state.wallet?.mnemonic == null
+                        onPressed: state.wallet?.mnemonic == null || _isSaving
                             ? null
-                            : () =>
-                                context.read<WalletCubit>().saveAndAuthorize(),
+                            : _onDonePressed,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
@@ -227,13 +263,22 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: Text(
-                          context.l10n.doneButton,
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
+                        child: _isSaving
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                              )
+                            : Text(
+                                context.l10n.doneButton,
+                                style: GoogleFonts.spaceGrotesk(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
                       ),
                     ),
                   )

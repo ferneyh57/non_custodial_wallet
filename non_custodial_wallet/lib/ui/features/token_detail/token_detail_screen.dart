@@ -32,7 +32,7 @@ class TokenDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           context.l10n.tokenDetailTitle,
-          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -90,7 +90,7 @@ class TokenDetailScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   context.l10n.activityTab,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.spaceGrotesk(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: context.colors.onSurface,

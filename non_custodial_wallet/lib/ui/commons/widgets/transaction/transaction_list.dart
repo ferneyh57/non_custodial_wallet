@@ -42,7 +42,7 @@ class TransactionList extends StatelessWidget {
         child: Center(
           child: Text(
             emptyMessage,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.spaceGrotesk(
               color: context.appColors.subtitleText,
               fontSize: 14,
             ),
@@ -94,7 +94,7 @@ class TransactionList extends StatelessWidget {
             child: Center(
               child: Text(
                 context.l10n.loadMore,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.spaceGrotesk(
                   color: context.colors.primary,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
