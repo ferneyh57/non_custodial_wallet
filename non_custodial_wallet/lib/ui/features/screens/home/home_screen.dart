@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/wallet/wallet_cubit.dart';
@@ -91,6 +93,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                 ),
                 actions: [
+                  if (kDebugMode)
+                    IconButton(
+                      onPressed: () {
+                        final mnemonic = state.wallet?.mnemonic;
+                        if (mnemonic != null) {
+                          Clipboard.setData(ClipboardData(text: mnemonic));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(context.l10n.mnemonicCopied)),
+                          );
+                        }
+                      },
+                      icon: Icon(
+                        Icons.key_rounded,
+                        color: context.appColors.subtitleText,
+                      ),
+                      tooltip: context.l10n.copyMnemonic,
+                    ),
                   IconButton(
                     onPressed: () => context.read<ThemeCubit>().toggleTheme(),
                     icon: Icon(

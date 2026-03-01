@@ -141,8 +141,8 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
   });
 
   static const dark = AppThemeExtension(
-    balanceCardGradientStart: Color(0xFF00B4DB),
-    balanceCardGradientEnd: Color(0xFF0083B0),
+    balanceCardGradientStart: Color(0xFF0ED2F7),
+    balanceCardGradientEnd: Color(0xFF005C97),
     backgroundGradientStart: Color(0xFF0F2027),
     backgroundGradientMid: Color(0xFF203A43),
     backgroundGradientEnd: Color(0xFF2C5364),
@@ -155,8 +155,8 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
   );
 
   static const light = AppThemeExtension(
-    balanceCardGradientStart: Color(0xFF00B4DB),
-    balanceCardGradientEnd: Color(0xFF0083B0),
+    balanceCardGradientStart: Color(0xFF0ED2F7),
+    balanceCardGradientEnd: Color(0xFF005C97),
     backgroundGradientStart: Color(0xFFE8F4F8),
     backgroundGradientMid: Color(0xFFD4E8EF),
     backgroundGradientEnd: Color(0xFFC0DCE5),

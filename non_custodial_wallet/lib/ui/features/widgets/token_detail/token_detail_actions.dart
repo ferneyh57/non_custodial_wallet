@@ -7,12 +7,14 @@ import '../quick_action_button.dart';
 class TokenDetailActions extends StatelessWidget {
   final VoidCallback onSend;
   final VoidCallback onReceive;
+  final VoidCallback onSwap;
   final String explorerUrl;
 
   const TokenDetailActions({
     super.key,
     required this.onSend,
     required this.onReceive,
+    required this.onSwap,
     required this.explorerUrl,
   });
 
