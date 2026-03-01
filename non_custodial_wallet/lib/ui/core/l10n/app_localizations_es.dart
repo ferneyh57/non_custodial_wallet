@@ -233,4 +233,43 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get loadMore => 'Cargar más';
+
+  @override
+  String get pinCreateTitle => 'Crear PIN';
+
+  @override
+  String get pinCreateSubtitle =>
+      'Establece un PIN de 6 dígitos para proteger tu billetera';
+
+  @override
+  String get pinConfirmTitle => 'Confirmar PIN';
+
+  @override
+  String get pinConfirmSubtitle => 'Vuelve a ingresar tu PIN de 6 dígitos';
+
+  @override
+  String get pinVerifyTitle => 'Ingresar PIN';
+
+  @override
+  String get pinVerifySubtitle =>
+      'Ingresa tu PIN de 6 dígitos para desbloquear';
+
+  @override
+  String get pinMismatchError => 'Los PIN no coinciden. Inténtalo de nuevo.';
+
+  @override
+  String get pinIncorrectError => 'PIN incorrecto. Inténtalo de nuevo.';
+
+  @override
+  String get pinForgotButton => '¿Olvidaste tu PIN?';
+
+  @override
+  String get pinForgotTitle => 'Olvidé mi PIN';
+
+  @override
+  String get pinForgotMessage =>
+      'Esto eliminará todos los datos de la billetera. Necesitarás tu frase de recuperación para restaurar el acceso.';
+
+  @override
+  String get pinResetButton => 'Restablecer Billetera';
 }

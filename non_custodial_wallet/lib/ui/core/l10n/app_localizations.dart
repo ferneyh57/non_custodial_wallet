@@ -535,6 +535,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Load more'**
   String get loadMore;
+
+  /// No description provided for @pinCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create PIN'**
+  String get pinCreateTitle;
+
+  /// No description provided for @pinCreateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a 6-digit PIN to secure your wallet'**
+  String get pinCreateSubtitle;
+
+  /// No description provided for @pinConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm PIN'**
+  String get pinConfirmTitle;
+
+  /// No description provided for @pinConfirmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter your 6-digit PIN'**
+  String get pinConfirmSubtitle;
+
+  /// No description provided for @pinVerifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter PIN'**
+  String get pinVerifyTitle;
+
+  /// No description provided for @pinVerifySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your 6-digit PIN to unlock'**
+  String get pinVerifySubtitle;
+
+  /// No description provided for @pinMismatchError.
+  ///
+  /// In en, this message translates to:
+  /// **'PINs do not match. Try again.'**
+  String get pinMismatchError;
+
+  /// No description provided for @pinIncorrectError.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect PIN. Try again.'**
+  String get pinIncorrectError;
+
+  /// No description provided for @pinForgotButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot PIN?'**
+  String get pinForgotButton;
+
+  /// No description provided for @pinForgotTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot PIN'**
+  String get pinForgotTitle;
+
+  /// No description provided for @pinForgotMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will delete all wallet data. You will need your recovery phrase to restore access.'**
+  String get pinForgotMessage;
+
+  /// No description provided for @pinResetButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Wallet'**
+  String get pinResetButton;
 }
 
 class _AppLocalizationsDelegate

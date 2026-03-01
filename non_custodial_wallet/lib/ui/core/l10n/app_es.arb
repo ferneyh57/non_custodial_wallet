@@ -78,5 +78,17 @@
   "swapSponsored": "Patrocinado",
   "swapNotSponsored": "Estándar",
   "swapSponsoredRequired": "Esta red aún no soporta intercambios. Prueba con otra red.",
-  "loadMore": "Cargar más"
+  "loadMore": "Cargar más",
+  "pinCreateTitle": "Crear PIN",
+  "pinCreateSubtitle": "Establece un PIN de 6 dígitos para proteger tu billetera",
+  "pinConfirmTitle": "Confirmar PIN",
+  "pinConfirmSubtitle": "Vuelve a ingresar tu PIN de 6 dígitos",
+  "pinVerifyTitle": "Ingresar PIN",
+  "pinVerifySubtitle": "Ingresa tu PIN de 6 dígitos para desbloquear",
+  "pinMismatchError": "Los PIN no coinciden. Inténtalo de nuevo.",
+  "pinIncorrectError": "PIN incorrecto. Inténtalo de nuevo.",
+  "pinForgotButton": "¿Olvidaste tu PIN?",
+  "pinForgotTitle": "Olvidé mi PIN",
+  "pinForgotMessage": "Esto eliminará todos los datos de la billetera. Necesitarás tu frase de recuperación para restaurar el acceso.",
+  "pinResetButton": "Restablecer Billetera"
 }

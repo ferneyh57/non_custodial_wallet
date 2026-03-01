@@ -78,5 +78,17 @@
   "swapSponsored": "Sponsored",
   "swapNotSponsored": "Standard",
   "swapSponsoredRequired": "This network does not support swaps yet. Try a different network.",
-  "loadMore": "Load more"
+  "loadMore": "Load more",
+  "pinCreateTitle": "Create PIN",
+  "pinCreateSubtitle": "Set a 6-digit PIN to secure your wallet",
+  "pinConfirmTitle": "Confirm PIN",
+  "pinConfirmSubtitle": "Re-enter your 6-digit PIN",
+  "pinVerifyTitle": "Enter PIN",
+  "pinVerifySubtitle": "Enter your 6-digit PIN to unlock",
+  "pinMismatchError": "PINs do not match. Try again.",
+  "pinIncorrectError": "Incorrect PIN. Try again.",
+  "pinForgotButton": "Forgot PIN?",
+  "pinForgotTitle": "Forgot PIN",
+  "pinForgotMessage": "This will delete all wallet data. You will need your recovery phrase to restore access.",
+  "pinResetButton": "Reset Wallet"
 }

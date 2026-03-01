@@ -231,4 +231,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadMore => 'Load more';
+
+  @override
+  String get pinCreateTitle => 'Create PIN';
+
+  @override
+  String get pinCreateSubtitle => 'Set a 6-digit PIN to secure your wallet';
+
+  @override
+  String get pinConfirmTitle => 'Confirm PIN';
+
+  @override
+  String get pinConfirmSubtitle => 'Re-enter your 6-digit PIN';
+
+  @override
+  String get pinVerifyTitle => 'Enter PIN';
+
+  @override
+  String get pinVerifySubtitle => 'Enter your 6-digit PIN to unlock';
+
+  @override
+  String get pinMismatchError => 'PINs do not match. Try again.';
+
+  @override
+  String get pinIncorrectError => 'Incorrect PIN. Try again.';
+
+  @override
+  String get pinForgotButton => 'Forgot PIN?';
+
+  @override
+  String get pinForgotTitle => 'Forgot PIN';
+
+  @override
+  String get pinForgotMessage =>
+      'This will delete all wallet data. You will need your recovery phrase to restore access.';
+
+  @override
+  String get pinResetButton => 'Reset Wallet';
 }

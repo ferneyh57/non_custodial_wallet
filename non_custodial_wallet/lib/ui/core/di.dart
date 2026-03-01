@@ -50,6 +50,14 @@ import 'package:non_custodial_wallet/domain/repositories/swap/i_swap_repository.
 import 'package:non_custodial_wallet/domain/usecases/swap/request_swap_quote_use_case.dart';
 import 'package:non_custodial_wallet/domain/usecases/swap/execute_swap_use_case.dart';
 import 'package:non_custodial_wallet/domain/usecases/swap/get_swap_status_use_case.dart';
+import 'package:non_custodial_wallet/data/datasources/pin/pin_datasource.dart';
+import 'package:non_custodial_wallet/data/repositories/pin/pin_repository_impl.dart';
+import 'package:non_custodial_wallet/domain/repositories/pin/i_pin_repository.dart';
+import 'package:non_custodial_wallet/domain/usecases/pin/save_pin_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/pin/verify_pin_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/pin/has_pin_use_case.dart';
+import 'package:non_custodial_wallet/domain/usecases/pin/delete_pin_use_case.dart';
+import '../features/cubits/pin/pin_cubit.dart';
 import '../core/constants/network_constants.dart';
 import '../core/constants/app_networks.dart';
 
@@ -117,6 +125,14 @@ void _initCubits() {
       networks: AppNetworks.all,
     ),
   );
+  sl.registerLazySingleton<PinCubit>(
+    () => PinCubit(
+      savePinUseCase: sl<SavePinUseCase>(),
+      verifyPinUseCase: sl<VerifyPinUseCase>(),
+      hasPinUseCase: sl<HasPinUseCase>(),
+      deletePinUseCase: sl<DeletePinUseCase>(),
+    ),
+  );
 }
 
 void _initUseCases() {
@@ -168,6 +184,18 @@ void _initUseCases() {
   sl.registerLazySingleton<GetSwapStatusUseCase>(
     () => GetSwapStatusUseCase(sl<ISwapRepository>()),
   );
+  sl.registerLazySingleton<SavePinUseCase>(
+    () => SavePinUseCase(repository: sl<IPinRepository>()),
+  );
+  sl.registerLazySingleton<VerifyPinUseCase>(
+    () => VerifyPinUseCase(repository: sl<IPinRepository>()),
+  );
+  sl.registerLazySingleton<HasPinUseCase>(
+    () => HasPinUseCase(repository: sl<IPinRepository>()),
+  );
+  sl.registerLazySingleton<DeletePinUseCase>(
+    () => DeletePinUseCase(repository: sl<IPinRepository>()),
+  );
 }
 
 void _initRepositories() {
@@ -191,6 +219,9 @@ void _initRepositories() {
   );
   sl.registerLazySingleton<ISwapRepository>(
     () => SwapRepositoryImpl(dataSource: sl<ISwapDataSource>()),
+  );
+  sl.registerLazySingleton<IPinRepository>(
+    () => PinRepositoryImpl(pinDataSource: sl<PinDataSource>()),
   );
 }
 
@@ -236,6 +267,10 @@ void _initDataSources() {
 
   sl.registerLazySingleton<AuthDataSource>(
     () => AuthDataSourceImpl(storageDataSource: sl<SecureStorageDataSource>()),
+  );
+
+  sl.registerLazySingleton<PinDataSource>(
+    () => PinDataSourceImpl(storageDataSource: sl<SecureStorageDataSource>()),
   );
 
   // Alchemy Prices API (Retrofit + Dio)

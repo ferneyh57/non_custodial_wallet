@@ -12,6 +12,7 @@ import 'ui/features/cubits/theme/theme_cubit.dart';
 import 'ui/features/cubits/theme/theme_state.dart';
 import 'ui/features/cubits/token/token_cubit.dart';
 import 'ui/features/cubits/transfer_history/transfer_history_cubit.dart';
+import 'ui/features/cubits/pin/pin_cubit.dart';
 import 'ui/core/constants/app_networks.dart';
 import 'ui/core/theme/app_theme.dart';
 import 'ui/core/routes/router.dart';
@@ -44,6 +45,7 @@ void main() async {
         MultiBlocProvider(
           providers: [
             BlocProvider(lazy: false, create: (context) => sl<WalletCubit>()..loadWallet()),
+            BlocProvider(lazy: false, create: (context) => sl<PinCubit>()..checkPinStatus()),
             BlocProvider(create: (context) => sl<MarketCubit>()..loadCoins()),
             BlocProvider(create: (context) => sl<ThemeCubit>()..loadTheme()),
             BlocProvider(create: (context) => sl<TokenCubit>()),
@@ -64,8 +66,32 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      sl<PinCubit>().lockApp();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +103,7 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           themeMode: themeState.themeMode,
-          routerConfig: createRouter(sl<WalletCubit>()),
+          routerConfig: createRouter(sl<WalletCubit>(), sl<PinCubit>()),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
