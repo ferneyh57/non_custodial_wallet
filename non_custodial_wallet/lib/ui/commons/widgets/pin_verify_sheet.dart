@@ -105,7 +105,17 @@ class _PinVerifySheetState extends State<PinVerifySheet> {
                 pinLength: PinCubit.pinLength,
                 hasError: _error != null,
               ),
-              if (_error != null) ...[
+              if (_verifying) ...[
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ] else if (_error != null) ...[
                 const SizedBox(height: 16),
                 Text(
                   _error!,
@@ -117,9 +127,15 @@ class _PinVerifySheetState extends State<PinVerifySheet> {
                 ),
               ],
               const SizedBox(height: 32),
-              PinKeypad(
-                onDigit: _onDigit,
-                onDelete: _onDelete,
+              IgnorePointer(
+                ignoring: _verifying,
+                child: Opacity(
+                  opacity: _verifying ? 0.4 : 1.0,
+                  child: PinKeypad(
+                    onDigit: _onDigit,
+                    onDelete: _onDelete,
+                  ),
+                ),
               ),
             ],
           ),

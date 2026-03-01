@@ -1,106 +1,154 @@
-# 📱 Non Wallet
+# Non-Custodial Wallet
 
 ![Flutter Version](https://img.shields.io/badge/Flutter-%5E3.11.0-blue.svg?style=flat&logo=flutter)
 ![Dart Version](https://img.shields.io/badge/Dart-3.0+-blue.svg?style=flat&logo=dart)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-Una aplicación móvil desarrollada en **Flutter** que funciona como una billetera de criptomonedas sin custodia (Non-Custodial Wallet), inspirada en la interfaz y experiencia de usuario de Trust Wallet.
+A mobile application built with **Flutter** that serves as a non-custodial cryptocurrency wallet. Users maintain full control of their private keys and seed phrases — no third-party custody involved.
 
-El proyecto está diseñado con una arquitectura limpia y robusta, enfocada en la seguridad, la gestión descentralizada de activos y el rendimiento fluido.
-
----
-
-## ✨ Características Principales
-
-- 🔐 **Billetera Sin Custodia:** El usuario tiene el control total de sus claves privadas y frases semilla (BIP39/BIP32).
-- 🪙 **Soporte Multicadena:** Integración con Bitcoin (vía `bdk_flutter`) y redes EVM / Ethereum (vía `web3dart`).
-- 📈 **Datos del Mercado:** Visualización en tiempo real de los precios y el estado del mercado de criptomonedas.
-- 🛡️ **Seguridad Local:** Almacenamiento seguro de credenciales y claves utilizando `flutter_secure_storage`.
-- 🌍 **Internacionalización:** Soporte nativo multilingüe (Español e Inglés).
-- 🎨 **Interfaz Moderna:** Diseño oscuro (Dark Theme) elegante, responsivo y fácil de usar.
+Built with Clean Architecture (Domain / Data / Presentation layers), the project prioritizes security, multi-chain asset management, and a smooth user experience.
 
 ---
 
-## 🛠️ Tecnologías y Arquitectura
+## Features
 
-El proyecto emplea las mejores prácticas y los estándares modernos del desarrollo en Flutter:
+### Wallet Management
+- **Create Wallet** — Generate BIP39 mnemonic phrases (12/24 words) with BIP32 HD key derivation.
+- **Import Wallet** — Restore an existing wallet from a seed phrase with full validation.
+- **Non-Custodial** — Private keys are stored exclusively on-device using platform-native secure storage (Keychain on iOS, Keystore on Android). Keys are zeroed from memory after use.
 
-### Core & UI
-* **[Flutter](https://flutter.dev/):** Framework principal para desarrollo UI multiplataforma.
-* **[GoRouter](https://pub.dev/packages/go_router):** Gestión de navegación y enrutamiento declarativo.
-* **[Google Fonts](https://pub.dev/packages/google_fonts):** Tipografías modernas integradas.
+### Multi-Chain Support
 
-### Gestión de Estado & Inyección de Dependencias
-* **[Flutter BLoC](https://pub.dev/packages/flutter_bloc):** Manejo de estados predecible y escalable (`WalletCubit`, `MarketCubit`).
-* **[GetIt](https://pub.dev/packages/get_it):** Localizador de servicios para la inyección de dependencias (DI).
+| Network | Mainnet | Testnet |
+|---------|---------|---------|
+| Ethereum | Chain 1 | Sepolia (11155111) |
+| Optimism | Chain 10 | Sepolia (11155420) |
+| Polygon | Chain 137 | Amoy (80002) |
+| Arbitrum | Chain 42161 | Sepolia (421614) |
+| Base | Chain 8453 | Sepolia (84532) |
 
-### Blockchain & Criptografía
-* **[web3dart](https://pub.dev/packages/web3dart):** Interacción con contratos inteligentes y la blockchain de Ethereum.
-* **[bdk_flutter](https://pub.dev/packages/bdk_flutter):** Bitcoin Development Kit para integrar funcionalidades completas de Bitcoin.
-* **[bip39](https://pub.dev/packages/bip39) & [bip32](https://pub.dev/packages/bip32):** Generación y manejo de mnemonics y derivación de billeteras HD (Hierarchical Deterministic).
+Users can switch between Mainnet and Testnet from Settings.
 
-### Redes & Datos
-* **[Dio](https://pub.dev/packages/dio) & [Retrofit](https://pub.dev/packages/retrofit):** Clientes HTTP potentes y tipados para llamadas a APIs externas.
-* **[Freezed](https://pub.dev/packages/freezed) & [Json Serializable](https://pub.dev/packages/json_serializable):** Clases de datos inmutables y de serialización segura (generación de código).
+### Send Transactions
+- Send native currency (ETH) and ERC-20 tokens across supported networks.
+- Real-time gas estimation before submitting.
+- PIN verification required to sign every transaction.
+- Transaction hash and status tracking after submission.
+
+### Receive
+- Display wallet address with QR code generation (EIP-681 compliant).
+- Optional amount parameter embedded in QR.
+- Copy address and share via system share sheet.
+
+### Token Swap / Exchange
+- Select source and destination assets across networks.
+- Real-time quote fetching with expiry countdown.
+- Quote execution with EIP-7702 Auth or personal_sign signing.
+- Swap status tracking via call ID polling.
+
+### ERC-20 Token Support
+- Fetch and display ERC-20 token balances across all active networks.
+- Pre-configured token list (USDC, USDC.e, DAI, and more).
+- Token detail screen with balance in token and USD, contract address, and block explorer link.
+
+### Market Data
+- Real-time cryptocurrency prices via Alchemy API.
+- Portfolio value in USD on the home screen.
+- TTL-based caching to minimize API calls with pull-to-refresh support.
+
+### Security
+- **PIN Protection** — 4-6 digit PIN with PBKDF2 hashing (100,000 iterations) and constant-time comparison.
+- **Auto-Lock** — App locks when moved to background; PIN required to resume.
+- **Failed Attempt Lockout** — Exponential backoff timer after multiple wrong PIN entries.
+- **Secure Storage** — Encrypted mnemonic and PIN hash via `flutter_secure_storage`.
+- **Memory Safety** — Credentials zeroed out after signing transactions.
+
+### QR Scanner
+- Camera-based QR code scanning for recipient addresses.
+- Torch toggle support.
+
+### Testnet Faucet
+- Direct links to faucets for all supported testnets.
+- Auto-copies wallet address for quick funding.
+
+### Settings
+- Network mode toggle (Mainnet / Testnet).
+- Light / Dark theme toggle.
+- Logout with PIN confirmation and secure key deletion.
+
+### Localization
+- English and Spanish (ARB-based i18n).
 
 ---
 
-## 🚀 Cómo Empezar
+## Architecture
 
-### Requisitos Previos
-
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) (versión 3.11.0 o superior)
-- Dart SDK
-- Android Studio / Xcode para compilación
-
-### Instalación
-
-1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/non_custodial_wallet.git
-   cd non_custodial_wallet
-   ```
-
-2. Instala las dependencias del proyecto:
-   ```bash
-   flutter pub get
-   ```
-
-3. Genera los archivos necesarios (Freezed, Retrofit, JSON Serializable):
-   ```bash
-   dart run build_runner build --delete-conflicting-outputs
-   ```
-
-4. Ejecuta la aplicación:
-   ```bash
-   flutter run
-   ```
-
----
-
-## 📁 Estructura del Proyecto
-
-La estructura de carpetas está orientada por funcionalidades y separación de responsabilidades:
-
-```text
+```
 lib/
- ┣ ui/                  # Componentes de la interfaz de usuario
- ┃ ┣ core/              # Configuraciones base (Navegación, DI, Logger, L10n)
- ┃ ┣ features/          # Pantallas y lógicas divididas por módulos
- ┃ ┃ ┣ cubits/          # Manejadores de estado BLoC/Cubit (Market, Wallet) 
- ┃ ...
- ┗ main.dart            # Punto de entrada de la aplicación
+├── domain/                  # Business logic (entities, repositories, use cases)
+├── data/                    # Data access (datasources, models, mappers, repositories)
+└── ui/                      # Presentation
+    ├── features/            # Feature screens
+    │   ├── auth/            #   Wallet creation & import
+    │   ├── home/            #   Dashboard (Assets, Tokens, Activity tabs)
+    │   ├── send/            #   Send transactions
+    │   ├── receive/         #   Receive address & QR
+    │   ├── swap/            #   Token swaps
+    │   ├── settings/        #   App settings
+    │   ├── pin/             #   PIN management
+    │   ├── qr_scanner/      #   QR scanning
+    │   ├── faucet/          #   Testnet faucets
+    │   ├── token_detail/    #   Token details
+    │   ├── splash/          #   App initialization
+    │   └── welcome/         #   Onboarding
+    ├── commons/             # Shared cubits & widgets
+    └── core/                # DI, routing, theme, l10n, constants
 ```
 
 ---
 
-## 🔒 Aviso de Seguridad
+## Tech Stack
 
-Este proyecto es una plantilla de desarrollo y un clon educativo. Si vas a utilizar este código para una billetera de producción:
-* Realiza auditorías de seguridad sobre la gestión de claves privadas.
-* Asegúrate de manejar correctamente el almacenamiento cifrado nativo.
-* No compartas ni expongas frases semilla en logs de consola.
+| Category | Libraries |
+|----------|-----------|
+| **State Management** | Flutter BLoC, Freezed, GetIt |
+| **Navigation** | GoRouter |
+| **Networking** | Dio, Retrofit |
+| **Blockchain** | web3dart, bip39, bip32, crypto |
+| **Storage** | flutter_secure_storage, SQLite3 |
+| **UI** | Google Fonts, qr_flutter, shimmer, flutter_animate |
+| **Utilities** | url_launcher, share_plus, mobile_scanner, logger |
 
 ---
 
-¡Construido con ❤️ usando Flutter!
+## Getting Started
+
+### Prerequisites
+
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.11.0+
+- Dart SDK
+- Android Studio / Xcode
+
+### Installation
+
+```bash
+git clone https://github.com/your-username/non_custodial_wallet.git
+cd non_custodial_wallet
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter run
+```
+
+---
+
+## Security Notice
+
+This project is intended for educational and development purposes. If you plan to use this code in a production wallet:
+
+- Conduct thorough security audits on private key management.
+- Ensure encrypted storage is properly configured for each platform.
+- Never expose seed phrases in console logs or debug output.
+
+---
+
+Built with Flutter.

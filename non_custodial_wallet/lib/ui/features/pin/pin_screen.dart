@@ -75,7 +75,17 @@ class PinScreen extends StatelessWidget {
                     pinLength: PinCubit.pinLength,
                     hasError: state.errorMessage != null,
                   ),
-                  if (errorText != null) ...[
+                  if (state.isLoading) ...[
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: context.colors.primary,
+                      ),
+                    ),
+                  ] else if (errorText != null) ...[
                     const SizedBox(height: 16),
                     Text(
                       errorText,
@@ -87,10 +97,17 @@ class PinScreen extends StatelessWidget {
                     ),
                   ],
                   const Spacer(),
-                  PinKeypad(
-                    onDigit: (digit) =>
-                        context.read<PinCubit>().enterDigit(digit),
-                    onDelete: () => context.read<PinCubit>().deleteDigit(),
+                  IgnorePointer(
+                    ignoring: state.isLoading,
+                    child: Opacity(
+                      opacity: state.isLoading ? 0.4 : 1.0,
+                      child: PinKeypad(
+                        onDigit: (digit) =>
+                            context.read<PinCubit>().enterDigit(digit),
+                        onDelete: () =>
+                            context.read<PinCubit>().deleteDigit(),
+                      ),
+                    ),
                   ),
                   if (!isCreate) ...[
                     const SizedBox(height: 8),

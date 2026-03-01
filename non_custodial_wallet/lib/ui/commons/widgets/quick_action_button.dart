@@ -31,7 +31,7 @@ class QuickActionButton extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: enabled ? onTap : null,
-              borderRadius: BorderRadius.circular(26),
+              customBorder: const CircleBorder(),
               splashColor: color.withValues(alpha: 0.2),
               highlightColor: color.withValues(alpha: 0.1),
               child: Ink(
