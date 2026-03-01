@@ -14,8 +14,8 @@ import 'ui/features/cubits/token/token_cubit.dart';
 import 'ui/features/cubits/transfer_history/transfer_history_cubit.dart';
 import 'ui/features/cubits/pin/pin_cubit.dart';
 import 'ui/features/cubits/network_mode/network_mode_cubit.dart';
-import 'ui/features/cubits/network_mode/network_mode_state.dart';
 import 'ui/core/theme/app_theme.dart';
+import 'package:go_router/go_router.dart';
 import 'ui/core/routes/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -49,15 +49,14 @@ void main() async {
         MultiBlocProvider(
           providers: [
             BlocProvider.value(value: networkModeCubit),
-            BlocProvider(lazy: false, create: (context) => sl<WalletCubit>()..loadWallet()),
+            BlocProvider.value(value: sl<WalletCubit>()..loadWallet()),
             BlocProvider(lazy: false, create: (context) => sl<PinCubit>()..checkPinStatus()),
             BlocProvider(create: (context) => sl<MarketCubit>()..loadCoins()),
             BlocProvider(create: (context) => sl<ThemeCubit>()..loadTheme()),
-            BlocProvider(create: (context) => sl<TokenCubit>()),
+            BlocProvider.value(value: sl<TokenCubit>()),
             BlocProvider(
               create: (context) => TransferHistoryCubit(
                 getTransferHistoryUseCase: sl(),
-                networks: networkModeCubit.state.networks,
               ),
             ),
           ],
@@ -79,10 +78,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  late final GoRouter _router;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _router = createRouter(sl<WalletCubit>(), sl<PinCubit>());
   }
 
   @override
@@ -100,42 +102,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NetworkModeCubit, NetworkModeState>(
-      listener: (context, networkState) {
-        final walletCubit = context.read<WalletCubit>();
-        final tokenCubit = context.read<TokenCubit>();
-
-        walletCubit.updateNetworks(networkState.networks);
-        tokenCubit.updateNetworks(
-          networkState.networks,
-          isMainnet: networkState.isMainnet,
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, themeState) {
+        return MaterialApp.router(
+          title: 'Trust Wallet Clone',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
+          themeMode: themeState.themeMode,
+          routerConfig: _router,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('en'), Locale('es')],
         );
-
-        final address = walletCubit.state.wallet?.ethAddress;
-        if (address != null) {
-          walletCubit.fetchBalance(force: true);
-          tokenCubit.fetchTokenBalances(address, force: true);
-        }
       },
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, themeState) {
-          return MaterialApp.router(
-            title: 'Trust Wallet Clone',
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.light(),
-            darkTheme: AppTheme.dark(),
-            themeMode: themeState.themeMode,
-            routerConfig: createRouter(sl<WalletCubit>(), sl<PinCubit>()),
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [Locale('en'), Locale('es')],
-          );
-        },
-      ),
     );
   }
 }

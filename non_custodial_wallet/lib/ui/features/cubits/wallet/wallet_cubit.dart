@@ -18,14 +18,12 @@ class WalletCubit extends Cubit<WalletState> {
   final GetEthAddressUseCase getEthAddressUseCase;
   final GetBalanceUseCase getBalanceUseCase;
 
-  List<NetworkEntity> _networks = AppNetworks.all;
+  final List<NetworkEntity> _networks = [
+    ...AppNetworks.testnetAll,
+    ...AppNetworks.mainnetAll,
+  ];
   DateTime? _lastBalanceFetched;
   static const _balanceTtl = Duration(seconds: 30);
-
-  void updateNetworks(List<NetworkEntity> networks) {
-    _networks = networks;
-    _lastBalanceFetched = null;
-  }
 
   WalletCubit({
     required this.generateKeyUseCase,
@@ -150,9 +148,7 @@ class WalletCubit extends Cubit<WalletState> {
       ),
     );
 
-    final newBalances = Map<int, BigInt>.from(
-      state.wallet?.balancesInWei ?? {},
-    );
+    final newBalances = <int, BigInt>{};
     for (final entry in results) {
       if (entry.value.isSuccess && entry.value.data != null) {
         newBalances[entry.key] = entry.value.data!;

@@ -15,8 +15,12 @@ class HomeActivityList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TransferHistoryCubit, TransferHistoryState>(
       builder: (context, state) {
+        final chainIds = networks.map((n) => n.chainId).toSet();
+        final filtered = state.transfers
+            .where((t) => chainIds.contains(t.chainId))
+            .toList();
         return TransactionList(
-          transfers: state.transfers,
+          transfers: filtered,
           isLoading: state.isLoading,
           isLoadingMore: state.isLoadingMore,
           hasMore: state.hasMore,

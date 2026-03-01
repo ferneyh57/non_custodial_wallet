@@ -174,7 +174,9 @@ class TransactionItem extends StatelessWidget {
   String get _assetIconUrl {
     if (network == null) return '';
     if (transfer.category == 'external') return network!.iconUrl;
-    final tokens = AppTokens.tokensByChain[transfer.chainId] ?? [];
+    final tokens = AppTokens.testnetTokensByChain[transfer.chainId] ??
+        AppTokens.mainnetTokensByChain[transfer.chainId] ??
+        [];
     for (final token in tokens) {
       if (token.symbol.toUpperCase() == transfer.asset.toUpperCase()) {
         return token.logoUrl;

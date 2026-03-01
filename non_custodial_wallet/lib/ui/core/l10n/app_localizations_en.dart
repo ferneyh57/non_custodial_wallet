@@ -319,4 +319,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLogoutConfirmButton => 'Log Out';
+
+  @override
+  String get swapTestnetDisclaimer =>
+      'Swap is not available on testnet. Switch to Mainnet in Settings to use this feature.';
 }

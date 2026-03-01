@@ -7,6 +7,7 @@ import '../../../ui/core/util/app_logger.dart';
 class SecureStorageDataSource {
   static const String _mnemonicKey = 'mnemonic';
   static const String _pinHashKey = 'pin_hash';
+  static const String _networkModeKey = 'network_mode';
 
   Future<void> saveMnemonic(String mnemonic) async {
     try {
@@ -76,5 +77,25 @@ class SecureStorageDataSource {
   Future<bool> hasPin() async {
     final pinHash = await getPinHash();
     return pinHash != null && pinHash.isNotEmpty;
+  }
+
+  Future<void> saveNetworkMode(String mode) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_networkModeKey, mode);
+    } catch (e, stackTrace) {
+      AppLogger.error('Error saving network mode', e, stackTrace);
+      throw SecureStorageException('Failed to save network mode');
+    }
+  }
+
+  Future<String?> getNetworkMode() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(_networkModeKey);
+    } catch (e, stackTrace) {
+      AppLogger.error('Error reading network mode', e, stackTrace);
+      throw SecureStorageException('Failed to read network mode');
+    }
   }
 }

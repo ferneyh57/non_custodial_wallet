@@ -2,11 +2,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/transaction/transfer_entity.dart';
 import '../../../../domain/usecases/transaction/get_transfer_history_use_case.dart';
+import '../../../core/constants/app_networks.dart';
 import 'transfer_history_state.dart';
 
 class TransferHistoryCubit extends Cubit<TransferHistoryState> {
   final GetTransferHistoryUseCase getTransferHistoryUseCase;
-  final List<NetworkEntity> networks;
+  final List<NetworkEntity> _networks = [
+    ...AppNetworks.testnetAll,
+    ...AppNetworks.mainnetAll,
+  ];
 
   DateTime? _lastFetched;
   String? _lastAddress;
@@ -18,7 +22,6 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
 
   TransferHistoryCubit({
     required this.getTransferHistoryUseCase,
-    required this.networks,
   }) : super(const TransferHistoryState());
 
   /// Loads recent transfers from ALL networks, merges and sorts by timestamp.
@@ -36,7 +39,7 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
     final results = await Future.wait(
-      networks.map((network) => getTransferHistoryUseCase(
+      _networks.map((network) => getTransferHistoryUseCase(
             walletAddress: walletAddress,
             network: network,
             maxCount: _pageSize,
@@ -51,7 +54,7 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
       if (result.isSuccess && result.data != null) {
         final page = result.data!;
         all.addAll(page.transfers);
-        _pageKeys[networks[i].chainId] =
+        _pageKeys[_networks[i].chainId] =
             (page.sentPageKey, page.receivedPageKey);
         if (page.hasMore) anyHasMore = true;
       }
@@ -74,7 +77,7 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
     emit(state.copyWith(isLoadingMore: true));
 
     // Only fetch from networks that still have data.
-    final networksWithData = networks.where((n) {
+    final networksWithData = _networks.where((n) {
       final keys = _pageKeys[n.chainId];
       return keys != null && (keys.$1 != null || keys.$2 != null);
     }).toList();
@@ -114,7 +117,7 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
     // Also check networks we didn't fetch — they might still have stale keys
     // that were already null, so only mark hasMore false if truly none remain.
     if (!anyHasMore) {
-      for (final n in networks) {
+      for (final n in _networks) {
         final keys = _pageKeys[n.chainId];
         if (keys != null && (keys.$1 != null || keys.$2 != null)) {
           anyHasMore = true;

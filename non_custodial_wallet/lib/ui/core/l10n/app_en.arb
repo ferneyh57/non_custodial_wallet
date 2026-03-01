@@ -106,5 +106,6 @@
   "settingsLogoutSubtitle": "Delete wallet data from this device",
   "settingsLogoutConfirmTitle": "Log Out",
   "settingsLogoutConfirmMessage": "This will delete all wallet data from this device. Make sure you have backed up your recovery phrase.",
-  "settingsLogoutConfirmButton": "Log Out"
+  "settingsLogoutConfirmButton": "Log Out",
+  "swapTestnetDisclaimer": "Swap is not available on testnet. Switch to Mainnet in Settings to use this feature."
 }

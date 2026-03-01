@@ -703,6 +703,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log Out'**
   String get settingsLogoutConfirmButton;
+
+  /// No description provided for @swapTestnetDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap is not available on testnet. Switch to Mainnet in Settings to use this feature.'**
+  String get swapTestnetDisclaimer;
 }
 
 class _AppLocalizationsDelegate

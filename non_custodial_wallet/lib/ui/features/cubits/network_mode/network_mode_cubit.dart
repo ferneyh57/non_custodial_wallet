@@ -1,30 +1,42 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../data/datasources/storage/secure_storage_datasource.dart';
 import '../../../core/constants/app_networks.dart';
 import 'network_mode_state.dart';
 
 class NetworkModeCubit extends Cubit<NetworkModeState> {
-  static const String _key = 'network_mode';
+  final SecureStorageDataSource _storage;
 
-  NetworkModeCubit() : super(const NetworkModeState());
+  NetworkModeCubit({required SecureStorageDataSource storage})
+      : _storage = storage,
+        super(NetworkModeState(
+          isMainnet: false,
+          networks: AppNetworks.testnetAll,
+          defaultNetwork: AppNetworks.ethSepolia,
+        ));
 
   Future<void> loadNetworkMode() async {
-    final prefs = await SharedPreferences.getInstance();
-    final saved = prefs.getString(_key);
-    final isMainnet = saved == 'mainnet';
-    emit(state.copyWith(
-      isMainnet: isMainnet,
-      networks:
-          isMainnet ? AppNetworks.mainnetAll : AppNetworks.testnetAll,
-      defaultNetwork:
-          isMainnet ? AppNetworks.ethMainnet : AppNetworks.ethSepolia,
-    ));
+    try {
+      final saved = await _storage.getNetworkMode();
+      final isMainnet = saved == 'mainnet';
+      emit(state.copyWith(
+        isMainnet: isMainnet,
+        networks:
+            isMainnet ? AppNetworks.mainnetAll : AppNetworks.testnetAll,
+        defaultNetwork:
+            isMainnet ? AppNetworks.ethMainnet : AppNetworks.ethSepolia,
+      ));
+    } catch (_) {
+      // Keep default testnet state on error
+    }
   }
 
   Future<void> toggleNetworkMode() async {
     final newIsMainnet = !state.isMainnet;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_key, newIsMainnet ? 'mainnet' : 'testnet');
+    try {
+      await _storage.saveNetworkMode(newIsMainnet ? 'mainnet' : 'testnet');
+    } catch (_) {
+      // Continue even if persistence fails
+    }
     emit(state.copyWith(
       isMainnet: newIsMainnet,
       networks:

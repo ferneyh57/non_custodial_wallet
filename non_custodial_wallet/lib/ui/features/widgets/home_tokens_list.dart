@@ -48,7 +48,12 @@ class _HomeTokensListState extends State<HomeTokensList> {
       );
     }
 
-    if (widget.tokenState.tokenBalances.isEmpty) {
+    final chainIds = widget.networks.map((n) => n.chainId).toSet();
+    final modeBalances = widget.tokenState.tokenBalances
+        .where((tb) => chainIds.contains(tb.chainId))
+        .toList();
+
+    if (modeBalances.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 40),
         child: Center(
@@ -73,8 +78,8 @@ class _HomeTokensListState extends State<HomeTokensList> {
     };
 
     final filtered = _query.isEmpty
-        ? widget.tokenState.tokenBalances
-        : widget.tokenState.tokenBalances.where((tb) {
+        ? modeBalances
+        : modeBalances.where((tb) {
             final q = _query.toLowerCase();
             return tb.token.symbol.toLowerCase().contains(q) ||
                 tb.token.name.toLowerCase().contains(q) ||

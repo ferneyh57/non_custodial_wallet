@@ -324,4 +324,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsLogoutConfirmButton => 'Cerrar Sesión';
+
+  @override
+  String get swapTestnetDisclaimer =>
+      'Swap no está disponible en testnet. Cambia a Mainnet en Configuración para usar esta función.';
 }

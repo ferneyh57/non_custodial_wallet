@@ -113,7 +113,6 @@ void _initCubits() {
   sl.registerFactory<TransferHistoryCubit>(
     () => TransferHistoryCubit(
       getTransferHistoryUseCase: sl<GetTransferHistoryUseCase>(),
-      networks: sl<NetworkModeCubit>().state.networks,
     ),
   );
   sl.registerFactory<SwapCubit>(
@@ -126,7 +125,9 @@ void _initCubits() {
       networks: sl<NetworkModeCubit>().state.networks,
     ),
   );
-  sl.registerLazySingleton<NetworkModeCubit>(() => NetworkModeCubit());
+  sl.registerLazySingleton<NetworkModeCubit>(
+    () => NetworkModeCubit(storage: sl<SecureStorageDataSource>()),
+  );
   sl.registerLazySingleton<PinCubit>(
     () => PinCubit(
       savePinUseCase: sl<SavePinUseCase>(),

@@ -11,6 +11,7 @@ import '../../cubits/swap/swap_state.dart';
 import '../../cubits/wallet/wallet_cubit.dart';
 import '../../cubits/market/market_cubit.dart';
 import '../../cubits/token/token_cubit.dart';
+import '../../cubits/network_mode/network_mode_cubit.dart';
 import '../../widgets/swap/swap_asset_picker.dart';
 import '../../widgets/swap/swap_section_label.dart';
 import '../../widgets/swap/swap_asset_selector_card.dart';
@@ -131,6 +132,40 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (!context.read<NetworkModeCubit>().state.isMainnet) ...[
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.orange.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.info_outline_rounded,
+                            color: Colors.orange,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              context.l10n.swapTestnetDisclaimer,
+                              style: GoogleFonts.poppins(
+                                color: Colors.orange,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   // From Asset
                   SwapSectionLabel(label: context.l10n.fromTokenLabel),
                   const SizedBox(height: 8),

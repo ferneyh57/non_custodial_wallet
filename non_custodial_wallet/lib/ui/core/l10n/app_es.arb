@@ -106,5 +106,6 @@
   "settingsLogoutSubtitle": "Eliminar los datos de la billetera de este dispositivo",
   "settingsLogoutConfirmTitle": "Cerrar Sesión",
   "settingsLogoutConfirmMessage": "Esto eliminará todos los datos de la billetera de este dispositivo. Asegúrate de haber respaldado tu frase de recuperación.",
-  "settingsLogoutConfirmButton": "Cerrar Sesión"
+  "settingsLogoutConfirmButton": "Cerrar Sesión",
+  "swapTestnetDisclaimer": "Swap no está disponible en testnet. Cambia a Mainnet en Configuración para usar esta función."
 }

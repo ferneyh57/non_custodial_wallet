@@ -29,7 +29,6 @@ class SettingsScreen extends StatelessWidget {
           _NetworkModeSection(),
           _ThemeSection(),
           if (kDebugMode) _CopySeedSection(),
-          const Divider(height: 1),
           _LogoutSection(),
         ],
       ),
@@ -105,10 +104,7 @@ class _CopySeedSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(
-        Icons.key_rounded,
-        color: context.appColors.subtitleText,
-      ),
+      leading: Icon(Icons.key_rounded, color: context.appColors.subtitleText),
       title: Text(
         context.l10n.settingsCopySeed,
         style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
@@ -123,13 +119,12 @@ class _CopySeedSection extends StatelessWidget {
       onTap: () async {
         final verified = await PinVerifySheet.show(context);
         if (!verified || !context.mounted) return;
-        final mnemonic =
-            context.read<WalletCubit>().state.wallet?.mnemonic;
+        final mnemonic = context.read<WalletCubit>().state.wallet?.mnemonic;
         if (mnemonic != null) {
           Clipboard.setData(ClipboardData(text: mnemonic));
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(context.l10n.mnemonicCopied)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(context.l10n.mnemonicCopied)));
         }
       },
     );
