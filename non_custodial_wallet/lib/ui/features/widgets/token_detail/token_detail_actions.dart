@@ -36,6 +36,12 @@ class TokenDetailActions extends StatelessWidget {
               label: context.l10n.receiveButton,
               onTap: onReceive,
             ),
+            const SizedBox(width: 32),
+            QuickActionButton(
+              icon: Icons.swap_horiz_rounded,
+              label: context.l10n.swapButton,
+              onTap: onSwap,
+            ),
           ],
         ),
         const SizedBox(height: 24),

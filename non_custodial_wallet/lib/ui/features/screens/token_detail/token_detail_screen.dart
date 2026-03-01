@@ -118,6 +118,13 @@ class TokenDetailScreenView extends StatelessWidget {
                         AppRoutes.receive,
                         extra: {'network': args.network},
                       ),
+                      onSwap: () => context.push(
+                        AppRoutes.swap,
+                        extra: {
+                          'network': args.network,
+                          'token': args.tokenBalance?.token,
+                        },
+                      ),
                       explorerUrl: explorerUrl,
                     ),
                     const SizedBox(height: 24),

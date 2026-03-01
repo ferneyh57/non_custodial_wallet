@@ -27,8 +27,8 @@ class PinDisplay extends StatelessWidget {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           margin: const EdgeInsets.symmetric(horizontal: 8),
-          width: isFilled ? 16 : 14,
-          height: isFilled ? 16 : 14,
+          width: 16,
+          height: 16,
           decoration: BoxDecoration(
             color: isFilled ? activeColor : Colors.transparent,
             shape: BoxShape.circle,
