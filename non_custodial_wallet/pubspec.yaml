@@ -39,7 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   bip39: ^1.0.6
   crypto: ^3.0.6
-  shared_preferences: ^2.3.4
+  flutter_secure_storage: ^9.2.4
   web3dart: ^2.7.3
   http: ^1.2.0
 

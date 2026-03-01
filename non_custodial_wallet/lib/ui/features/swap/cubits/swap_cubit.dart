@@ -7,11 +7,9 @@ import '../../../../domain/usecases/swap/request_swap_quote_use_case.dart';
 import '../../../../domain/usecases/swap/execute_swap_use_case.dart';
 import '../../../../domain/usecases/swap/get_swap_status_use_case.dart';
 import '../../../core/constants/app_tokens.dart';
+import '../../../core/constants/crypto_constants.dart';
 import '../../../commons/cubits/wallet/wallet_cubit.dart';
 import 'swap_state.dart';
-
-/// Native token address used by Alchemy swap API.
-const _nativeTokenAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 /// Represents a selectable asset (native or ERC-20) on a specific network.
 class SwapAsset {
@@ -129,7 +127,7 @@ class SwapCubit extends Cubit<SwapState> {
   }
 
   String _tokenAddress(TokenEntity? token) {
-    return token?.contractAddress ?? _nativeTokenAddress;
+    return token?.contractAddress ?? CryptoConstants.nativeTokenAddress;
   }
 
   int _tokenDecimals(TokenEntity? token) {

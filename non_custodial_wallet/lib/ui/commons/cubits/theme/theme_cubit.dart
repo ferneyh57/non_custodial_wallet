@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../data/datasources/storage/secure_storage_datasource.dart';
 import 'theme_state.dart';
 
 class ThemeCubit extends Cubit<ThemeState> {
-  static const String _themeKey = 'theme_mode';
+  final SecureStorageDataSource _storage;
 
-  ThemeCubit() : super(const ThemeState());
+  ThemeCubit({required SecureStorageDataSource storage})
+      : _storage = storage,
+        super(const ThemeState());
 
   Future<void> loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    final savedTheme = prefs.getString(_themeKey);
+    final savedTheme = await _storage.getThemeMode();
     if (savedTheme == 'light') {
       emit(state.copyWith(themeMode: ThemeMode.light));
     }
@@ -21,10 +22,7 @@ class ThemeCubit extends Cubit<ThemeState> {
         ? ThemeMode.light
         : ThemeMode.dark;
     emit(state.copyWith(themeMode: newMode));
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      _themeKey,
+    await _storage.saveThemeMode(
       newMode == ThemeMode.light ? 'light' : 'dark',
     );
   }

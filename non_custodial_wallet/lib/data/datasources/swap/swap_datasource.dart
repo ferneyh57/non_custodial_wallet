@@ -6,6 +6,8 @@ import 'package:web3dart/crypto.dart' as crypto;
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/swap/swap_quote_entity.dart';
 import '../../../domain/entities/swap/swap_status_entity.dart';
+import '../../../ui/core/constants/crypto_constants.dart';
+import '../../../ui/core/constants/rpc_methods.dart';
 import '../../../ui/core/error/failures.dart';
 import '../../../ui/core/util/result.dart';
 import '../../../ui/core/util/app_logger.dart';
@@ -68,7 +70,7 @@ class SwapDataSourceImpl implements ISwapDataSource {
   }) async {
     try {
       final result = await rpcClient.call(
-        method: 'wallet_requestQuote_v0',
+        method: RpcMethods.requestQuote,
         params: [
           {
             'from': fromAddress,
@@ -118,7 +120,7 @@ class SwapDataSourceImpl implements ISwapDataSource {
           final sigType = sigReq['type'] as String;
           String rawPayload;
 
-          if (sigType == 'personal_sign') {
+          if (sigType == CryptoConstants.personalSign) {
             final sigData = sigReq['data'] as Map<String, dynamic>;
             rawPayload = sigData['raw'] as String;
           } else {
@@ -171,10 +173,10 @@ class SwapDataSourceImpl implements ISwapDataSource {
   ) {
     final payload = _hexToBytes(sigReq.rawPayload);
 
-    if (sigReq.type == 'personal_sign') {
+    if (sigReq.type == CryptoConstants.personalSign) {
       final sig = credentials.signPersonalMessageToUint8List(payload);
-      return {'type': 'secp256k1', 'data': _bytesToHex(sig)};
-    } else if (sigReq.type == 'eip7702Auth') {
+      return {'type': CryptoConstants.secp256k1, 'data': _bytesToHex(sig)};
+    } else if (sigReq.type == CryptoConstants.eip7702Auth) {
       final msgSig = crypto.sign(payload, credentials.privateKey);
       final r = _padTo32(crypto.unsignedIntToBytes(msgSig.r));
       final s = _padTo32(crypto.unsignedIntToBytes(msgSig.s));
@@ -183,7 +185,7 @@ class SwapDataSourceImpl implements ISwapDataSource {
       sigBytes.setRange(0, 32, r);
       sigBytes.setRange(32, 64, s);
       sigBytes[64] = v;
-      return {'type': 'secp256k1', 'data': _bytesToHex(sigBytes)};
+      return {'type': CryptoConstants.secp256k1, 'data': _bytesToHex(sigBytes)};
     }
 
     throw Exception('Unknown signature type: ${sigReq.type}');
@@ -224,7 +226,7 @@ class SwapDataSourceImpl implements ISwapDataSource {
       ];
 
       final result = await rpcClient.call(
-        method: 'wallet_sendPreparedCalls',
+        method: RpcMethods.sendPreparedCalls,
         params: requestParams,
       );
 
@@ -242,7 +244,7 @@ class SwapDataSourceImpl implements ISwapDataSource {
   Future<Result<SwapStatusEntity>> getSwapStatus(String callId) async {
     try {
       final result = await rpcClient.call(
-        method: 'wallet_getCallsStatus',
+        method: RpcMethods.getCallsStatus,
         params: [callId],
       );
 

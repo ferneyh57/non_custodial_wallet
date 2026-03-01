@@ -1,6 +1,8 @@
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/transaction/transfer_entity.dart';
 import '../../../domain/entities/transaction/transfer_page_result.dart';
+import '../../../ui/core/constants/blockchain_constants.dart';
+import '../../../ui/core/constants/rpc_methods.dart';
 import '../../../ui/core/error/failures.dart';
 import '../../../ui/core/util/result.dart';
 import '../../../ui/core/util/app_logger.dart';
@@ -29,7 +31,7 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
     required NetworkEntity network,
     String? contractAddress,
     int maxCount = 10,
-    List<String> categories = const ['external', 'erc20'],
+    List<String> categories = BlockchainConstants.defaultTransferCategories,
     String? sentPageKey,
     String? receivedPageKey,
   }) async {
@@ -110,11 +112,11 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
     String? pageKey,
   }) async {
     final params = <String, dynamic>{
-      'fromBlock': '0x0',
-      'toBlock': 'latest',
+      'fromBlock': BlockchainConstants.fromBlockGenesis,
+      'toBlock': BlockchainConstants.toBlockLatest,
       direction: walletAddress,
       'category': categories,
-      'order': 'desc',
+      'order': BlockchainConstants.orderDesc,
       'maxCount': maxCount,
       'withMetadata': true,
       'excludeZeroValue': true,
@@ -130,7 +132,7 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
 
     try {
       final result = await rpcClient.call(
-        method: 'alchemy_getAssetTransfers',
+        method: RpcMethods.getAssetTransfers,
         params: [params],
         url: rpcUrl,
       );

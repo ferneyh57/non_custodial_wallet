@@ -1,6 +1,7 @@
 import 'package:web3dart/web3dart.dart';
 import 'package:non_custodial_wallet/domain/entities/network/network_entity.dart';
 import 'package:non_custodial_wallet/domain/entities/token/token_entity.dart';
+import 'package:non_custodial_wallet/ui/core/constants/blockchain_constants.dart';
 import 'package:non_custodial_wallet/ui/core/error/failures.dart';
 import 'package:non_custodial_wallet/ui/core/util/app_logger.dart';
 import 'package:non_custodial_wallet/domain/entities/transaction/gas_estimate_entity.dart';
@@ -36,9 +37,8 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
   final Map<int, Web3Client> clients;
   final WalletKeyDeriver keyDeriver;
 
-  // Minimal ERC-20 ABI: transfer(address,uint256) → bool
   static final _erc20Abi = ContractAbi.fromJson(
-    '[{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}]',
+    BlockchainConstants.erc20TransferAbi,
     'ERC20',
   );
 
@@ -106,7 +106,7 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
         _erc20Abi,
         EthereumAddress.fromHex(token.contractAddress),
       );
-      final transfer = contract.function('transfer');
+      final transfer = contract.function(BlockchainConstants.transferFunction);
 
       final txHash = await client.sendTransaction(
         credentials,
@@ -159,7 +159,7 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
           _erc20Abi,
           EthereumAddress.fromHex(token.contractAddress),
         );
-        final transfer = contract.function('transfer');
+        final transfer = contract.function(BlockchainConstants.transferFunction);
         final data = transfer.encodeCall([to, amount]);
 
         gasUnits = await client.estimateGas(

@@ -1,18 +1,20 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../ui/core/constants/storage_keys.dart';
 import '../../../ui/core/error/exceptions.dart';
 import '../../../ui/core/util/app_logger.dart';
 
-/// TODO: Replace with flutter_secure_storage when proper signing is configured.
-/// This is a temporary bypass using shared_preferences for local development.
 class SecureStorageDataSource {
-  static const String _mnemonicKey = 'mnemonic';
-  static const String _pinHashKey = 'pin_hash';
-  static const String _networkModeKey = 'network_mode';
+
+  final FlutterSecureStorage _storage;
+
+  SecureStorageDataSource()
+      : _storage = const FlutterSecureStorage(
+          aOptions: AndroidOptions(encryptedSharedPreferences: true),
+        );
 
   Future<void> saveMnemonic(String mnemonic) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_mnemonicKey, mnemonic);
+      await _storage.write(key: StorageKeys.mnemonic, value: mnemonic);
     } catch (e, stackTrace) {
       AppLogger.error('Error saving mnemonic to storage', e, stackTrace);
       throw SecureStorageException('Failed to save mnemonic');
@@ -21,8 +23,7 @@ class SecureStorageDataSource {
 
   Future<String?> getMnemonic() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getString(_mnemonicKey);
+      return await _storage.read(key: StorageKeys.mnemonic);
     } catch (e, stackTrace) {
       AppLogger.error('Error reading mnemonic from storage', e, stackTrace);
       throw SecureStorageException('Failed to read mnemonic');
@@ -31,8 +32,7 @@ class SecureStorageDataSource {
 
   Future<void> deleteMnemonic() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_mnemonicKey);
+      await _storage.delete(key: StorageKeys.mnemonic);
     } catch (e, stackTrace) {
       AppLogger.error('Error deleting mnemonic from storage', e, stackTrace);
       throw SecureStorageException('Failed to delete mnemonic');
@@ -46,8 +46,7 @@ class SecureStorageDataSource {
 
   Future<void> savePinHash(String pinHash) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_pinHashKey, pinHash);
+      await _storage.write(key: StorageKeys.pinHash, value: pinHash);
     } catch (e, stackTrace) {
       AppLogger.error('Error saving PIN hash to storage', e, stackTrace);
       throw SecureStorageException('Failed to save PIN');
@@ -56,8 +55,7 @@ class SecureStorageDataSource {
 
   Future<String?> getPinHash() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getString(_pinHashKey);
+      return await _storage.read(key: StorageKeys.pinHash);
     } catch (e, stackTrace) {
       AppLogger.error('Error reading PIN hash from storage', e, stackTrace);
       throw SecureStorageException('Failed to read PIN');
@@ -66,8 +64,7 @@ class SecureStorageDataSource {
 
   Future<void> deletePinHash() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_pinHashKey);
+      await _storage.delete(key: StorageKeys.pinHash);
     } catch (e, stackTrace) {
       AppLogger.error('Error deleting PIN hash from storage', e, stackTrace);
       throw SecureStorageException('Failed to delete PIN');
@@ -81,8 +78,7 @@ class SecureStorageDataSource {
 
   Future<void> saveNetworkMode(String mode) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_networkModeKey, mode);
+      await _storage.write(key: StorageKeys.networkMode, value: mode);
     } catch (e, stackTrace) {
       AppLogger.error('Error saving network mode', e, stackTrace);
       throw SecureStorageException('Failed to save network mode');
@@ -91,11 +87,28 @@ class SecureStorageDataSource {
 
   Future<String?> getNetworkMode() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getString(_networkModeKey);
+      return await _storage.read(key: StorageKeys.networkMode);
     } catch (e, stackTrace) {
       AppLogger.error('Error reading network mode', e, stackTrace);
       throw SecureStorageException('Failed to read network mode');
+    }
+  }
+
+  Future<void> saveThemeMode(String mode) async {
+    try {
+      await _storage.write(key: StorageKeys.themeMode, value: mode);
+    } catch (e, stackTrace) {
+      AppLogger.error('Error saving theme mode', e, stackTrace);
+      throw SecureStorageException('Failed to save theme mode');
+    }
+  }
+
+  Future<String?> getThemeMode() async {
+    try {
+      return await _storage.read(key: StorageKeys.themeMode);
+    } catch (e, stackTrace) {
+      AppLogger.error('Error reading theme mode', e, stackTrace);
+      throw SecureStorageException('Failed to read theme mode');
     }
   }
 }

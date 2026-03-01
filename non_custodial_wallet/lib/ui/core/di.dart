@@ -101,7 +101,9 @@ void _initCubits() {
       networks: sl<NetworkModeCubit>().state.networks,
     ),
   );
-  sl.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
+  sl.registerLazySingleton<ThemeCubit>(
+    () => ThemeCubit(storage: sl<SecureStorageDataSource>()),
+  );
   sl.registerLazySingleton<TokenCubit>(
     () => TokenCubit(
       getTokenBalancesUseCase: sl<GetTokenBalancesUseCase>(),

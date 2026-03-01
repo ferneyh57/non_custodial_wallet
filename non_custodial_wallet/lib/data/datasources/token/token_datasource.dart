@@ -1,6 +1,7 @@
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
 import '../../../domain/entities/token/token_balance_entity.dart';
+import '../../../ui/core/constants/rpc_methods.dart';
 import '../../../ui/core/error/failures.dart';
 import '../../../ui/core/util/result.dart';
 import '../../../ui/core/util/app_logger.dart';
@@ -36,7 +37,7 @@ class TokenDataSourceImpl implements TokenDataSource {
           tokens.map((t) => t.contractAddress).toList();
 
       final result = await rpcClient.call(
-        method: 'alchemy_getTokenBalances',
+        method: RpcMethods.getTokenBalances,
         params: [walletAddress, contractAddresses],
         url: network.rpcUrl,
       );
