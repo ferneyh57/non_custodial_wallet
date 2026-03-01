@@ -205,7 +205,7 @@ class SwapCubit extends Cubit<SwapState> {
 
   Future<void> executeSwap() async {
     final quote = state.quote;
-    if (quote == null || _mnemonic.isEmpty) return;
+    if (quote == null || _mnemonic.isEmpty || state.isExecuting) return;
 
     emit(state.copyWith(isExecuting: true, errorMessage: null));
 

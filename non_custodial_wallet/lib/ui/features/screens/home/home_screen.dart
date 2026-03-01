@@ -36,6 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // Eagerly fetch token balances so the balance card includes them from the start.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final address =
+          context.read<WalletCubit>().state.wallet?.ethAddress;
+      if (address != null && address.isNotEmpty) {
+        context.read<TokenCubit>().fetchTokenBalances(address);
+      }
+    });
   }
 
   void _lazyLoadTab(int index) {
@@ -55,7 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocListener<WalletCubit, WalletState>(
       listenWhen: (prev, curr) =>
           prev.wallet?.ethAddress != curr.wallet?.ethAddress,
-      listener: (context, state) {},
+      listener: (context, state) {
+        final address = state.wallet?.ethAddress;
+        if (address != null && address.isNotEmpty) {
+          context.read<TokenCubit>().fetchTokenBalances(address);
+        }
+      },
       child: BlocBuilder<WalletCubit, WalletState>(
         builder: (context, state) {
           return SafeArea(

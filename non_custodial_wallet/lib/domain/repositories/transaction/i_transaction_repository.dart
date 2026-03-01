@@ -33,5 +33,6 @@ abstract class ITransactionRepository {
     required NetworkEntity network,
     String? contractAddress,
     int maxCount = 10,
+    List<String> categories = const ['external', 'erc20'],
   });
 }

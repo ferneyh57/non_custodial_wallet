@@ -10,11 +10,8 @@ import '../../../../ui/core/di.dart';
 import '../../cubits/swap/swap_cubit.dart';
 import '../../cubits/swap/swap_state.dart';
 import '../../cubits/wallet/wallet_cubit.dart';
-import '../../cubits/wallet/wallet_state.dart';
 import '../../cubits/market/market_cubit.dart';
-import '../../cubits/market/market_state.dart';
 import '../../cubits/token/token_cubit.dart';
-import '../../cubits/token/token_state.dart';
 import '../../widgets/swap/swap_asset_picker.dart';
 import '../../widgets/swap/swap_confirmation_sheet.dart';
 
@@ -26,6 +23,12 @@ class SwapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Ensure token balances are loaded for the swap cards
+    final address = context.read<WalletCubit>().state.wallet?.ethAddress;
+    if (address != null && address.isNotEmpty) {
+      context.read<TokenCubit>().fetchTokenBalances(address);
+    }
+
     return BlocProvider(
       create: (_) {
         final cubit = sl<SwapCubit>();
@@ -59,6 +62,44 @@ class _SwapScreenView extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        final walletState = context.watch<WalletCubit>().state;
+        final marketState = context.watch<MarketCubit>().state;
+        final tokenState = context.watch<TokenCubit>().state;
+
+        final priceBySymbol = <String, double>{
+          for (final coin in marketState.coins)
+            coin.symbol.toUpperCase(): coin.currentPrice,
+        };
+        final usdcPrice = priceBySymbol['USDC'];
+        if (usdcPrice != null) {
+          priceBySymbol['USDC.E'] = usdcPrice;
+        }
+
+        double? getBalance(NetworkEntity? network, TokenEntity? token) {
+          if (network == null) return null;
+          if (token == null) {
+            return walletState.wallet?.balanceInEth(network.chainId);
+          }
+          final tb = tokenState.tokenBalances.where(
+            (tb) =>
+                tb.chainId == network.chainId &&
+                tb.token.contractAddress.toLowerCase() ==
+                    token.contractAddress.toLowerCase(),
+          );
+          return tb.isNotEmpty ? tb.first.balanceFormatted : 0.0;
+        }
+
+        double? getPrice(NetworkEntity? network, TokenEntity? token) {
+          if (network == null) return null;
+          final symbol = token?.symbol ?? network.nativeSymbol;
+          return priceBySymbol[symbol.toUpperCase()];
+        }
+
+        final fromBalance = getBalance(state.fromNetwork, state.fromToken);
+        final fromPrice = getPrice(state.fromNetwork, state.fromToken);
+        final toBalance = getBalance(state.toNetwork, state.toToken);
+        final toPrice = getPrice(state.toNetwork, state.toToken);
+
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -82,6 +123,8 @@ class _SwapScreenView extends StatelessWidget {
                     networkName: state.fromNetwork?.shortName,
                     iconUrl: state.fromIconUrl,
                     networkIconUrl: state.fromNetwork?.iconUrl ?? '',
+                    balance: fromBalance,
+                    price: fromPrice,
                     onTap: () async {
                       final asset = await SwapAssetPicker.show(
                         context,
@@ -123,6 +166,8 @@ class _SwapScreenView extends StatelessWidget {
                     networkName: state.toNetwork?.shortName,
                     iconUrl: state.toIconUrl,
                     networkIconUrl: state.toNetwork?.iconUrl ?? '',
+                    balance: toBalance,
+                    price: toPrice,
                     onTap: () async {
                       final asset = await SwapAssetPicker.show(
                         context,
@@ -223,6 +268,8 @@ class _AssetSelectorCard extends StatelessWidget {
   final String? networkName;
   final String iconUrl;
   final String networkIconUrl;
+  final double? balance;
+  final double? price;
   final VoidCallback onTap;
 
   const _AssetSelectorCard({
@@ -231,11 +278,15 @@ class _AssetSelectorCard extends StatelessWidget {
     required this.iconUrl,
     required this.networkIconUrl,
     required this.onTap,
+    this.balance,
+    this.price,
   });
 
   @override
   Widget build(BuildContext context) {
     final hasSelection = symbol.isNotEmpty;
+    final usdValue = (balance ?? 0) * (price ?? 0);
+    final currencyFormat = NumberFormat.currency(symbol: '\$');
 
     return Material(
       color: context.appColors.cardColor,
@@ -329,6 +380,30 @@ class _AssetSelectorCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                // Balance and USD value
+                if (balance != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        balance!.toStringAsFixed(4),
+                        style: GoogleFonts.poppins(
+                          color: context.colors.onSurface,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        currencyFormat.format(usdValue),
+                        style: GoogleFonts.poppins(
+                          color: context.appColors.subtitleText,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                const SizedBox(width: 4),
               ] else ...[
                 CircleAvatar(
                   radius: 22,

@@ -71,12 +71,14 @@ class TransactionRepositoryImpl implements ITransactionRepository {
     required NetworkEntity network,
     String? contractAddress,
     int maxCount = 10,
+    List<String> categories = const ['external', 'erc20'],
   }) {
     return historyDataSource.getTransfers(
       walletAddress: walletAddress,
       network: network,
       contractAddress: contractAddress,
       maxCount: maxCount,
+      categories: categories,
     );
   }
 }

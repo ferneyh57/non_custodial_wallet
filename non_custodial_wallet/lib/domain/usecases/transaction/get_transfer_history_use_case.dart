@@ -13,12 +13,14 @@ class GetTransferHistoryUseCase {
     required NetworkEntity network,
     String? contractAddress,
     int maxCount = 10,
+    List<String> categories = const ['external', 'erc20'],
   }) {
     return _repository.getTransferHistory(
       walletAddress: walletAddress,
       network: network,
       contractAddress: contractAddress,
       maxCount: maxCount,
+      categories: categories,
     );
   }
 }

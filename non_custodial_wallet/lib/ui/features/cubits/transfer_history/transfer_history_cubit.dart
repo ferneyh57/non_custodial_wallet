@@ -62,11 +62,17 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
   }) async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
+    // Native assets only show 'external' transfers; ERC-20 tokens only 'erc20'.
+    final categories = contractAddress != null
+        ? const ['erc20']
+        : const ['external'];
+
     final result = await getTransferHistoryUseCase(
       walletAddress: walletAddress,
       network: network,
       contractAddress: contractAddress,
       maxCount: maxCount,
+      categories: categories,
     );
 
     result.fold(
