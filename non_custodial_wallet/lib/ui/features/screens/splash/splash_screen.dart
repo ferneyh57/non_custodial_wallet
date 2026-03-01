@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../cubits/wallet/wallet_cubit.dart';
+import '../../cubits/market/market_cubit.dart';
+import '../../cubits/token/token_cubit.dart';
+import '../../cubits/transfer_history/transfer_history_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,6 +19,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    final walletCubit = context.read<WalletCubit>();
+
+    await walletCubit.loadWallet();
+    if (!mounted) return;
+
+    if (walletCubit.state.isAuthorized) {
+      final address = walletCubit.state.wallet?.ethAddress ?? '';
+      if (address.isNotEmpty) {
+        await Future.wait([
+          walletCubit.fetchBalance(),
+          context.read<MarketCubit>().loadCoins(),
+          context.read<TokenCubit>().fetchTokenBalances(address),
+          context.read<TransferHistoryCubit>().loadAll(address),
+        ]);
+      }
+    }
+
+    if (!mounted) return;
+    walletCubit.setReady();
   }
 
   @override

@@ -3,12 +3,11 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/token/token_entity.dart';
-import '../../../../domain/usecases/auth/get_key_use_case.dart';
-import '../../../../domain/usecases/wallet/get_eth_address_use_case.dart';
 import '../../../../domain/usecases/swap/request_swap_quote_use_case.dart';
 import '../../../../domain/usecases/swap/execute_swap_use_case.dart';
 import '../../../../domain/usecases/swap/get_swap_status_use_case.dart';
 import '../../../core/constants/app_tokens.dart';
+import '../wallet/wallet_cubit.dart';
 import 'swap_state.dart';
 
 /// Native token address used by Alchemy swap API.
@@ -32,12 +31,9 @@ class SwapCubit extends Cubit<SwapState> {
   final RequestSwapQuoteUseCase requestSwapQuoteUseCase;
   final ExecuteSwapUseCase executeSwapUseCase;
   final GetSwapStatusUseCase getSwapStatusUseCase;
-  final GetKeyUseCase getKeyUseCase;
-  final GetEthAddressUseCase getEthAddressUseCase;
+  final WalletCubit walletCubit;
   final List<NetworkEntity> networks;
 
-  String _mnemonic = '';
-  String _address = '';
   Timer? _statusTimer;
   bool _swapInProgress = false;
 
@@ -45,24 +41,12 @@ class SwapCubit extends Cubit<SwapState> {
     required this.requestSwapQuoteUseCase,
     required this.executeSwapUseCase,
     required this.getSwapStatusUseCase,
-    required this.getKeyUseCase,
-    required this.getEthAddressUseCase,
+    required this.walletCubit,
     required this.networks,
   }) : super(SwapState(fromNetwork: networks.first));
 
-  Future<void> loadWalletData() async {
-    final keyResult = await getKeyUseCase();
-    if (keyResult.isFailure || keyResult.data == null) {
-      emit(state.copyWith(errorMessage: 'Failed to load wallet'));
-      return;
-    }
-    _mnemonic = keyResult.data!;
-
-    final addressResult = await getEthAddressUseCase(_mnemonic);
-    if (addressResult.isSuccess && addressResult.data != null) {
-      _address = addressResult.data!;
-    }
-  }
+  String get _mnemonic => walletCubit.state.wallet?.mnemonic ?? '';
+  String get _address => walletCubit.state.wallet?.ethAddress ?? '';
 
   /// All selectable assets: native tokens + ERC-20 tokens for each network.
   List<SwapAsset> get allAssets {

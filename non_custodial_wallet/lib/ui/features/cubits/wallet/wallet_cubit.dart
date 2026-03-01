@@ -45,7 +45,6 @@ class WalletCubit extends Cubit<WalletState> {
           isLoading: false,
           wallet: WalletEntity(mnemonic: mnemonic, ethAddress: ethResult.data),
         ));
-        await fetchBalance();
       } else {
         emit(state.copyWith(
           isLoading: false,
@@ -91,7 +90,6 @@ class WalletCubit extends Cubit<WalletState> {
       final saveResult = await saveKeyUseCase(mnemonic);
       if (saveResult.isSuccess) {
         emit(state.copyWith(isAuthorized: true));
-        await fetchBalance();
       } else {
         emit(state.copyWith(errorMessage: saveResult.failure?.message));
       }
@@ -100,6 +98,8 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
+  /// Loads wallet from secure storage. Keeps isLoading: true so the router
+  /// stays on splash until [setReady] is called after all data is loaded.
   Future<void> loadWallet() async {
     emit(state.copyWith(isLoading: true));
 
@@ -115,14 +115,11 @@ class WalletCubit extends Cubit<WalletState> {
 
       if (ethResult.isSuccess) {
         emit(state.copyWith(
-          isLoading: false,
           isAuthorized: true,
           wallet: WalletEntity(mnemonic: mnemonic, ethAddress: ethResult.data),
         ));
-        await fetchBalance();
       } else {
         emit(state.copyWith(
-          isLoading: false,
           isAuthorized: true,
           wallet: WalletEntity(mnemonic: mnemonic),
         ));
@@ -130,6 +127,11 @@ class WalletCubit extends Cubit<WalletState> {
     } catch (e) {
       emit(state.copyWith(isLoading: false, isAuthorized: false));
     }
+  }
+
+  /// Called by SplashScreen after all initial data is loaded.
+  void setReady() {
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> fetchBalance({bool force = false}) async {

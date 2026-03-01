@@ -33,7 +33,6 @@ class SwapScreen extends StatelessWidget {
         if (initialFromNetwork != null) {
           cubit.selectFromAsset(initialFromNetwork!, initialFromToken);
         }
-        cubit.loadWalletData();
         return cubit;
       },
       child: const _SwapScreenView(),

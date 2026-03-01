@@ -97,8 +97,7 @@ void _initCubits() {
   );
   sl.registerFactory<ReceiveCubit>(
     () => ReceiveCubit(
-      getKeyUseCase: sl<GetKeyUseCase>(),
-      getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+      walletCubit: sl<WalletCubit>(),
       networks: sl<NetworkModeCubit>().state.networks,
     ),
   );
@@ -118,8 +117,7 @@ void _initCubits() {
       requestSwapQuoteUseCase: sl<RequestSwapQuoteUseCase>(),
       executeSwapUseCase: sl<ExecuteSwapUseCase>(),
       getSwapStatusUseCase: sl<GetSwapStatusUseCase>(),
-      getKeyUseCase: sl<GetKeyUseCase>(),
-      getEthAddressUseCase: sl<GetEthAddressUseCase>(),
+      walletCubit: sl<WalletCubit>(),
       networks: sl<NetworkModeCubit>().state.networks,
     ),
   );

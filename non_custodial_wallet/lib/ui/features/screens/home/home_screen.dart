@@ -29,24 +29,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTab = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadInitialData();
-    });
-  }
-
-  void _loadInitialData() {
-    final address = context.read<WalletCubit>().state.wallet?.ethAddress;
-    if (address == null || address.isEmpty) return;
-
-    // fetchBalance() and loadCoins() are already called at startup
-    // (loadWallet → fetchBalance in main.dart, MarketCubit..loadCoins in main.dart)
-    context.read<TokenCubit>().fetchTokenBalances(address);
-    context.read<TransferHistoryCubit>().loadAll(address);
-  }
-
   bool _onScroll(ScrollNotification notification) {
     if (_selectedTab != 2) return false;
     if (notification is! ScrollUpdateNotification) return false;

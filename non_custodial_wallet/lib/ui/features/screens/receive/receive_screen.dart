@@ -24,7 +24,6 @@ class ReceiveScreen extends StatelessWidget {
         if (initialNetwork != null) {
           cubit.updateNetwork(initialNetwork!);
         }
-        cubit.loadAddress();
         return cubit;
       },
       child: const ReceiveScreenView(),

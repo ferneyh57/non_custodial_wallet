@@ -49,9 +49,9 @@ void main() async {
         MultiBlocProvider(
           providers: [
             BlocProvider.value(value: networkModeCubit),
-            BlocProvider.value(value: sl<WalletCubit>()..loadWallet()),
+            BlocProvider.value(value: sl<WalletCubit>()),
             BlocProvider(lazy: false, create: (context) => sl<PinCubit>()..checkPinStatus()),
-            BlocProvider(create: (context) => sl<MarketCubit>()..loadCoins()),
+            BlocProvider(create: (context) => sl<MarketCubit>()),
             BlocProvider(create: (context) => sl<ThemeCubit>()..loadTheme()),
             BlocProvider.value(value: sl<TokenCubit>()),
             BlocProvider(
@@ -105,7 +105,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, themeState) {
         return MaterialApp.router(
-          title: 'Trust Wallet Clone',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
