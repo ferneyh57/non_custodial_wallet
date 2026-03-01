@@ -132,6 +132,7 @@ void _initCubits() {
       verifyPinUseCase: sl<VerifyPinUseCase>(),
       hasPinUseCase: sl<HasPinUseCase>(),
       deletePinUseCase: sl<DeletePinUseCase>(),
+      storage: sl<SecureStorageDataSource>(),
     ),
   );
 }

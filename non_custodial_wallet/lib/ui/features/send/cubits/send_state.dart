@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:web3dart/web3dart.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/token/token_entity.dart';
 import '../../../../domain/entities/transaction/gas_estimate_entity.dart';
@@ -21,8 +22,14 @@ abstract class SendState with _$SendState {
     String? errorMessage,
   }) = _SendState;
 
-  bool get isValidAddress =>
-      address.length == 42 && address.startsWith('0x');
+  bool get isValidAddress {
+    try {
+      EthereumAddress.fromHex(address);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 
   bool get isValidAmount {
     final parsed = double.tryParse(amount);

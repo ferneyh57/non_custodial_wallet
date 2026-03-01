@@ -196,42 +196,59 @@ class SwapDataSourceImpl implements ISwapDataSource {
     required String mnemonic,
     required SwapQuoteEntity quote,
   }) async {
+    // Validate quote expiry
+    final expirySeconds = int.tryParse(quote.expiry);
+    if (expirySeconds != null) {
+      final expiryDate =
+          DateTime.fromMillisecondsSinceEpoch(expirySeconds * 1000);
+      if (DateTime.now().isAfter(expiryDate)) {
+        return Result.failure(
+          ServerFailure('Swap quote has expired'),
+        );
+      }
+    }
+
     try {
       final credentials = keyDeriver.deriveCredentials(mnemonic);
-      final dataArray = jsonDecode(quote.preparedDataJson) as List<dynamic>;
+      try {
+        final dataArray =
+            jsonDecode(quote.preparedDataJson) as List<dynamic>;
 
-      int sigIndex = 0;
-      final signedItems = <Map<String, dynamic>>[];
+        int sigIndex = 0;
+        final signedItems = <Map<String, dynamic>>[];
 
-      for (final item in dataArray) {
-        final itemMap = Map<String, dynamic>.from(item as Map);
-        final hasSigReq = itemMap.containsKey('signatureRequest');
+        for (final item in dataArray) {
+          final itemMap = Map<String, dynamic>.from(item as Map);
+          final hasSigReq = itemMap.containsKey('signatureRequest');
 
-        itemMap.remove('signatureRequest');
+          itemMap.remove('signatureRequest');
 
-        if (hasSigReq && sigIndex < quote.signatureRequests.length) {
-          itemMap['signature'] =
-              _signRequest(quote.signatureRequests[sigIndex], credentials);
-          sigIndex++;
+          if (hasSigReq && sigIndex < quote.signatureRequests.length) {
+            itemMap['signature'] =
+                _signRequest(quote.signatureRequests[sigIndex], credentials);
+            sigIndex++;
+          }
+
+          signedItems.add(itemMap);
         }
 
-        signedItems.add(itemMap);
+        final requestParams = [
+          {
+            'type': 'array',
+            'data': signedItems,
+          },
+        ];
+
+        final result = await rpcClient.call(
+          method: RpcMethods.sendPreparedCalls,
+          params: requestParams,
+        );
+
+        final callId = result['id'] as String;
+        return Result.success(callId);
+      } finally {
+        keyDeriver.zeroOutKey(credentials);
       }
-
-      final requestParams = [
-        {
-          'type': 'array',
-          'data': signedItems,
-        },
-      ];
-
-      final result = await rpcClient.call(
-        method: RpcMethods.sendPreparedCalls,
-        params: requestParams,
-      );
-
-      final callId = result['id'] as String;
-      return Result.success(callId);
     } catch (e, stackTrace) {
       AppLogger.error('Error executing swap', e, stackTrace);
       return Result.failure(

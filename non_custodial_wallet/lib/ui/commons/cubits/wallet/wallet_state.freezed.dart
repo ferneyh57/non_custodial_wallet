@@ -14,7 +14,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$WalletState {
 
- bool get isLoading; WalletEntity? get wallet; String? get errorMessage; bool get isAuthorized;
+ bool get isLoading; WalletEntity? get wallet; String? get errorMessage; bool get isAuthorized;/// Temporary field set ONLY during wallet creation for display purposes.
+/// Cleared immediately after the user confirms backup.
+ String? get generatedMnemonic;
 /// Create a copy of WalletState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +27,16 @@ $WalletStateCopyWith<WalletState> get copyWith => _$WalletStateCopyWithImpl<Wall
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WalletState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.wallet, wallet) || other.wallet == wallet)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isAuthorized, isAuthorized) || other.isAuthorized == isAuthorized));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WalletState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.wallet, wallet) || other.wallet == wallet)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isAuthorized, isAuthorized) || other.isAuthorized == isAuthorized)&&(identical(other.generatedMnemonic, generatedMnemonic) || other.generatedMnemonic == generatedMnemonic));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,wallet,errorMessage,isAuthorized);
+int get hashCode => Object.hash(runtimeType,isLoading,wallet,errorMessage,isAuthorized,generatedMnemonic);
 
 @override
 String toString() {
-  return 'WalletState(isLoading: $isLoading, wallet: $wallet, errorMessage: $errorMessage, isAuthorized: $isAuthorized)';
+  return 'WalletState(isLoading: $isLoading, wallet: $wallet, errorMessage: $errorMessage, isAuthorized: $isAuthorized, generatedMnemonic: $generatedMnemonic)';
 }
 
 
@@ -45,7 +47,7 @@ abstract mixin class $WalletStateCopyWith<$Res>  {
   factory $WalletStateCopyWith(WalletState value, $Res Function(WalletState) _then) = _$WalletStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, WalletEntity? wallet, String? errorMessage, bool isAuthorized
+ bool isLoading, WalletEntity? wallet, String? errorMessage, bool isAuthorized, String? generatedMnemonic
 });
 
 
@@ -62,13 +64,14 @@ class _$WalletStateCopyWithImpl<$Res>
 
 /// Create a copy of WalletState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? wallet = freezed,Object? errorMessage = freezed,Object? isAuthorized = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? wallet = freezed,Object? errorMessage = freezed,Object? isAuthorized = null,Object? generatedMnemonic = freezed,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,wallet: freezed == wallet ? _self.wallet : wallet // ignore: cast_nullable_to_non_nullable
 as WalletEntity?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,isAuthorized: null == isAuthorized ? _self.isAuthorized : isAuthorized // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,generatedMnemonic: freezed == generatedMnemonic ? _self.generatedMnemonic : generatedMnemonic // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -153,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  WalletEntity? wallet,  String? errorMessage,  bool isAuthorized)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  WalletEntity? wallet,  String? errorMessage,  bool isAuthorized,  String? generatedMnemonic)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WalletState() when $default != null:
-return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthorized);case _:
+return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthorized,_that.generatedMnemonic);case _:
   return orElse();
 
 }
@@ -174,10 +177,10 @@ return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthoriz
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  WalletEntity? wallet,  String? errorMessage,  bool isAuthorized)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  WalletEntity? wallet,  String? errorMessage,  bool isAuthorized,  String? generatedMnemonic)  $default,) {final _that = this;
 switch (_that) {
 case _WalletState():
-return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthorized);case _:
+return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthorized,_that.generatedMnemonic);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +197,10 @@ return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthoriz
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  WalletEntity? wallet,  String? errorMessage,  bool isAuthorized)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  WalletEntity? wallet,  String? errorMessage,  bool isAuthorized,  String? generatedMnemonic)?  $default,) {final _that = this;
 switch (_that) {
 case _WalletState() when $default != null:
-return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthorized);case _:
+return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthorized,_that.generatedMnemonic);case _:
   return null;
 
 }
@@ -209,13 +212,16 @@ return $default(_that.isLoading,_that.wallet,_that.errorMessage,_that.isAuthoriz
 
 
 class _WalletState implements WalletState {
-  const _WalletState({this.isLoading = true, this.wallet, this.errorMessage, this.isAuthorized = false});
+  const _WalletState({this.isLoading = true, this.wallet, this.errorMessage, this.isAuthorized = false, this.generatedMnemonic});
   
 
 @override@JsonKey() final  bool isLoading;
 @override final  WalletEntity? wallet;
 @override final  String? errorMessage;
 @override@JsonKey() final  bool isAuthorized;
+/// Temporary field set ONLY during wallet creation for display purposes.
+/// Cleared immediately after the user confirms backup.
+@override final  String? generatedMnemonic;
 
 /// Create a copy of WalletState
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +233,16 @@ _$WalletStateCopyWith<_WalletState> get copyWith => __$WalletStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WalletState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.wallet, wallet) || other.wallet == wallet)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isAuthorized, isAuthorized) || other.isAuthorized == isAuthorized));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WalletState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.wallet, wallet) || other.wallet == wallet)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isAuthorized, isAuthorized) || other.isAuthorized == isAuthorized)&&(identical(other.generatedMnemonic, generatedMnemonic) || other.generatedMnemonic == generatedMnemonic));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,wallet,errorMessage,isAuthorized);
+int get hashCode => Object.hash(runtimeType,isLoading,wallet,errorMessage,isAuthorized,generatedMnemonic);
 
 @override
 String toString() {
-  return 'WalletState(isLoading: $isLoading, wallet: $wallet, errorMessage: $errorMessage, isAuthorized: $isAuthorized)';
+  return 'WalletState(isLoading: $isLoading, wallet: $wallet, errorMessage: $errorMessage, isAuthorized: $isAuthorized, generatedMnemonic: $generatedMnemonic)';
 }
 
 
@@ -247,7 +253,7 @@ abstract mixin class _$WalletStateCopyWith<$Res> implements $WalletStateCopyWith
   factory _$WalletStateCopyWith(_WalletState value, $Res Function(_WalletState) _then) = __$WalletStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, WalletEntity? wallet, String? errorMessage, bool isAuthorized
+ bool isLoading, WalletEntity? wallet, String? errorMessage, bool isAuthorized, String? generatedMnemonic
 });
 
 
@@ -264,13 +270,14 @@ class __$WalletStateCopyWithImpl<$Res>
 
 /// Create a copy of WalletState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? wallet = freezed,Object? errorMessage = freezed,Object? isAuthorized = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? wallet = freezed,Object? errorMessage = freezed,Object? isAuthorized = null,Object? generatedMnemonic = freezed,}) {
   return _then(_WalletState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,wallet: freezed == wallet ? _self.wallet : wallet // ignore: cast_nullable_to_non_nullable
 as WalletEntity?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,isAuthorized: null == isAuthorized ? _self.isAuthorized : isAuthorized // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,generatedMnemonic: freezed == generatedMnemonic ? _self.generatedMnemonic : generatedMnemonic // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

@@ -129,7 +129,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     const Expanded(
                       child: Center(child: CircularProgressIndicator()),
                     )
-                  else if (state.wallet?.mnemonic != null) ...[
+                  else if (state.generatedMnemonic != null) ...[
                     // Mnemonic Grid
                     Expanded(
                       child: Container(
@@ -150,10 +150,10 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                             childAspectRatio: 2.6,
                           ),
                           itemCount:
-                              state.wallet!.mnemonic.split(' ').length,
+                              state.generatedMnemonic!.split(' ').length,
                           itemBuilder: (context, index) {
                             final word =
-                                state.wallet!.mnemonic.split(' ')[index];
+                                state.generatedMnemonic!.split(' ')[index];
                             return Container(
                               decoration: BoxDecoration(
                                 color: context.appColors.containerFill,
@@ -221,8 +221,11 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     TextButton.icon(
                       onPressed: () {
                         Clipboard.setData(
-                          ClipboardData(text: state.wallet!.mnemonic),
+                          ClipboardData(text: state.generatedMnemonic!),
                         );
+                        Future.delayed(const Duration(seconds: 60), () {
+                          Clipboard.setData(const ClipboardData(text: ''));
+                        });
                         setState(() => _copied = true);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -272,7 +275,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     height: 55,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        gradient: state.wallet?.mnemonic != null
+                        gradient: state.generatedMnemonic != null
                             ? LinearGradient(
                                 colors: [
                                   context.appColors.balanceCardGradientStart,
@@ -280,11 +283,11 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                                 ],
                               )
                             : null,
-                        color: state.wallet?.mnemonic == null
+                        color: state.generatedMnemonic == null
                             ? context.appColors.containerFill
                             : null,
                         borderRadius: BorderRadius.circular(16),
-                        boxShadow: state.wallet?.mnemonic != null
+                        boxShadow: state.generatedMnemonic != null
                             ? [
                                 BoxShadow(
                                   color: context.colors.primary
@@ -296,7 +299,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                             : null,
                       ),
                       child: ElevatedButton(
-                        onPressed: state.wallet?.mnemonic == null || _isSaving
+                        onPressed: state.generatedMnemonic == null || _isSaving
                             ? null
                             : _onDonePressed,
                         style: ElevatedButton.styleFrom(

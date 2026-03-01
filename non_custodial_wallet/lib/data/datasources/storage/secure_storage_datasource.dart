@@ -111,4 +111,59 @@ class SecureStorageDataSource {
       throw SecureStorageException('Failed to read theme mode');
     }
   }
+
+  // --- PIN brute-force protection ---
+
+  Future<void> savePinAttempts(int count) async {
+    try {
+      await _storage.write(
+        key: StorageKeys.pinAttempts,
+        value: count.toString(),
+      );
+    } catch (e, stackTrace) {
+      AppLogger.error('Error saving PIN attempts', e, stackTrace);
+      throw SecureStorageException('Failed to save PIN attempts');
+    }
+  }
+
+  Future<int> getPinAttempts() async {
+    try {
+      final value = await _storage.read(key: StorageKeys.pinAttempts);
+      return value != null ? (int.tryParse(value) ?? 0) : 0;
+    } catch (e, stackTrace) {
+      AppLogger.error('Error reading PIN attempts', e, stackTrace);
+      throw SecureStorageException('Failed to read PIN attempts');
+    }
+  }
+
+  Future<void> savePinLockoutUntil(String isoTimestamp) async {
+    try {
+      await _storage.write(
+        key: StorageKeys.pinLockoutUntil,
+        value: isoTimestamp,
+      );
+    } catch (e, stackTrace) {
+      AppLogger.error('Error saving PIN lockout timestamp', e, stackTrace);
+      throw SecureStorageException('Failed to save PIN lockout');
+    }
+  }
+
+  Future<String?> getPinLockoutUntil() async {
+    try {
+      return await _storage.read(key: StorageKeys.pinLockoutUntil);
+    } catch (e, stackTrace) {
+      AppLogger.error('Error reading PIN lockout timestamp', e, stackTrace);
+      throw SecureStorageException('Failed to read PIN lockout');
+    }
+  }
+
+  Future<void> clearPinAttempts() async {
+    try {
+      await _storage.delete(key: StorageKeys.pinAttempts);
+      await _storage.delete(key: StorageKeys.pinLockoutUntil);
+    } catch (e, stackTrace) {
+      AppLogger.error('Error clearing PIN attempts', e, stackTrace);
+      throw SecureStorageException('Failed to clear PIN attempts');
+    }
+  }
 }

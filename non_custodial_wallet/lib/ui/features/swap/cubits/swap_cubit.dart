@@ -43,7 +43,6 @@ class SwapCubit extends Cubit<SwapState> {
     required this.networks,
   }) : super(SwapState(fromNetwork: networks.first));
 
-  String get _mnemonic => walletCubit.state.wallet?.mnemonic ?? '';
   String get _address => walletCubit.state.wallet?.ethAddress ?? '';
 
   /// All selectable assets: native tokens + ERC-20 tokens for each network.
@@ -191,35 +190,60 @@ class SwapCubit extends Cubit<SwapState> {
   Future<void> executeSwap() async {
     if (_swapInProgress) return;
     final quote = state.quote;
-    if (quote == null || _mnemonic.isEmpty) return;
+    if (quote == null) return;
 
     _swapInProgress = true;
     emit(state.copyWith(isExecuting: true, errorMessage: null));
 
-    final result = await executeSwapUseCase(
-      mnemonic: _mnemonic,
-      quote: quote,
-    );
-
-    if (isClosed) return;
-
-    result.fold(
-      (callId) {
-        emit(state.copyWith(
-          isExecuting: false,
-          isTrackingStatus: true,
-          quote: null,
-        ));
-        _pollSwapStatus(callId);
-      },
-      (failure) {
+    // Validate quote expiry before executing
+    final expirySeconds = int.tryParse(quote.expiry);
+    if (expirySeconds != null) {
+      final expiryDate =
+          DateTime.fromMillisecondsSinceEpoch(expirySeconds * 1000);
+      if (DateTime.now().isAfter(expiryDate)) {
         _swapInProgress = false;
         emit(state.copyWith(
           isExecuting: false,
-          errorMessage: failure.message,
+          errorMessage: 'Swap quote has expired. Please request a new quote.',
+          quote: null,
         ));
-      },
-    );
+        return;
+      }
+    }
+
+    try {
+      final mnemonic = await walletCubit.getMnemonic();
+      final result = await executeSwapUseCase(
+        mnemonic: mnemonic,
+        quote: quote,
+      );
+
+      if (isClosed) return;
+
+      result.fold(
+        (callId) {
+          emit(state.copyWith(
+            isExecuting: false,
+            isTrackingStatus: true,
+            quote: null,
+          ));
+          _pollSwapStatus(callId);
+        },
+        (failure) {
+          _swapInProgress = false;
+          emit(state.copyWith(
+            isExecuting: false,
+            errorMessage: failure.message,
+          ));
+        },
+      );
+    } catch (e) {
+      _swapInProgress = false;
+      emit(state.copyWith(
+        isExecuting: false,
+        errorMessage: e.toString(),
+      ));
+    }
   }
 
   void _pollSwapStatus(String callId) {

@@ -34,6 +34,16 @@ class WalletCubit extends Cubit<WalletState> {
     required this.getBalanceUseCase,
   }) : super(const WalletState());
 
+  /// Reads the mnemonic directly from SecureStorage on demand.
+  /// Never stored in cubit state for longer than the creation flow.
+  Future<String> getMnemonic() async {
+    final result = await getKeyUseCase();
+    if (result.isSuccess && result.data != null) {
+      return result.data!;
+    }
+    throw Exception('Mnemonic not found in secure storage');
+  }
+
   Future<void> createWallet() async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
     try {
@@ -43,12 +53,14 @@ class WalletCubit extends Cubit<WalletState> {
       if (ethResult.isSuccess) {
         emit(state.copyWith(
           isLoading: false,
-          wallet: WalletEntity(mnemonic: mnemonic, ethAddress: ethResult.data),
+          wallet: WalletEntity(ethAddress: ethResult.data),
+          generatedMnemonic: mnemonic,
         ));
       } else {
         emit(state.copyWith(
           isLoading: false,
-          wallet: WalletEntity(mnemonic: mnemonic),
+          wallet: const WalletEntity(),
+          generatedMnemonic: mnemonic,
           errorMessage: ethResult.failure?.message,
         ));
       }
@@ -58,12 +70,13 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future<void> saveAndAuthorize() async {
-    final mnemonic = state.wallet?.mnemonic;
+    final mnemonic = state.generatedMnemonic;
     if (mnemonic == null) return;
 
     final result = await saveKeyUseCase(mnemonic);
     if (result.isSuccess) {
-      emit(state.copyWith(isAuthorized: true));
+      // Clear the temporary mnemonic from state after saving to secure storage.
+      emit(state.copyWith(isAuthorized: true, generatedMnemonic: null));
     } else {
       emit(state.copyWith(errorMessage: result.failure?.message));
     }
@@ -82,16 +95,19 @@ class WalletCubit extends Cubit<WalletState> {
         return;
       }
 
-      emit(state.copyWith(
-        isLoading: false,
-        wallet: WalletEntity(mnemonic: mnemonic, ethAddress: ethResult.data),
-      ));
-
+      // Save to secure storage first, do NOT put mnemonic in state.
       final saveResult = await saveKeyUseCase(mnemonic);
       if (saveResult.isSuccess) {
-        emit(state.copyWith(isAuthorized: true));
+        emit(state.copyWith(
+          isLoading: false,
+          wallet: WalletEntity(ethAddress: ethResult.data),
+          isAuthorized: true,
+        ));
       } else {
-        emit(state.copyWith(errorMessage: saveResult.failure?.message));
+        emit(state.copyWith(
+          isLoading: false,
+          errorMessage: saveResult.failure?.message,
+        ));
       }
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
@@ -116,12 +132,12 @@ class WalletCubit extends Cubit<WalletState> {
       if (ethResult.isSuccess) {
         emit(state.copyWith(
           isAuthorized: true,
-          wallet: WalletEntity(mnemonic: mnemonic, ethAddress: ethResult.data),
+          wallet: WalletEntity(ethAddress: ethResult.data),
         ));
       } else {
         emit(state.copyWith(
           isAuthorized: true,
-          wallet: WalletEntity(mnemonic: mnemonic),
+          wallet: const WalletEntity(),
         ));
       }
     } catch (e) {

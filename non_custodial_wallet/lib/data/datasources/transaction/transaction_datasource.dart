@@ -62,17 +62,19 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
     }
     try {
       final credentials = keyDeriver.deriveCredentials(mnemonic);
-
-      final txHash = await client.sendTransaction(
-        credentials,
-        Transaction(
-          to: EthereumAddress.fromHex(toAddress),
-          value: EtherAmount.inWei(amountInWei),
-        ),
-        chainId: network.chainId,
-      );
-
-      return Result.success(txHash);
+      try {
+        final txHash = await client.sendTransaction(
+          credentials,
+          Transaction(
+            to: EthereumAddress.fromHex(toAddress),
+            value: EtherAmount.inWei(amountInWei),
+          ),
+          chainId: network.chainId,
+        );
+        return Result.success(txHash);
+      } finally {
+        keyDeriver.zeroOutKey(credentials);
+      }
     } catch (e, stackTrace) {
       AppLogger.error(
         'Error sending transaction on ${network.shortName}',
@@ -101,27 +103,29 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
     }
     try {
       final credentials = keyDeriver.deriveCredentials(mnemonic);
-
-      final contract = DeployedContract(
-        _erc20Abi,
-        EthereumAddress.fromHex(token.contractAddress),
-      );
-      final transfer = contract.function(BlockchainConstants.transferFunction);
-
-      final txHash = await client.sendTransaction(
-        credentials,
-        Transaction.callContract(
-          contract: contract,
-          function: transfer,
-          parameters: [
-            EthereumAddress.fromHex(toAddress),
-            amount,
-          ],
-        ),
-        chainId: network.chainId,
-      );
-
-      return Result.success(txHash);
+      try {
+        final contract = DeployedContract(
+          _erc20Abi,
+          EthereumAddress.fromHex(token.contractAddress),
+        );
+        final transfer =
+            contract.function(BlockchainConstants.transferFunction);
+        final txHash = await client.sendTransaction(
+          credentials,
+          Transaction.callContract(
+            contract: contract,
+            function: transfer,
+            parameters: [
+              EthereumAddress.fromHex(toAddress),
+              amount,
+            ],
+          ),
+          chainId: network.chainId,
+        );
+        return Result.success(txHash);
+      } finally {
+        keyDeriver.zeroOutKey(credentials);
+      }
     } catch (e, stackTrace) {
       AppLogger.error(
         'Error sending ${token.symbol} on ${network.shortName}',

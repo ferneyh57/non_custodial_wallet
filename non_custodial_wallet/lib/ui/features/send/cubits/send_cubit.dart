@@ -1,6 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:web3dart/web3dart.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/token/token_entity.dart';
 import '../../../../domain/usecases/transaction/send_transaction_use_case.dart';
@@ -35,7 +36,6 @@ class SendCubit extends Cubit<SendState> {
     amountController.addListener(_onAmountChanged);
   }
 
-  String get _mnemonic => walletCubit.state.wallet?.mnemonic ?? '';
   String get _address => walletCubit.state.wallet?.ethAddress ?? '';
 
   void _onAddressChanged() {
@@ -68,7 +68,11 @@ class SendCubit extends Cubit<SendState> {
     if (network == null || _address.isEmpty) return;
 
     final address = addressController.text.trim();
-    if (!address.startsWith('0x') || address.length != 42) return;
+    try {
+      EthereumAddress.fromHex(address);
+    } catch (_) {
+      return;
+    }
 
     final amountStr = amountController.text.trim();
     final decimals = _currentDecimals();
@@ -173,8 +177,10 @@ class SendCubit extends Cubit<SendState> {
 
     final address = addressController.text.trim();
     if (address.isEmpty) return state.errorMessage ?? 'Address cannot be empty';
-    if (!address.startsWith('0x') || address.length != 42) {
-      return 'Invalid address';
+    try {
+      EthereumAddress.fromHex(address);
+    } catch (_) {
+      return 'Invalid Ethereum address';
     }
 
     final amountStr = amountController.text;
@@ -200,12 +206,13 @@ class SendCubit extends Cubit<SendState> {
     try {
       emit(state.copyWith(isLoading: true, errorMessage: null, txHash: null));
 
+      final mnemonic = await walletCubit.getMnemonic();
       final token = state.selectedToken;
       final Result<String> result;
 
       if (token != null) {
         result = await sendTokenTransactionUseCase(
-          mnemonic: _mnemonic,
+          mnemonic: mnemonic,
           toAddress: address,
           amount: amountRaw,
           network: network,
@@ -213,7 +220,7 @@ class SendCubit extends Cubit<SendState> {
         );
       } else {
         result = await sendTransactionUseCase(
-          mnemonic: _mnemonic,
+          mnemonic: mnemonic,
           toAddress: address,
           amountInWei: amountRaw,
           network: network,

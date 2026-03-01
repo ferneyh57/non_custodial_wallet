@@ -10,7 +10,9 @@ String _deriveAddressIsolate(String mnemonic) {
   final root = bip32.BIP32.fromSeed(seed);
   final child = root.derivePath(CryptoConstants.ethDerivationPath);
   final privateKey = Uint8List.fromList(child.privateKey!);
-  return EthPrivateKey.fromHex(HEX.encode(privateKey)).address.hexEip55;
+  final address = EthPrivateKey.fromHex(HEX.encode(privateKey)).address.hexEip55;
+  privateKey.fillRange(0, privateKey.length, 0);
+  return address;
 }
 
 /// Derives Ethereum credentials from a BIP39 mnemonic phrase.
@@ -25,6 +27,18 @@ class WalletKeyDeriver {
     final child = root.derivePath(CryptoConstants.ethDerivationPath);
     final privateKey = Uint8List.fromList(child.privateKey!);
     return EthPrivateKey.fromHex(HEX.encode(privateKey));
+  }
+
+  /// Zeros out the private key bytes of an EthPrivateKey after use.
+  /// Note: Dart strings are immutable so the hex representation may linger,
+  /// but this clears the underlying Uint8List where accessible.
+  void zeroOutKey(EthPrivateKey key) {
+    try {
+      final bytes = key.privateKey;
+      bytes.fillRange(0, bytes.length, 0);
+    } catch (_) {
+      // Best-effort: web3dart may not expose mutable bytes
+    }
   }
 
   String deriveAddress(String mnemonic) {

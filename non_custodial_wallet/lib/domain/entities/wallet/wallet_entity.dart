@@ -1,10 +1,8 @@
 class WalletEntity {
-  final String mnemonic;
   final String? ethAddress;
   final Map<int, BigInt> balancesInWei;
 
   const WalletEntity({
-    required this.mnemonic,
     this.ethAddress,
     this.balancesInWei = const {},
   });
@@ -24,12 +22,10 @@ class WalletEntity {
   }
 
   WalletEntity copyWith({
-    String? mnemonic,
     String? ethAddress,
     Map<int, BigInt>? balancesInWei,
   }) {
     return WalletEntity(
-      mnemonic: mnemonic ?? this.mnemonic,
       ethAddress: ethAddress ?? this.ethAddress,
       balancesInWei: balancesInWei ?? this.balancesInWei,
     );

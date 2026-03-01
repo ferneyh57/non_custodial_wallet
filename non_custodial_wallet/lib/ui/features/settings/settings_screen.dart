@@ -120,12 +120,16 @@ class _CopySeedSection extends StatelessWidget {
       onTap: () async {
         final verified = await PinVerifySheet.show(context);
         if (!verified || !context.mounted) return;
-        final mnemonic = context.read<WalletCubit>().state.wallet?.mnemonic;
-        if (mnemonic != null) {
+        final cubit = context.read<WalletCubit>();
+        final messenger = ScaffoldMessenger.of(context);
+        final copiedMsg = context.l10n.mnemonicCopied;
+        final mnemonic = await cubit.getMnemonic();
+        if (mnemonic.isNotEmpty) {
           Clipboard.setData(ClipboardData(text: mnemonic));
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(context.l10n.mnemonicCopied)));
+          Future.delayed(const Duration(seconds: 60), () {
+            Clipboard.setData(const ClipboardData(text: ''));
+          });
+          messenger.showSnackBar(SnackBar(content: Text(copiedMsg)));
         }
       },
     );

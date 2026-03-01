@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PinState {
 
- bool get isLoading; bool get hasPinSet; bool get isPinVerified; String get enteredPin; String get confirmPin; bool get isConfirmStep; PinMode get mode; String? get errorMessage;
+ bool get isLoading; bool get hasPinSet; bool get isPinVerified; String get enteredPin; String get confirmPin; bool get isConfirmStep; PinMode get mode; String? get errorMessage; int get failedAttempts; DateTime? get lockoutUntil;
 /// Create a copy of PinState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,17 +25,13 @@ $PinStateCopyWith<PinState> get copyWith => _$PinStateCopyWithImpl<PinState>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PinState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.hasPinSet, hasPinSet) || other.hasPinSet == hasPinSet)&&(identical(other.isPinVerified, isPinVerified) || other.isPinVerified == isPinVerified)&&(identical(other.enteredPin, enteredPin) || other.enteredPin == enteredPin)&&(identical(other.confirmPin, confirmPin) || other.confirmPin == confirmPin)&&(identical(other.isConfirmStep, isConfirmStep) || other.isConfirmStep == isConfirmStep)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PinState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.hasPinSet, hasPinSet) || other.hasPinSet == hasPinSet)&&(identical(other.isPinVerified, isPinVerified) || other.isPinVerified == isPinVerified)&&(identical(other.enteredPin, enteredPin) || other.enteredPin == enteredPin)&&(identical(other.confirmPin, confirmPin) || other.confirmPin == confirmPin)&&(identical(other.isConfirmStep, isConfirmStep) || other.isConfirmStep == isConfirmStep)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.failedAttempts, failedAttempts) || other.failedAttempts == failedAttempts)&&(identical(other.lockoutUntil, lockoutUntil) || other.lockoutUntil == lockoutUntil));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,hasPinSet,isPinVerified,enteredPin,confirmPin,isConfirmStep,mode,errorMessage);
+int get hashCode => Object.hash(runtimeType,isLoading,hasPinSet,isPinVerified,enteredPin,confirmPin,isConfirmStep,mode,errorMessage,failedAttempts,lockoutUntil);
 
-@override
-String toString() {
-  return 'PinState(isLoading: $isLoading, hasPinSet: $hasPinSet, isPinVerified: $isPinVerified, enteredPin: $enteredPin, confirmPin: $confirmPin, isConfirmStep: $isConfirmStep, mode: $mode, errorMessage: $errorMessage)';
-}
 
 
 }
@@ -45,7 +41,7 @@ abstract mixin class $PinStateCopyWith<$Res>  {
   factory $PinStateCopyWith(PinState value, $Res Function(PinState) _then) = _$PinStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, bool hasPinSet, bool isPinVerified, String enteredPin, String confirmPin, bool isConfirmStep, PinMode mode, String? errorMessage
+ bool isLoading, bool hasPinSet, bool isPinVerified, String enteredPin, String confirmPin, bool isConfirmStep, PinMode mode, String? errorMessage, int failedAttempts, DateTime? lockoutUntil
 });
 
 
@@ -62,7 +58,7 @@ class _$PinStateCopyWithImpl<$Res>
 
 /// Create a copy of PinState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? hasPinSet = null,Object? isPinVerified = null,Object? enteredPin = null,Object? confirmPin = null,Object? isConfirmStep = null,Object? mode = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? hasPinSet = null,Object? isPinVerified = null,Object? enteredPin = null,Object? confirmPin = null,Object? isConfirmStep = null,Object? mode = null,Object? errorMessage = freezed,Object? failedAttempts = null,Object? lockoutUntil = freezed,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,hasPinSet: null == hasPinSet ? _self.hasPinSet : hasPinSet // ignore: cast_nullable_to_non_nullable
@@ -72,7 +68,9 @@ as String,confirmPin: null == confirmPin ? _self.confirmPin : confirmPin // igno
 as String,isConfirmStep: null == isConfirmStep ? _self.isConfirmStep : isConfirmStep // ignore: cast_nullable_to_non_nullable
 as bool,mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
 as PinMode,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,failedAttempts: null == failedAttempts ? _self.failedAttempts : failedAttempts // ignore: cast_nullable_to_non_nullable
+as int,lockoutUntil: freezed == lockoutUntil ? _self.lockoutUntil : lockoutUntil // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -157,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  bool hasPinSet,  bool isPinVerified,  String enteredPin,  String confirmPin,  bool isConfirmStep,  PinMode mode,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  bool hasPinSet,  bool isPinVerified,  String enteredPin,  String confirmPin,  bool isConfirmStep,  PinMode mode,  String? errorMessage,  int failedAttempts,  DateTime? lockoutUntil)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PinState() when $default != null:
-return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.enteredPin,_that.confirmPin,_that.isConfirmStep,_that.mode,_that.errorMessage);case _:
+return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.enteredPin,_that.confirmPin,_that.isConfirmStep,_that.mode,_that.errorMessage,_that.failedAttempts,_that.lockoutUntil);case _:
   return orElse();
 
 }
@@ -178,10 +176,10 @@ return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.entere
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  bool hasPinSet,  bool isPinVerified,  String enteredPin,  String confirmPin,  bool isConfirmStep,  PinMode mode,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  bool hasPinSet,  bool isPinVerified,  String enteredPin,  String confirmPin,  bool isConfirmStep,  PinMode mode,  String? errorMessage,  int failedAttempts,  DateTime? lockoutUntil)  $default,) {final _that = this;
 switch (_that) {
 case _PinState():
-return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.enteredPin,_that.confirmPin,_that.isConfirmStep,_that.mode,_that.errorMessage);case _:
+return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.enteredPin,_that.confirmPin,_that.isConfirmStep,_that.mode,_that.errorMessage,_that.failedAttempts,_that.lockoutUntil);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +196,10 @@ return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.entere
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  bool hasPinSet,  bool isPinVerified,  String enteredPin,  String confirmPin,  bool isConfirmStep,  PinMode mode,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  bool hasPinSet,  bool isPinVerified,  String enteredPin,  String confirmPin,  bool isConfirmStep,  PinMode mode,  String? errorMessage,  int failedAttempts,  DateTime? lockoutUntil)?  $default,) {final _that = this;
 switch (_that) {
 case _PinState() when $default != null:
-return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.enteredPin,_that.confirmPin,_that.isConfirmStep,_that.mode,_that.errorMessage);case _:
+return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.enteredPin,_that.confirmPin,_that.isConfirmStep,_that.mode,_that.errorMessage,_that.failedAttempts,_that.lockoutUntil);case _:
   return null;
 
 }
@@ -212,8 +210,8 @@ return $default(_that.isLoading,_that.hasPinSet,_that.isPinVerified,_that.entere
 /// @nodoc
 
 
-class _PinState implements PinState {
-  const _PinState({this.isLoading = true, this.hasPinSet = false, this.isPinVerified = false, this.enteredPin = '', this.confirmPin = '', this.isConfirmStep = false, this.mode = PinMode.verify, this.errorMessage});
+class _PinState extends PinState {
+  const _PinState({this.isLoading = true, this.hasPinSet = false, this.isPinVerified = false, this.enteredPin = '', this.confirmPin = '', this.isConfirmStep = false, this.mode = PinMode.verify, this.errorMessage, this.failedAttempts = 0, this.lockoutUntil}): super._();
   
 
 @override@JsonKey() final  bool isLoading;
@@ -224,6 +222,8 @@ class _PinState implements PinState {
 @override@JsonKey() final  bool isConfirmStep;
 @override@JsonKey() final  PinMode mode;
 @override final  String? errorMessage;
+@override@JsonKey() final  int failedAttempts;
+@override final  DateTime? lockoutUntil;
 
 /// Create a copy of PinState
 /// with the given fields replaced by the non-null parameter values.
@@ -235,17 +235,13 @@ _$PinStateCopyWith<_PinState> get copyWith => __$PinStateCopyWithImpl<_PinState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PinState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.hasPinSet, hasPinSet) || other.hasPinSet == hasPinSet)&&(identical(other.isPinVerified, isPinVerified) || other.isPinVerified == isPinVerified)&&(identical(other.enteredPin, enteredPin) || other.enteredPin == enteredPin)&&(identical(other.confirmPin, confirmPin) || other.confirmPin == confirmPin)&&(identical(other.isConfirmStep, isConfirmStep) || other.isConfirmStep == isConfirmStep)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PinState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.hasPinSet, hasPinSet) || other.hasPinSet == hasPinSet)&&(identical(other.isPinVerified, isPinVerified) || other.isPinVerified == isPinVerified)&&(identical(other.enteredPin, enteredPin) || other.enteredPin == enteredPin)&&(identical(other.confirmPin, confirmPin) || other.confirmPin == confirmPin)&&(identical(other.isConfirmStep, isConfirmStep) || other.isConfirmStep == isConfirmStep)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.failedAttempts, failedAttempts) || other.failedAttempts == failedAttempts)&&(identical(other.lockoutUntil, lockoutUntil) || other.lockoutUntil == lockoutUntil));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,hasPinSet,isPinVerified,enteredPin,confirmPin,isConfirmStep,mode,errorMessage);
+int get hashCode => Object.hash(runtimeType,isLoading,hasPinSet,isPinVerified,enteredPin,confirmPin,isConfirmStep,mode,errorMessage,failedAttempts,lockoutUntil);
 
-@override
-String toString() {
-  return 'PinState(isLoading: $isLoading, hasPinSet: $hasPinSet, isPinVerified: $isPinVerified, enteredPin: $enteredPin, confirmPin: $confirmPin, isConfirmStep: $isConfirmStep, mode: $mode, errorMessage: $errorMessage)';
-}
 
 
 }
@@ -255,7 +251,7 @@ abstract mixin class _$PinStateCopyWith<$Res> implements $PinStateCopyWith<$Res>
   factory _$PinStateCopyWith(_PinState value, $Res Function(_PinState) _then) = __$PinStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, bool hasPinSet, bool isPinVerified, String enteredPin, String confirmPin, bool isConfirmStep, PinMode mode, String? errorMessage
+ bool isLoading, bool hasPinSet, bool isPinVerified, String enteredPin, String confirmPin, bool isConfirmStep, PinMode mode, String? errorMessage, int failedAttempts, DateTime? lockoutUntil
 });
 
 
@@ -272,7 +268,7 @@ class __$PinStateCopyWithImpl<$Res>
 
 /// Create a copy of PinState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? hasPinSet = null,Object? isPinVerified = null,Object? enteredPin = null,Object? confirmPin = null,Object? isConfirmStep = null,Object? mode = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? hasPinSet = null,Object? isPinVerified = null,Object? enteredPin = null,Object? confirmPin = null,Object? isConfirmStep = null,Object? mode = null,Object? errorMessage = freezed,Object? failedAttempts = null,Object? lockoutUntil = freezed,}) {
   return _then(_PinState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,hasPinSet: null == hasPinSet ? _self.hasPinSet : hasPinSet // ignore: cast_nullable_to_non_nullable
@@ -282,7 +278,9 @@ as String,confirmPin: null == confirmPin ? _self.confirmPin : confirmPin // igno
 as String,isConfirmStep: null == isConfirmStep ? _self.isConfirmStep : isConfirmStep // ignore: cast_nullable_to_non_nullable
 as bool,mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
 as PinMode,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,failedAttempts: null == failedAttempts ? _self.failedAttempts : failedAttempts // ignore: cast_nullable_to_non_nullable
+as int,lockoutUntil: freezed == lockoutUntil ? _self.lockoutUntil : lockoutUntil // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

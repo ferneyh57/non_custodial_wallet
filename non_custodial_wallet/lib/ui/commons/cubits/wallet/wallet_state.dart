@@ -10,5 +10,8 @@ abstract class WalletState with _$WalletState {
     WalletEntity? wallet,
     String? errorMessage,
     @Default(false) bool isAuthorized,
+    /// Temporary field set ONLY during wallet creation for display purposes.
+    /// Cleared immediately after the user confirms backup.
+    String? generatedMnemonic,
   }) = _WalletState;
 }
