@@ -46,8 +46,21 @@ class SwapScreen extends StatelessWidget {
   }
 }
 
-class _SwapScreenView extends StatelessWidget {
+class _SwapScreenView extends StatefulWidget {
   const _SwapScreenView();
+
+  @override
+  State<_SwapScreenView> createState() => _SwapScreenViewState();
+}
+
+class _SwapScreenViewState extends State<_SwapScreenView> {
+  final _amountController = TextEditingController();
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +209,7 @@ class _SwapScreenView extends StatelessWidget {
                       border: Border.all(color: context.appColors.cardBorder),
                     ),
                     child: TextField(
+                      controller: _amountController,
                       onChanged: cubit.updateAmount,
                       maxLength: 20,
                       keyboardType: const TextInputType.numberWithOptions(
@@ -208,15 +222,44 @@ class _SwapScreenView extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         color: context.colors.onSurface,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: '0.00',
                         filled: false,
                         border: InputBorder.none,
                         counterText: '',
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 14,
                         ),
+                        suffixIcon: fromBalance != null && fromBalance > 0
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () {
+                                      final maxStr =
+                                          fromBalance.toStringAsFixed(8);
+                                      _amountController.text = maxStr;
+                                      cubit.updateAmount(maxStr);
+                                    },
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      child: Text(
+                                        context.l10n.maxButton,
+                                        style: GoogleFonts.poppins(
+                                          color: context.colors.primary,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : null,
                       ),
                     ),
                   ),
