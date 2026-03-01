@@ -10,6 +10,7 @@ import '../../core/di.dart';
 import 'cubits/receive_cubit.dart';
 import 'cubits/receive_state.dart';
 import '../../commons/widgets/network_dropdown.dart';
+import 'widgets/amount_input_dialog.dart';
 
 class ReceiveScreen extends StatelessWidget {
   final NetworkEntity? initialNetwork;
@@ -169,17 +170,22 @@ class ReceiveScreenView extends StatelessWidget {
                           child: ReceiveActionCard(
                             icon: Icons.edit_rounded,
                             label: context.l10n.amountHint,
-                            onTap: () =>
-                                _showAmountDialog(context, cubit, state.amount),
+                            onTap: () {
+                              cubit.amountController.text = state.amount;
+                              showDialog(
+                                context: context,
+                                builder: (_) => AmountInputDialog(
+                                  controller: cubit.amountController,
+                                ),
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: ReceiveActionCard(
                             icon: Icons.share_rounded,
-                            label: context.l10n.sendButton == 'Send'
-                                ? 'Share'
-                                : 'Compartir',
+                            label: context.l10n.shareButton,
                             onTap: () {
                               if (state.address.isNotEmpty) {
                                 SharePlus.instance.share(
@@ -213,51 +219,6 @@ class ReceiveScreenView extends StatelessWidget {
     );
   }
 
-  void _showAmountDialog(
-    BuildContext context,
-    ReceiveCubit cubit,
-    String currentAmount,
-  ) {
-    cubit.amountController.text = currentAmount;
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          backgroundColor: context.colors.surfaceContainerHighest,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Text(
-            context.l10n.amountHint,
-            style: AppFonts.style(color: context.colors.onSurface),
-          ),
-          content: TextField(
-            controller: cubit.amountController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            style: AppFonts.style(color: context.colors.onSurface),
-            decoration: InputDecoration(
-              hintText: '0.00',
-              filled: true,
-              fillColor: context.appColors.containerFill,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: Text(
-                'OK',
-                style: AppFonts.style(color: context.colors.primary),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 class ReceiveActionCard extends StatelessWidget {

@@ -2,7 +2,7 @@ import '../../entities/network/network_entity.dart';
 import '../../entities/token/token_entity.dart';
 import '../../entities/token/token_balance_entity.dart';
 import '../../repositories/token/i_token_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 class GetTokenBalancesUseCase {
   final ITokenRepository _repository;

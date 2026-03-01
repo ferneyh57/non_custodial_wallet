@@ -111,5 +111,16 @@
   "phraseDisclaimerTitle": "¿Guardaste tu frase?",
   "phraseDisclaimerMessage": "Si pierdes tu frase de recuperación, perderás permanentemente el acceso a tus fondos. Asegúrate de haberla guardado en un lugar seguro.",
   "phraseDisclaimerConfirm": "Sí, la guardé",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "shareButton": "Compartir",
+  "ok": "Aceptar",
+  "pinLockedError": "Cuenta bloqueada. Inténtalo de nuevo en {time}.",
+  "@pinLockedError": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "swapQuoteExpired": "La cotización ha expirado. Solicita una nueva cotización."
 }

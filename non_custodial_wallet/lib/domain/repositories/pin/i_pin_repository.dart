@@ -1,4 +1,4 @@
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 abstract class IPinRepository {
   Future<Result<void>> savePin(String pin);

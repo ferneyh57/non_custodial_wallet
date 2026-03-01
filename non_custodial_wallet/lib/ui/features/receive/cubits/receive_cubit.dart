@@ -20,4 +20,10 @@ class ReceiveCubit extends Cubit<ReceiveState> {
   void updateNetwork(NetworkEntity network) {
     emit(state.copyWith(selectedNetwork: network, errorMessage: null));
   }
+
+  @override
+  Future<void> close() {
+    amountController.dispose();
+    return super.close();
+  }
 }

@@ -111,5 +111,16 @@
   "phraseDisclaimerTitle": "Did you save your phrase?",
   "phraseDisclaimerMessage": "If you lose your recovery phrase, you will permanently lose access to your funds. Make sure you saved it in a safe place.",
   "phraseDisclaimerConfirm": "Yes, I saved it",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "shareButton": "Share",
+  "ok": "OK",
+  "pinLockedError": "Account locked. Try again in {time}.",
+  "@pinLockedError": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "swapQuoteExpired": "Swap quote has expired. Please request a new quote."
 }

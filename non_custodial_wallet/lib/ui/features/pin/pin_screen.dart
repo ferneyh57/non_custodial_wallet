@@ -9,6 +9,7 @@ import '../../commons/cubits/wallet/wallet_cubit.dart';
 import 'widgets/pin_header.dart';
 import 'widgets/pin_display.dart';
 import 'widgets/pin_keypad.dart';
+import 'widgets/pin_reset_dialog.dart';
 
 class PinScreen extends StatelessWidget {
   const PinScreen({super.key});
@@ -36,10 +37,16 @@ class PinScreen extends StatelessWidget {
         }
 
         String? errorText;
-        if (state.errorMessage == 'mismatch') {
+        if (state.errorMessage == PinErrorCode.mismatch) {
           errorText = context.l10n.pinMismatchError;
-        } else if (state.errorMessage == 'incorrect') {
+        } else if (state.errorMessage == PinErrorCode.incorrect) {
           errorText = context.l10n.pinIncorrectError;
+        } else if (state.errorMessage != null &&
+            state.errorMessage!.startsWith(PinErrorCode.locked)) {
+          final time = state.errorMessage!.substring(
+            PinErrorCode.locked.length + 1,
+          );
+          errorText = context.l10n.pinLockedError(time);
         } else if (state.errorMessage != null) {
           errorText = state.errorMessage;
         }
@@ -88,7 +95,15 @@ class PinScreen extends StatelessWidget {
                   if (!isCreate) ...[
                     const SizedBox(height: 8),
                     TextButton(
-                      onPressed: () => _showResetDialog(context),
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => PinResetDialog(
+                          onConfirm: () {
+                            context.read<PinCubit>().resetPin();
+                            context.read<WalletCubit>().logout();
+                          },
+                        ),
+                      ),
                       child: Text(
                         context.l10n.pinForgotButton,
                         style: AppFonts.style(
@@ -108,39 +123,4 @@ class PinScreen extends StatelessWidget {
     );
   }
 
-  void _showResetDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(
-          context.l10n.pinForgotTitle,
-          style: AppFonts.style(fontWeight: FontWeight.w600),
-        ),
-        content: Text(
-          context.l10n.pinForgotMessage,
-          style: AppFonts.style(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(
-              context.l10n.cancelButton,
-              style: AppFonts.style(),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              context.read<PinCubit>().resetPin();
-              context.read<WalletCubit>().logout();
-            },
-            child: Text(
-              context.l10n.pinResetButton,
-              style: AppFonts.style(color: context.colors.error),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

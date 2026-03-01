@@ -457,9 +457,10 @@ class AssetDropdown extends StatelessWidget {
             if (value == '_native') {
               onChanged(null);
             } else {
-              final token = tokens.firstWhere(
-                (t) => t.contractAddress == value,
-              );
+              final token = tokens
+                  .where((t) => t.contractAddress == value)
+                  .firstOrNull;
+              if (token == null) return;
               onChanged(token);
             }
           },

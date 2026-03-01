@@ -19,7 +19,7 @@ class MarketCubit extends Cubit<MarketState> {
 
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
-    final result = await getCoinsMarketUseCase.execute();
+    final result = await getCoinsMarketUseCase();
 
     result.fold(
       (coins) {

@@ -43,7 +43,10 @@ class AlchemyRpcClient {
       },
     );
 
-    final json = response.data!;
+    final json = response.data;
+    if (json == null) {
+      throw RpcException('Empty response from RPC', code: -1);
+    }
 
     if (json.containsKey('error')) {
       final error = json['error'] as Map<String, dynamic>;

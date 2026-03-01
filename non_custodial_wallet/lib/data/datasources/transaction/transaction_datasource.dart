@@ -1,11 +1,11 @@
 import 'package:web3dart/web3dart.dart';
 import 'package:non_custodial_wallet/domain/entities/network/network_entity.dart';
 import 'package:non_custodial_wallet/domain/entities/token/token_entity.dart';
-import 'package:non_custodial_wallet/ui/core/constants/blockchain_constants.dart';
-import 'package:non_custodial_wallet/ui/core/error/failures.dart';
-import 'package:non_custodial_wallet/ui/core/util/app_logger.dart';
+import '../../constants/blockchain_constants.dart';
+import '../../../domain/core/failures.dart';
+import '../../../domain/core/app_logger.dart';
 import 'package:non_custodial_wallet/domain/entities/transaction/gas_estimate_entity.dart';
-import 'package:non_custodial_wallet/ui/core/util/result.dart';
+import '../../../domain/core/result.dart';
 import '../shared/wallet_key_deriver.dart';
 
 abstract class ITransactionDataSource {

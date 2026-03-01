@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../data/datasources/storage/secure_storage_datasource.dart';
 import '../../../core/constants/app_networks.dart';
+import '../../../core/util/app_logger.dart';
 import 'network_mode_state.dart';
 
 class NetworkModeCubit extends Cubit<NetworkModeState> {
@@ -25,8 +26,8 @@ class NetworkModeCubit extends Cubit<NetworkModeState> {
         defaultNetwork:
             isMainnet ? AppNetworks.ethMainnet : AppNetworks.ethSepolia,
       ));
-    } catch (_) {
-      // Keep default testnet state on error
+    } catch (e, stackTrace) {
+      AppLogger.warning('Failed to load network mode', e, stackTrace);
     }
   }
 
@@ -34,8 +35,8 @@ class NetworkModeCubit extends Cubit<NetworkModeState> {
     final newIsMainnet = !state.isMainnet;
     try {
       await _storage.saveNetworkMode(newIsMainnet ? 'mainnet' : 'testnet');
-    } catch (_) {
-      // Continue even if persistence fails
+    } catch (e, stackTrace) {
+      AppLogger.warning('Failed to save network mode', e, stackTrace);
     }
     emit(state.copyWith(
       isMainnet: newIsMainnet,

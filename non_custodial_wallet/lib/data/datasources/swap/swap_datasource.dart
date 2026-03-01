@@ -8,9 +8,9 @@ import '../../../domain/entities/swap/swap_quote_entity.dart';
 import '../../../domain/entities/swap/swap_status_entity.dart';
 import '../../../ui/core/constants/crypto_constants.dart';
 import '../../../ui/core/constants/rpc_methods.dart';
-import '../../../ui/core/error/failures.dart';
-import '../../../ui/core/util/result.dart';
-import '../../../ui/core/util/app_logger.dart';
+import '../../../domain/core/failures.dart';
+import '../../../domain/core/result.dart';
+import '../../../domain/core/app_logger.dart';
 import '../shared/alchemy_rpc_client.dart';
 import '../shared/wallet_key_deriver.dart';
 

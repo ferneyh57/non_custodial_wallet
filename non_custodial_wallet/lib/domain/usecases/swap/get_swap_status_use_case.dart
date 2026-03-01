@@ -1,6 +1,6 @@
 import '../../entities/swap/swap_status_entity.dart';
 import '../../repositories/swap/i_swap_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 class GetSwapStatusUseCase {
   final ISwapRepository _repository;

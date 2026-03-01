@@ -341,4 +341,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get cancel => 'Cancelar';
+
+  @override
+  String get shareButton => 'Compartir';
+
+  @override
+  String get ok => 'Aceptar';
+
+  @override
+  String pinLockedError(String time) {
+    return 'Cuenta bloqueada. Inténtalo de nuevo en $time.';
+  }
+
+  @override
+  String get swapQuoteExpired =>
+      'La cotización ha expirado. Solicita una nueva cotización.';
 }

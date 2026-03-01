@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../../ui/core/constants/storage_keys.dart';
-import '../../../ui/core/error/exceptions.dart';
-import '../../../ui/core/util/app_logger.dart';
+import '../../constants/storage_keys.dart';
+import '../../../domain/core/exceptions.dart';
+import '../../../domain/core/app_logger.dart';
 
 class SecureStorageDataSource {
 

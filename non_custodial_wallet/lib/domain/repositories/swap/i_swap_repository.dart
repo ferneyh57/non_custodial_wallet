@@ -1,4 +1,4 @@
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 import '../../entities/swap/swap_quote_entity.dart';
 import '../../entities/swap/swap_status_entity.dart';
 import '../../entities/network/network_entity.dart';

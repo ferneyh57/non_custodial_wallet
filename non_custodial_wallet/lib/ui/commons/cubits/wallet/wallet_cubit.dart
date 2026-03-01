@@ -48,7 +48,9 @@ class WalletCubit extends Cubit<WalletState> {
     emit(state.copyWith(isLoading: true, errorMessage: null));
     try {
       final mnemonic = await generateKeyUseCase();
+      if (isClosed) return;
       final ethResult = await getEthAddressUseCase(mnemonic);
+      if (isClosed) return;
 
       if (ethResult.isSuccess) {
         emit(state.copyWith(
@@ -65,6 +67,7 @@ class WalletCubit extends Cubit<WalletState> {
         ));
       }
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
   }
@@ -74,6 +77,7 @@ class WalletCubit extends Cubit<WalletState> {
     if (mnemonic == null) return;
 
     final result = await saveKeyUseCase(mnemonic);
+    if (isClosed) return;
     if (result.isSuccess) {
       // Clear the temporary mnemonic from state after saving to secure storage.
       emit(state.copyWith(isAuthorized: true, generatedMnemonic: null));
@@ -86,6 +90,7 @@ class WalletCubit extends Cubit<WalletState> {
     emit(state.copyWith(isLoading: true, errorMessage: null));
     try {
       final ethResult = await getEthAddressUseCase(mnemonic);
+      if (isClosed) return;
 
       if (ethResult.isFailure) {
         emit(state.copyWith(
@@ -97,6 +102,7 @@ class WalletCubit extends Cubit<WalletState> {
 
       // Save to secure storage first, do NOT put mnemonic in state.
       final saveResult = await saveKeyUseCase(mnemonic);
+      if (isClosed) return;
       if (saveResult.isSuccess) {
         emit(state.copyWith(
           isLoading: false,
@@ -110,6 +116,7 @@ class WalletCubit extends Cubit<WalletState> {
         ));
       }
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
   }
@@ -121,6 +128,7 @@ class WalletCubit extends Cubit<WalletState> {
 
     try {
       final result = await getKeyUseCase();
+      if (isClosed) return;
       if (result.isFailure || result.data == null) {
         emit(state.copyWith(isLoading: false, isAuthorized: false));
         return;
@@ -128,6 +136,7 @@ class WalletCubit extends Cubit<WalletState> {
 
       final mnemonic = result.data!;
       final ethResult = await getEthAddressUseCase(mnemonic);
+      if (isClosed) return;
 
       if (ethResult.isSuccess) {
         emit(state.copyWith(
@@ -141,6 +150,7 @@ class WalletCubit extends Cubit<WalletState> {
         ));
       }
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(isLoading: false, isAuthorized: false));
     }
   }
@@ -166,6 +176,8 @@ class WalletCubit extends Cubit<WalletState> {
       ),
     );
 
+    if (isClosed) return;
+
     final newBalances = <int, BigInt>{};
     for (final entry in results) {
       if (entry.value.isSuccess && entry.value.data != null) {
@@ -181,6 +193,7 @@ class WalletCubit extends Cubit<WalletState> {
 
   Future<void> logout() async {
     await deleteKeyUseCase();
+    if (isClosed) return;
     emit(const WalletState(isLoading: false, isAuthorized: false));
   }
 }

@@ -1,6 +1,6 @@
 import 'package:non_custodial_wallet/data/datasources/wallet/wallet_datasource.dart';
 import 'package:non_custodial_wallet/domain/entities/network/network_entity.dart';
-import '../../ui/core/util/result.dart';
+import '../../domain/core/result.dart';
 import '../../domain/repositories/wallet/i_wallet_repository.dart';
 
 class WalletRepositoryImpl implements IWalletRepository {

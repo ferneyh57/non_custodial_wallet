@@ -11,6 +11,11 @@ import '../../../core/constants/crypto_constants.dart';
 import '../../../commons/cubits/wallet/wallet_cubit.dart';
 import 'swap_state.dart';
 
+abstract class SwapErrorCode {
+  static const invalidAmount = 'invalid_amount';
+  static const quoteExpired = 'quote_expired';
+}
+
 /// Represents a selectable asset (native or ERC-20) on a specific network.
 class SwapAsset {
   final NetworkEntity network;
@@ -155,7 +160,7 @@ class SwapCubit extends Cubit<SwapState> {
     if (amountRaw <= BigInt.zero) {
       emit(state.copyWith(
         isLoadingQuote: false,
-        errorMessage: 'Invalid amount',
+        errorMessage: SwapErrorCode.invalidAmount,
       ));
       return;
     }
@@ -193,26 +198,26 @@ class SwapCubit extends Cubit<SwapState> {
     if (quote == null) return;
 
     _swapInProgress = true;
-    emit(state.copyWith(isExecuting: true, errorMessage: null));
-
-    // Validate quote expiry before executing
-    final expirySeconds = int.tryParse(quote.expiry);
-    if (expirySeconds != null) {
-      final expiryDate =
-          DateTime.fromMillisecondsSinceEpoch(expirySeconds * 1000);
-      if (DateTime.now().isAfter(expiryDate)) {
-        _swapInProgress = false;
-        emit(state.copyWith(
-          isExecuting: false,
-          errorMessage: 'Swap quote has expired. Please request a new quote.',
-          quote: null,
-        ));
-        return;
-      }
-    }
-
     try {
+      emit(state.copyWith(isExecuting: true, errorMessage: null));
+
+      // Validate quote expiry before executing
+      final expirySeconds = int.tryParse(quote.expiry);
+      if (expirySeconds != null) {
+        final expiryDate =
+            DateTime.fromMillisecondsSinceEpoch(expirySeconds * 1000);
+        if (DateTime.now().isAfter(expiryDate)) {
+          emit(state.copyWith(
+            isExecuting: false,
+            errorMessage: SwapErrorCode.quoteExpired,
+            quote: null,
+          ));
+          return;
+        }
+      }
+
       final mnemonic = await walletCubit.getMnemonic();
+      if (isClosed) return;
       final result = await executeSwapUseCase(
         mnemonic: mnemonic,
         quote: quote,
@@ -230,7 +235,6 @@ class SwapCubit extends Cubit<SwapState> {
           _pollSwapStatus(callId);
         },
         (failure) {
-          _swapInProgress = false;
           emit(state.copyWith(
             isExecuting: false,
             errorMessage: failure.message,
@@ -238,11 +242,16 @@ class SwapCubit extends Cubit<SwapState> {
         },
       );
     } catch (e) {
-      _swapInProgress = false;
+      if (isClosed) return;
       emit(state.copyWith(
         isExecuting: false,
         errorMessage: e.toString(),
       ));
+    } finally {
+      // Only reset if not tracking (successful swap transitions to tracking)
+      if (!state.isTrackingStatus) {
+        _swapInProgress = false;
+      }
     }
   }
 

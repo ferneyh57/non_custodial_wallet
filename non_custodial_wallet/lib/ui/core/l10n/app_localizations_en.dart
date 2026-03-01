@@ -337,4 +337,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get shareButton => 'Share';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String pinLockedError(String time) {
+    return 'Account locked. Try again in $time.';
+  }
+
+  @override
+  String get swapQuoteExpired =>
+      'Swap quote has expired. Please request a new quote.';
 }

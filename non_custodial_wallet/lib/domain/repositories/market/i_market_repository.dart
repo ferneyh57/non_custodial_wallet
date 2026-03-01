@@ -1,4 +1,4 @@
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 import '../../entities/market/coin_entity.dart';
 
 abstract class IMarketRepository {

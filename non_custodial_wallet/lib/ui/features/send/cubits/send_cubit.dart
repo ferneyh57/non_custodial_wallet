@@ -207,6 +207,7 @@ class SendCubit extends Cubit<SendState> {
       emit(state.copyWith(isLoading: true, errorMessage: null, txHash: null));
 
       final mnemonic = await walletCubit.getMnemonic();
+      if (isClosed) return;
       final token = state.selectedToken;
       final Result<String> result;
 
@@ -227,6 +228,8 @@ class SendCubit extends Cubit<SendState> {
         );
       }
 
+      if (isClosed) return;
+
       result.fold(
         (txHash) {
           emit(state.copyWith(isLoading: false, txHash: txHash));
@@ -236,6 +239,7 @@ class SendCubit extends Cubit<SendState> {
         },
       );
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
   }

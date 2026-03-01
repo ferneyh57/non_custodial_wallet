@@ -3,7 +3,7 @@ import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
 import '../../../domain/entities/token/token_balance_entity.dart';
 import '../../../domain/repositories/token/i_token_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../../domain/core/result.dart';
 
 class TokenRepositoryImpl implements ITokenRepository {
   final TokenDataSource tokenDataSource;

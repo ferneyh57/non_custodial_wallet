@@ -1,7 +1,7 @@
 import '../../entities/network/network_entity.dart';
 import '../../entities/swap/swap_quote_entity.dart';
 import '../../repositories/swap/i_swap_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 class RequestSwapQuoteUseCase {
   final ISwapRepository _repository;

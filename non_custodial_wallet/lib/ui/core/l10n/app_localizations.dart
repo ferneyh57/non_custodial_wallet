@@ -733,6 +733,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @shareButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareButton;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @pinLockedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Account locked. Try again in {time}.'**
+  String pinLockedError(String time);
+
+  /// No description provided for @swapQuoteExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap quote has expired. Please request a new quote.'**
+  String get swapQuoteExpired;
 }
 
 class _AppLocalizationsDelegate

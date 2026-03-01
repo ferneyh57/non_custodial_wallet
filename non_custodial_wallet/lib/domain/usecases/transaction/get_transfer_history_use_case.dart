@@ -1,7 +1,7 @@
 import '../../entities/network/network_entity.dart';
 import '../../entities/transaction/transfer_page_result.dart';
 import '../../repositories/transaction/i_transaction_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 class GetTransferHistoryUseCase {
   final ITransactionRepository _repository;

@@ -1,9 +1,9 @@
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:flutter/foundation.dart';
 import 'auth_datasource.dart';
-import '../../../../ui/core/util/result.dart';
-import '../../../../ui/core/error/exceptions.dart';
-import '../../../../ui/core/error/failures.dart';
+import '../../../domain/core/result.dart';
+import '../../../domain/core/exceptions.dart';
+import '../../../domain/core/failures.dart';
 import '../storage/secure_storage_datasource.dart';
 
 String _generateMnemonicIsolate(_) => bip39.generateMnemonic();

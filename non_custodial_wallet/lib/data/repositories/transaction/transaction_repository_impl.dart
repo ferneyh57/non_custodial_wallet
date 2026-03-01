@@ -4,7 +4,7 @@ import 'package:non_custodial_wallet/domain/entities/network/network_entity.dart
 import 'package:non_custodial_wallet/domain/entities/token/token_entity.dart';
 import 'package:non_custodial_wallet/domain/entities/transaction/gas_estimate_entity.dart';
 import 'package:non_custodial_wallet/domain/entities/transaction/transfer_page_result.dart';
-import 'package:non_custodial_wallet/ui/core/util/result.dart';
+import '../../../domain/core/result.dart';
 import '../../../domain/repositories/transaction/i_transaction_repository.dart';
 
 class TransactionRepositoryImpl implements ITransactionRepository {

@@ -1,6 +1,6 @@
 import '../../entities/network/network_entity.dart';
 import '../../repositories/transaction/i_transaction_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 class SendTransactionUseCase {
   final ITransactionRepository _repository;

@@ -1,7 +1,7 @@
 import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource.dart';
 import 'package:non_custodial_wallet/domain/repositories/auth/i_auth_repository.dart';
 
-import '../../../ui/core/util/result.dart';
+import '../../../domain/core/result.dart';
 
 
 class AuthRepositoryImpl implements IAuthRepository {

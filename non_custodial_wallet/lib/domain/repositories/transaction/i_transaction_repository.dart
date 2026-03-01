@@ -2,7 +2,7 @@ import '../../entities/network/network_entity.dart';
 import '../../entities/token/token_entity.dart';
 import '../../entities/transaction/gas_estimate_entity.dart';
 import '../../entities/transaction/transfer_page_result.dart';
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 abstract class ITransactionRepository {
   Future<Result<String>> sendTransaction({

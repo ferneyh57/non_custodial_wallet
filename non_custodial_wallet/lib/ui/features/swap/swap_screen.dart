@@ -63,9 +63,17 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
     return BlocConsumer<SwapCubit, SwapState>(
       listener: (context, state) {
         if (state.errorMessage != null) {
+          String displayMessage;
+          if (state.errorMessage == SwapErrorCode.invalidAmount) {
+            displayMessage = context.l10n.errorInvalidAmount;
+          } else if (state.errorMessage == SwapErrorCode.quoteExpired) {
+            displayMessage = context.l10n.swapQuoteExpired;
+          } else {
+            displayMessage = state.errorMessage!;
+          }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.errorMessage!),
+              content: Text(displayMessage),
               backgroundColor: context.colors.error,
             ),
           );

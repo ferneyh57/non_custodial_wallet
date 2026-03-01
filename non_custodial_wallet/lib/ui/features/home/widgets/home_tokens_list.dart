@@ -105,9 +105,10 @@ class _HomeTokensListState extends State<HomeTokensList> {
               price:
                   widget.priceBySymbol[tb.token.symbol.toUpperCase()],
               onTap: () {
-                final network = widget.networks.firstWhere(
-                  (n) => n.chainId == tb.chainId,
-                );
+                final network = widget.networks
+                    .where((n) => n.chainId == tb.chainId)
+                    .firstOrNull;
+                if (network == null) return;
                 context.push(
                   AppRoutes.tokenDetail,
                   extra: TokenDetailArgs(

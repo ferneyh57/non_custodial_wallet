@@ -2,7 +2,7 @@ import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/swap/swap_quote_entity.dart';
 import '../../../domain/entities/swap/swap_status_entity.dart';
 import '../../../domain/repositories/swap/i_swap_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../../domain/core/result.dart';
 import '../../datasources/swap/swap_datasource.dart';
 
 class SwapRepositoryImpl implements ISwapRepository {

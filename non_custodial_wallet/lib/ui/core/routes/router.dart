@@ -94,7 +94,9 @@ GoRouter createRouter(WalletCubit walletCubit, PinCubit pinCubit) => GoRouter(
     GoRoute(
       path: AppRoutes.send,
       builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>?;
+        final extra = state.extra is Map<String, dynamic>
+            ? state.extra as Map<String, dynamic>
+            : null;
         return SendScreen(
           initialNetwork: extra?['network'] as NetworkEntity?,
           initialToken: extra?['token'] as TokenEntity?,
@@ -104,7 +106,9 @@ GoRouter createRouter(WalletCubit walletCubit, PinCubit pinCubit) => GoRouter(
     GoRoute(
       path: AppRoutes.receive,
       builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>?;
+        final extra = state.extra is Map<String, dynamic>
+            ? state.extra as Map<String, dynamic>
+            : null;
         return ReceiveScreen(
           initialNetwork: extra?['network'] as NetworkEntity?,
         );
@@ -116,13 +120,24 @@ GoRouter createRouter(WalletCubit walletCubit, PinCubit pinCubit) => GoRouter(
     ),
     GoRoute(
       path: AppRoutes.tokenDetail,
-      builder: (context, state) =>
-          TokenDetailScreen(args: state.extra! as TokenDetailArgs),
+      builder: (context, state) {
+        final args = state.extra is TokenDetailArgs
+            ? state.extra as TokenDetailArgs
+            : null;
+        if (args == null) {
+          return const Scaffold(
+            body: Center(child: Text('Invalid token detail arguments')),
+          );
+        }
+        return TokenDetailScreen(args: args);
+      },
     ),
     GoRoute(
       path: AppRoutes.swap,
       builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>?;
+        final extra = state.extra is Map<String, dynamic>
+            ? state.extra as Map<String, dynamic>
+            : null;
         return SwapScreen(
           initialFromNetwork: extra?['network'] as NetworkEntity?,
           initialFromToken: extra?['token'] as TokenEntity?,

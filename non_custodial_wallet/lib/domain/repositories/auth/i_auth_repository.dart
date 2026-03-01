@@ -1,4 +1,4 @@
-import 'package:non_custodial_wallet/ui/core/util/result.dart';
+import '../../core/result.dart';
 
 abstract class IAuthRepository {
   String generateMnemonic();

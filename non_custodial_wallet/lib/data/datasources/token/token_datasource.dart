@@ -2,9 +2,9 @@ import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
 import '../../../domain/entities/token/token_balance_entity.dart';
 import '../../../ui/core/constants/rpc_methods.dart';
-import '../../../ui/core/error/failures.dart';
-import '../../../ui/core/util/result.dart';
-import '../../../ui/core/util/app_logger.dart';
+import '../../../domain/core/failures.dart';
+import '../../../domain/core/result.dart';
+import '../../../domain/core/app_logger.dart';
 import '../shared/alchemy_rpc_client.dart';
 
 abstract class TokenDataSource {

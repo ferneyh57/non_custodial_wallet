@@ -1,8 +1,8 @@
 import '../../../domain/entities/market/coin_entity.dart';
 import '../../../domain/repositories/market/i_market_repository.dart';
-import '../../../ui/core/util/result.dart';
-import '../../../ui/core/error/failures.dart';
-import '../../../ui/core/util/app_logger.dart';
+import '../../../domain/core/result.dart';
+import '../../../domain/core/failures.dart';
+import '../../../domain/core/app_logger.dart';
 import '../../datasources/market/alchemy_prices_datasource.dart';
 import '../../mappers/market/coin_mapper.dart';
 

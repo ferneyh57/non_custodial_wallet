@@ -1,6 +1,6 @@
 import '../../datasources/pin/pin_datasource.dart';
 import '../../../domain/repositories/pin/i_pin_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../../domain/core/result.dart';
 
 class PinRepositoryImpl implements IPinRepository {
   final PinDataSource pinDataSource;

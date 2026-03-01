@@ -10,6 +10,7 @@ import '../../commons/cubits/theme/theme_cubit.dart';
 import '../../commons/cubits/theme/theme_state.dart';
 import '../../commons/cubits/wallet/wallet_cubit.dart';
 import '../../commons/widgets/pin_verify_sheet.dart';
+import 'widgets/logout_confirmation_dialog.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -155,36 +156,11 @@ class _LogoutSection extends StatelessWidget {
           fontSize: 13,
         ),
       ),
-      onTap: () => _showLogoutDialog(context),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(
-          context.l10n.settingsLogoutConfirmTitle,
-          style: AppFonts.style(fontWeight: FontWeight.w600),
+      onTap: () => showDialog(
+        context: context,
+        builder: (_) => LogoutConfirmationDialog(
+          onConfirm: () => context.read<WalletCubit>().logout(),
         ),
-        content: Text(
-          context.l10n.settingsLogoutConfirmMessage,
-          style: AppFonts.style(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(context.l10n.cancelButton),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              context.read<WalletCubit>().logout();
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(context.l10n.settingsLogoutConfirmButton),
-          ),
-        ],
       ),
     );
   }

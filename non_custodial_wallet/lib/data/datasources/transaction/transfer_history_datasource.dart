@@ -1,11 +1,11 @@
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/transaction/transfer_entity.dart';
 import '../../../domain/entities/transaction/transfer_page_result.dart';
-import '../../../ui/core/constants/blockchain_constants.dart';
+import '../../constants/blockchain_constants.dart';
 import '../../../ui/core/constants/rpc_methods.dart';
-import '../../../ui/core/error/failures.dart';
-import '../../../ui/core/util/result.dart';
-import '../../../ui/core/util/app_logger.dart';
+import '../../../domain/core/failures.dart';
+import '../../../domain/core/result.dart';
+import '../../../domain/core/app_logger.dart';
 import '../shared/alchemy_rpc_client.dart';
 
 abstract class TransferHistoryDataSource {

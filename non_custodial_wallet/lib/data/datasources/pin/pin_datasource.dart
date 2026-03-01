@@ -5,10 +5,10 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 
 import '../storage/secure_storage_datasource.dart';
-import '../../../ui/core/error/exceptions.dart';
-import '../../../ui/core/error/failures.dart';
-import '../../../ui/core/util/app_logger.dart';
-import '../../../ui/core/util/result.dart';
+import '../../../domain/core/exceptions.dart';
+import '../../../domain/core/failures.dart';
+import '../../../domain/core/app_logger.dart';
+import '../../../domain/core/result.dart';
 
 const int _pbkdf2Iterations = 100000;
 const int _keyLength = 32;

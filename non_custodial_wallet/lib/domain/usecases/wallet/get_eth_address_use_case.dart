@@ -1,4 +1,4 @@
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 import '../../repositories/wallet/i_wallet_repository.dart';
 
 class GetEthAddressUseCase {

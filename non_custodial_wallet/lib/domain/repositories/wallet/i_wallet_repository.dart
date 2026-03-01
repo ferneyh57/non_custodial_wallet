@@ -1,5 +1,5 @@
 import '../../entities/network/network_entity.dart';
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 abstract class IWalletRepository {
   Future<Result<String>> getEthAddress(String mnemonic);

@@ -1,5 +1,5 @@
 import '../../repositories/pin/i_pin_repository.dart';
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 
 class HasPinUseCase {
   final IPinRepository repository;

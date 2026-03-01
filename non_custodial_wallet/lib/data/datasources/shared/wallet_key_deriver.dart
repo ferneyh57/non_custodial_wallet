@@ -9,7 +9,11 @@ String _deriveAddressIsolate(String mnemonic) {
   final seed = bip39.mnemonicToSeed(mnemonic);
   final root = bip32.BIP32.fromSeed(seed);
   final child = root.derivePath(CryptoConstants.ethDerivationPath);
-  final privateKey = Uint8List.fromList(child.privateKey!);
+  final privateKeyData = child.privateKey;
+  if (privateKeyData == null) {
+    throw Exception('Failed to derive private key from seed');
+  }
+  final privateKey = Uint8List.fromList(privateKeyData);
   final address = EthPrivateKey.fromHex(HEX.encode(privateKey)).address.hexEip55;
   privateKey.fillRange(0, privateKey.length, 0);
   return address;
@@ -25,7 +29,11 @@ class WalletKeyDeriver {
     final seed = bip39.mnemonicToSeed(mnemonic);
     final root = bip32.BIP32.fromSeed(seed);
     final child = root.derivePath(CryptoConstants.ethDerivationPath);
-    final privateKey = Uint8List.fromList(child.privateKey!);
+    final privateKeyData = child.privateKey;
+    if (privateKeyData == null) {
+      throw Exception('Failed to derive private key from seed');
+    }
+    final privateKey = Uint8List.fromList(privateKeyData);
     return EthPrivateKey.fromHex(HEX.encode(privateKey));
   }
 

@@ -1,4 +1,4 @@
-import '../../../ui/core/util/result.dart';
+import '../../core/result.dart';
 import '../../entities/market/coin_entity.dart';
 import '../../repositories/market/i_market_repository.dart';
 
@@ -7,7 +7,7 @@ class GetCoinsMarketUseCase {
 
   GetCoinsMarketUseCase(this.repository);
 
-  Future<Result<List<CoinEntity>>> execute() async {
+  Future<Result<List<CoinEntity>>> call() async {
     return await repository.getCoinsMarket();
   }
 }

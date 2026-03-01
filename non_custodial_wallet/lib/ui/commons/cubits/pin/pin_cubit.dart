@@ -8,6 +8,12 @@ import '../../../../domain/usecases/pin/delete_pin_use_case.dart';
 import '../../../core/util/app_logger.dart';
 import 'pin_state.dart';
 
+abstract class PinErrorCode {
+  static const mismatch = 'pin_mismatch';
+  static const incorrect = 'pin_incorrect';
+  static const locked = 'pin_locked';
+}
+
 class PinCubit extends Cubit<PinState> {
   final SavePinUseCase _savePinUseCase;
   final VerifyPinUseCase _verifyPinUseCase;
@@ -102,7 +108,7 @@ class PinCubit extends Cubit<PinState> {
     if (state.enteredPin != confirmPin) {
       emit(state.copyWith(
         confirmPin: '',
-        errorMessage: 'mismatch',
+        errorMessage: PinErrorCode.mismatch,
       ));
       return;
     }
@@ -156,7 +162,7 @@ class PinCubit extends Cubit<PinState> {
       final attempts = await _incrementFailedAttempts();
       final lockoutUntil = await _getPersistedLockoutUntil();
 
-      String errorMsg = 'incorrect';
+      String errorMsg = PinErrorCode.incorrect;
       if (lockoutUntil != null && lockoutUntil.isAfter(DateTime.now())) {
         errorMsg = _buildLockoutMessage(lockoutUntil);
       }
@@ -187,14 +193,14 @@ class PinCubit extends Cubit<PinState> {
   /// Builds a user-facing lockout message with remaining time.
   String _buildLockoutMessage(DateTime lockoutUntil) {
     final remaining = lockoutUntil.difference(DateTime.now());
-    if (remaining.isNegative) return 'incorrect';
+    if (remaining.isNegative) return PinErrorCode.incorrect;
 
     if (remaining.inMinutes >= 1) {
       final minutes = remaining.inMinutes;
-      return 'locked:$minutes min';
+      return '${PinErrorCode.locked}:$minutes min';
     } else {
       final seconds = remaining.inSeconds;
-      return 'locked:$seconds sec';
+      return '${PinErrorCode.locked}:$seconds sec';
     }
   }
 
