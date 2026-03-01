@@ -10,4 +10,5 @@ class AppRoutes {
   static const String tokenDetail = '/token-detail';
   static const String swap = '/swap';
   static const String pin = '/pin';
+  static const String settings = '/settings';
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../core/constants/app_networks.dart';
 import '../../core/extensions/context_extension.dart';
+import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_balance_entity.dart';
 import '../cubits/wallet/wallet_state.dart';
 import '../cubits/market/market_state.dart';
@@ -11,11 +11,13 @@ class BalanceCard extends StatefulWidget {
   final WalletState state;
   final MarketState marketState;
   final List<TokenBalanceEntity> tokenBalances;
+  final List<NetworkEntity> networks;
 
   const BalanceCard({
     super.key,
     required this.state,
     required this.marketState,
+    required this.networks,
     this.tokenBalances = const [],
   });
 
@@ -41,7 +43,7 @@ class _BalanceCardState extends State<BalanceCard> {
       priceBySymbol['USDC.E'] = usdcPrice;
     }
     double totalUsd = 0.0;
-    for (final network in AppNetworks.all) {
+    for (final network in widget.networks) {
       final balanceEth =
           widget.state.wallet?.balanceInEth(network.chainId) ?? 0.0;
       final price = priceBySymbol[network.nativeSymbol] ?? 0.0;
@@ -135,7 +137,7 @@ class _BalanceCardState extends State<BalanceCard> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    '${AppNetworks.all.length} networks',
+                    '${widget.networks.length} networks',
                     style: GoogleFonts.poppins(
                       color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 11,

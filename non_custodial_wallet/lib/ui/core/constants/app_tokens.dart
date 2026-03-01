@@ -37,10 +37,13 @@ class AppTokens {
       'https://assets.coingecko.com/coins/images/18834/large/wstETH.png';
 
   static Map<int, List<TokenEntity>> get tokensByChain =>
-      AppEnvironment.isMainnet ? _mainnetTokensByChain : _testnetTokensByChain;
+      AppEnvironment.isMainnet ? mainnetTokensByChain : testnetTokensByChain;
+
+  static Map<int, List<TokenEntity>> getTokensByChain(bool isMainnet) =>
+      isMainnet ? mainnetTokensByChain : testnetTokensByChain;
 
   // --- Testnet ---
-  static const Map<int, List<TokenEntity>> _testnetTokensByChain = {
+  static const Map<int, List<TokenEntity>> testnetTokensByChain = {
     // Ethereum Sepolia
     11155111: [
       TokenEntity(
@@ -185,7 +188,7 @@ class AppTokens {
   };
 
   // --- Mainnet ---
-  static const Map<int, List<TokenEntity>> _mainnetTokensByChain = {
+  static const Map<int, List<TokenEntity>> mainnetTokensByChain = {
     // Ethereum
     1: [
       TokenEntity(

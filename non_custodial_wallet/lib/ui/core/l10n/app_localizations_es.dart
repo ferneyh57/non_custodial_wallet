@@ -279,4 +279,49 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get cameraPermissionDenied =>
       'Se requiere permiso de camara para escanear codigos QR';
+
+  @override
+  String get settingsTitle => 'Configuración';
+
+  @override
+  String get settingsNetworkMode => 'Modo de Red';
+
+  @override
+  String get settingsNetworkModeMainnet => 'Mainnet';
+
+  @override
+  String get settingsNetworkModeTestnet => 'Testnet';
+
+  @override
+  String get settingsTheme => 'Apariencia';
+
+  @override
+  String get settingsThemeDark => 'Modo Oscuro';
+
+  @override
+  String get settingsThemeLight => 'Modo Claro';
+
+  @override
+  String get settingsCopySeed => 'Copiar Frase de Recuperación';
+
+  @override
+  String get settingsCopySeedSubtitle =>
+      'Copiar tu frase mnemónica al portapapeles';
+
+  @override
+  String get settingsLogout => 'Cerrar Sesión';
+
+  @override
+  String get settingsLogoutSubtitle =>
+      'Eliminar los datos de la billetera de este dispositivo';
+
+  @override
+  String get settingsLogoutConfirmTitle => 'Cerrar Sesión';
+
+  @override
+  String get settingsLogoutConfirmMessage =>
+      'Esto eliminará todos los datos de la billetera de este dispositivo. Asegúrate de haber respaldado tu frase de recuperación.';
+
+  @override
+  String get settingsLogoutConfirmButton => 'Cerrar Sesión';
 }

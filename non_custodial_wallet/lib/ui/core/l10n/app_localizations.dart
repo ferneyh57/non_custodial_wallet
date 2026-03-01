@@ -619,6 +619,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Camera permission is required to scan QR codes'**
   String get cameraPermissionDenied;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsNetworkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Mode'**
+  String get settingsNetworkMode;
+
+  /// No description provided for @settingsNetworkModeMainnet.
+  ///
+  /// In en, this message translates to:
+  /// **'Mainnet'**
+  String get settingsNetworkModeMainnet;
+
+  /// No description provided for @settingsNetworkModeTestnet.
+  ///
+  /// In en, this message translates to:
+  /// **'Testnet'**
+  String get settingsNetworkModeTestnet;
+
+  /// No description provided for @settingsTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsTheme;
+
+  /// No description provided for @settingsThemeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get settingsThemeDark;
+
+  /// No description provided for @settingsThemeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Mode'**
+  String get settingsThemeLight;
+
+  /// No description provided for @settingsCopySeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Recovery Phrase'**
+  String get settingsCopySeed;
+
+  /// No description provided for @settingsCopySeedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy your mnemonic phrase to clipboard'**
+  String get settingsCopySeedSubtitle;
+
+  /// No description provided for @settingsLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get settingsLogout;
+
+  /// No description provided for @settingsLogoutSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete wallet data from this device'**
+  String get settingsLogoutSubtitle;
+
+  /// No description provided for @settingsLogoutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get settingsLogoutConfirmTitle;
+
+  /// No description provided for @settingsLogoutConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will delete all wallet data from this device. Make sure you have backed up your recovery phrase.'**
+  String get settingsLogoutConfirmMessage;
+
+  /// No description provided for @settingsLogoutConfirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get settingsLogoutConfirmButton;
 }
 
 class _AppLocalizationsDelegate

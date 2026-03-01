@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/token/token_balance_entity.dart';
 import '../../../../domain/usecases/token/get_token_balances_use_case.dart';
 import '../../../core/constants/app_networks.dart';
@@ -8,12 +9,20 @@ import 'token_state.dart';
 class TokenCubit extends Cubit<TokenState> {
   final GetTokenBalancesUseCase getTokenBalancesUseCase;
 
+  List<NetworkEntity> _networks = AppNetworks.all;
+  bool _isMainnet = false;
   DateTime? _lastFetched;
   String? _lastAddress;
   static const _ttl = Duration(seconds: 30);
 
   TokenCubit({required this.getTokenBalancesUseCase})
       : super(const TokenState());
+
+  void updateNetworks(List<NetworkEntity> networks, {required bool isMainnet}) {
+    _networks = networks;
+    _isMainnet = isMainnet;
+    _lastFetched = null;
+  }
 
   Future<void> fetchTokenBalances(String walletAddress,
       {bool force = false}) async {
@@ -27,11 +36,12 @@ class TokenCubit extends Cubit<TokenState> {
 
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
+    final tokensByChain = AppTokens.getTokensByChain(_isMainnet);
     final allBalances = <TokenBalanceEntity>[];
 
     final results = await Future.wait(
-      AppNetworks.all.map((network) {
-        final tokens = AppTokens.tokensByChain[network.chainId] ?? [];
+      _networks.map((network) {
+        final tokens = tokensByChain[network.chainId] ?? [];
         if (tokens.isEmpty) {
           return Future.value(<TokenBalanceEntity>[]);
         }

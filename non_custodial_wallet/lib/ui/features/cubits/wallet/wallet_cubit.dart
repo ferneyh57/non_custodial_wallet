@@ -4,6 +4,7 @@ import '../../../../domain/usecases/auth/generate_key_use_case.dart';
 import '../../../../domain/usecases/auth/save_key_use_case.dart';
 import '../../../../domain/usecases/auth/get_key_use_case.dart';
 import '../../../../domain/usecases/auth/delete_key_use_case.dart';
+import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/usecases/wallet/get_balance_use_case.dart';
 import '../../../../domain/usecases/wallet/get_eth_address_use_case.dart';
 import '../../../core/constants/app_networks.dart';
@@ -17,8 +18,14 @@ class WalletCubit extends Cubit<WalletState> {
   final GetEthAddressUseCase getEthAddressUseCase;
   final GetBalanceUseCase getBalanceUseCase;
 
+  List<NetworkEntity> _networks = AppNetworks.all;
   DateTime? _lastBalanceFetched;
   static const _balanceTtl = Duration(seconds: 30);
+
+  void updateNetworks(List<NetworkEntity> networks) {
+    _networks = networks;
+    _lastBalanceFetched = null;
+  }
 
   WalletCubit({
     required this.generateKeyUseCase,
@@ -137,7 +144,7 @@ class WalletCubit extends Cubit<WalletState> {
     }
 
     final results = await Future.wait(
-      AppNetworks.all.map(
+      _networks.map(
         (network) => getBalanceUseCase(address, network)
             .then((result) => MapEntry(network.chainId, result)),
       ),

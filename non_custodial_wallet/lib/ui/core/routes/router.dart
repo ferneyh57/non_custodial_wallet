@@ -12,6 +12,7 @@ import '../../features/screens/token_detail/token_detail_screen.dart';
 import '../../features/screens/swap/swap_screen.dart';
 import '../../features/screens/splash/splash_screen.dart';
 import '../../features/screens/pin/pin_screen.dart';
+import '../../features/screens/settings/settings_screen.dart';
 import '../../../domain/entities/token_detail/token_detail_args.dart';
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
@@ -127,6 +128,10 @@ GoRouter createRouter(WalletCubit walletCubit, PinCubit pinCubit) => GoRouter(
           initialFromToken: extra?['token'] as TokenEntity?,
         );
       },
+    ),
+    GoRoute(
+      path: AppRoutes.settings,
+      builder: (context, state) => const SettingsScreen(),
     ),
   ],
 );

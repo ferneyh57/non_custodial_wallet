@@ -92,5 +92,19 @@
   "pinForgotMessage": "Esto eliminará todos los datos de la billetera. Necesitarás tu frase de recuperación para restaurar el acceso.",
   "pinResetButton": "Restablecer Billetera",
   "qrScannerTitle": "Escanear Codigo QR",
-  "cameraPermissionDenied": "Se requiere permiso de camara para escanear codigos QR"
+  "cameraPermissionDenied": "Se requiere permiso de camara para escanear codigos QR",
+  "settingsTitle": "Configuración",
+  "settingsNetworkMode": "Modo de Red",
+  "settingsNetworkModeMainnet": "Mainnet",
+  "settingsNetworkModeTestnet": "Testnet",
+  "settingsTheme": "Apariencia",
+  "settingsThemeDark": "Modo Oscuro",
+  "settingsThemeLight": "Modo Claro",
+  "settingsCopySeed": "Copiar Frase de Recuperación",
+  "settingsCopySeedSubtitle": "Copiar tu frase mnemónica al portapapeles",
+  "settingsLogout": "Cerrar Sesión",
+  "settingsLogoutSubtitle": "Eliminar los datos de la billetera de este dispositivo",
+  "settingsLogoutConfirmTitle": "Cerrar Sesión",
+  "settingsLogoutConfirmMessage": "Esto eliminará todos los datos de la billetera de este dispositivo. Asegúrate de haber respaldado tu frase de recuperación.",
+  "settingsLogoutConfirmButton": "Cerrar Sesión"
 }

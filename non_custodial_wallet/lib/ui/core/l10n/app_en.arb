@@ -92,5 +92,19 @@
   "pinForgotMessage": "This will delete all wallet data. You will need your recovery phrase to restore access.",
   "pinResetButton": "Reset Wallet",
   "qrScannerTitle": "Scan QR Code",
-  "cameraPermissionDenied": "Camera permission is required to scan QR codes"
+  "cameraPermissionDenied": "Camera permission is required to scan QR codes",
+  "settingsTitle": "Settings",
+  "settingsNetworkMode": "Network Mode",
+  "settingsNetworkModeMainnet": "Mainnet",
+  "settingsNetworkModeTestnet": "Testnet",
+  "settingsTheme": "Appearance",
+  "settingsThemeDark": "Dark Mode",
+  "settingsThemeLight": "Light Mode",
+  "settingsCopySeed": "Copy Recovery Phrase",
+  "settingsCopySeedSubtitle": "Copy your mnemonic phrase to clipboard",
+  "settingsLogout": "Log Out",
+  "settingsLogoutSubtitle": "Delete wallet data from this device",
+  "settingsLogoutConfirmTitle": "Log Out",
+  "settingsLogoutConfirmMessage": "This will delete all wallet data from this device. Make sure you have backed up your recovery phrase.",
+  "settingsLogoutConfirmButton": "Log Out"
 }

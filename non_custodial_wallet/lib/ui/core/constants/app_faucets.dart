@@ -14,6 +14,7 @@ class FaucetLink {
 
 class AppFaucets {
   static bool get isAvailable => AppEnvironment.isTestnet;
+  static bool isAvailableFor(bool isMainnet) => !isMainnet;
 
   static List<FaucetLink> get current =>
       AppEnvironment.isTestnet ? sepolia : const [];

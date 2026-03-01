@@ -275,4 +275,48 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cameraPermissionDenied =>
       'Camera permission is required to scan QR codes';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsNetworkMode => 'Network Mode';
+
+  @override
+  String get settingsNetworkModeMainnet => 'Mainnet';
+
+  @override
+  String get settingsNetworkModeTestnet => 'Testnet';
+
+  @override
+  String get settingsTheme => 'Appearance';
+
+  @override
+  String get settingsThemeDark => 'Dark Mode';
+
+  @override
+  String get settingsThemeLight => 'Light Mode';
+
+  @override
+  String get settingsCopySeed => 'Copy Recovery Phrase';
+
+  @override
+  String get settingsCopySeedSubtitle =>
+      'Copy your mnemonic phrase to clipboard';
+
+  @override
+  String get settingsLogout => 'Log Out';
+
+  @override
+  String get settingsLogoutSubtitle => 'Delete wallet data from this device';
+
+  @override
+  String get settingsLogoutConfirmTitle => 'Log Out';
+
+  @override
+  String get settingsLogoutConfirmMessage =>
+      'This will delete all wallet data from this device. Make sure you have backed up your recovery phrase.';
+
+  @override
+  String get settingsLogoutConfirmButton => 'Log Out';
 }

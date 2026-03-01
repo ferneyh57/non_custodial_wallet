@@ -115,7 +115,7 @@ class AppNetworks {
       );
 
   // --- Environment-aware getters ---
-  static List<NetworkEntity> get _testnetAll => [
+  static List<NetworkEntity> get testnetAll => [
         ethSepolia,
         optSepolia,
         polygonAmoy,
@@ -123,7 +123,7 @@ class AppNetworks {
         baseSepolia,
       ];
 
-  static List<NetworkEntity> get _mainnetAll => [
+  static List<NetworkEntity> get mainnetAll => [
         ethMainnet,
         optMainnet,
         polygonMainnet,
@@ -132,7 +132,7 @@ class AppNetworks {
       ];
 
   static List<NetworkEntity> get all =>
-      AppEnvironment.isMainnet ? _mainnetAll : _testnetAll;
+      AppEnvironment.isMainnet ? mainnetAll : testnetAll;
 
   static NetworkEntity get defaultNetwork =>
       AppEnvironment.isMainnet ? ethMainnet : ethSepolia;

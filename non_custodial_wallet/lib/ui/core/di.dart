@@ -58,6 +58,7 @@ import 'package:non_custodial_wallet/domain/usecases/pin/verify_pin_use_case.dar
 import 'package:non_custodial_wallet/domain/usecases/pin/has_pin_use_case.dart';
 import 'package:non_custodial_wallet/domain/usecases/pin/delete_pin_use_case.dart';
 import '../features/cubits/pin/pin_cubit.dart';
+import '../features/cubits/network_mode/network_mode_cubit.dart';
 import '../core/constants/network_constants.dart';
 import '../core/constants/app_networks.dart';
 
@@ -93,14 +94,14 @@ void _initCubits() {
       getBalanceUseCase: sl<GetBalanceUseCase>(),
       getEthAddressUseCase: sl<GetEthAddressUseCase>(),
       getTokenBalancesUseCase: sl<GetTokenBalancesUseCase>(),
-      networks: AppNetworks.all,
+      networks: sl<NetworkModeCubit>().state.networks,
     ),
   );
   sl.registerFactory<ReceiveCubit>(
     () => ReceiveCubit(
       getKeyUseCase: sl<GetKeyUseCase>(),
       getEthAddressUseCase: sl<GetEthAddressUseCase>(),
-      networks: AppNetworks.all,
+      networks: sl<NetworkModeCubit>().state.networks,
     ),
   );
   sl.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
@@ -112,7 +113,7 @@ void _initCubits() {
   sl.registerFactory<TransferHistoryCubit>(
     () => TransferHistoryCubit(
       getTransferHistoryUseCase: sl<GetTransferHistoryUseCase>(),
-      networks: AppNetworks.all,
+      networks: sl<NetworkModeCubit>().state.networks,
     ),
   );
   sl.registerFactory<SwapCubit>(
@@ -122,9 +123,10 @@ void _initCubits() {
       getSwapStatusUseCase: sl<GetSwapStatusUseCase>(),
       getKeyUseCase: sl<GetKeyUseCase>(),
       getEthAddressUseCase: sl<GetEthAddressUseCase>(),
-      networks: AppNetworks.all,
+      networks: sl<NetworkModeCubit>().state.networks,
     ),
   );
+  sl.registerLazySingleton<NetworkModeCubit>(() => NetworkModeCubit());
   sl.registerLazySingleton<PinCubit>(
     () => PinCubit(
       savePinUseCase: sl<SavePinUseCase>(),
@@ -228,8 +230,12 @@ void _initRepositories() {
 void _initDataSources() {
   // http.Client still needed for Web3Client
   final httpClient = http.Client();
+  final allNetworks = [
+    ...AppNetworks.testnetAll,
+    ...AppNetworks.mainnetAll,
+  ];
   final clientsMap = {
-    for (final network in AppNetworks.all)
+    for (final network in allNetworks)
       network.chainId: Web3Client(network.rpcUrl, httpClient),
   };
   sl.registerLazySingleton<Map<int, Web3Client>>(() => clientsMap);
