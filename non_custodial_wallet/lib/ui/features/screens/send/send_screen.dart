@@ -58,9 +58,11 @@ class SendScreenView extends StatelessWidget {
             ),
             centerTitle: true,
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
+          body: SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Network Selector
@@ -300,6 +302,7 @@ class SendScreenView extends StatelessWidget {
                 ),
               ],
             ),
+          ),
           ),
         );
       },

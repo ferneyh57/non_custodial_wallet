@@ -17,33 +17,36 @@ class FaucetScreen extends StatelessWidget {
           style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.l10n.faucetSubtitle,
-              style: GoogleFonts.poppins(
-                color: context.appColors.subtitleText,
-                fontSize: 14,
+      body: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.l10n.faucetSubtitle,
+                style: GoogleFonts.poppins(
+                  color: context.appColors.subtitleText,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.separated(
-                itemCount: AppFaucets.current.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 10),
-                itemBuilder: (context, index) {
-                  final faucet = AppFaucets.current[index];
-                  return FaucetItem(
-                    faucet: faucet,
-                    onTap: () => _openFaucet(faucet.url),
-                  );
-                },
+              const SizedBox(height: 20),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: AppFaucets.current.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    final faucet = AppFaucets.current[index];
+                    return FaucetItem(
+                      faucet: faucet,
+                      onTap: () => _openFaucet(faucet.url),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

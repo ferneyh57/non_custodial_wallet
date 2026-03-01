@@ -42,142 +42,149 @@ class ReceiveScreenView extends StatelessWidget {
             ? '${state.address.substring(0, 6)}...${state.address.substring(state.address.length - 4)}'
             : state.address;
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              context.l10n.receiveButton,
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        return SafeArea(
+          top: false,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(
+                context.l10n.receiveButton,
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
             ),
-            centerTitle: true,
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Network Selector
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    context.l10n.networkLabel,
-                    style: GoogleFonts.poppins(
-                      color: context.appColors.subtitleText,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+            body: SafeArea(
+              top: false,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Network Selector
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        context.l10n.networkLabel,
+                        style: GoogleFonts.poppins(
+                          color: context.appColors.subtitleText,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                NetworkDropdown(
-                  value: state.selectedNetwork,
-                  networks: cubit.networks,
-                  onChanged: (network) {
-                    if (network != null) cubit.updateNetwork(network);
-                  },
-                ),
-                const SizedBox(height: 32),
-
-                // QR Code Card
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: context.appColors.cardColor,
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: context.appColors.cardBorder),
-                    boxShadow: [
-                      BoxShadow(
-                        color: context.colors.primary.withValues(alpha: 0.08),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: QrImageView(
-                          data: qrData.isNotEmpty ? qrData : ' ',
-                          version: QrVersions.auto,
-                          size: 200.0,
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      // Truncated address with copy button
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            truncatedAddress,
-                            style: GoogleFonts.poppins(
-                              color: context.colors.onSurface,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          InkWell(
-                            onTap: () => _copyAddress(context, state.address),
-                            borderRadius: BorderRadius.circular(8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Icon(
-                                Icons.copy_rounded,
-                                color: context.colors.primary,
-                                size: 18,
-                              ),
-                            ),
+                    const SizedBox(height: 8),
+                    NetworkDropdown(
+                      value: state.selectedNetwork,
+                      networks: cubit.networks,
+                      onChanged: (network) {
+                        if (network != null) cubit.updateNetwork(network);
+                      },
+                    ),
+                    const SizedBox(height: 32),
+          
+                    // QR Code Card
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: context.appColors.cardColor,
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(color: context.appColors.cardBorder),
+                        boxShadow: [
+                          BoxShadow(
+                            color: context.colors.primary.withValues(alpha: 0.08),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 32),
-
-                // Action Buttons as Cards
-                Row(
-                  children: [
-                    Expanded(
-                      child: ReceiveActionCard(
-                        icon: Icons.copy_rounded,
-                        label: context.l10n.copyTooltip,
-                        onTap: () => _copyAddress(context, state.address),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: QrImageView(
+                              data: qrData.isNotEmpty ? qrData : ' ',
+                              version: QrVersions.auto,
+                              size: 200.0,
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          // Truncated address with copy button
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                truncatedAddress,
+                                style: GoogleFonts.poppins(
+                                  color: context.colors.onSurface,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              InkWell(
+                                onTap: () => _copyAddress(context, state.address),
+                                borderRadius: BorderRadius.circular(8),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Icon(
+                                    Icons.copy_rounded,
+                                    color: context.colors.primary,
+                                    size: 18,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ReceiveActionCard(
-                        icon: Icons.edit_rounded,
-                        label: context.l10n.amountHint,
-                        onTap: () =>
-                            _showAmountDialog(context, cubit, state.amount),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ReceiveActionCard(
-                        icon: Icons.share_rounded,
-                        label: context.l10n.sendButton == 'Send'
-                            ? 'Share'
-                            : 'Compartir',
-                        onTap: () {
-                          if (state.address.isNotEmpty) {
-                            SharePlus.instance
-                                .share(ShareParams(text: state.address));
-                          }
-                        },
-                      ),
+                    const SizedBox(height: 32),
+          
+                    // Action Buttons as Cards
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ReceiveActionCard(
+                            icon: Icons.copy_rounded,
+                            label: context.l10n.copyTooltip,
+                            onTap: () => _copyAddress(context, state.address),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ReceiveActionCard(
+                            icon: Icons.edit_rounded,
+                            label: context.l10n.amountHint,
+                            onTap: () =>
+                                _showAmountDialog(context, cubit, state.amount),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ReceiveActionCard(
+                            icon: Icons.share_rounded,
+                            label: context.l10n.sendButton == 'Send'
+                                ? 'Share'
+                                : 'Compartir',
+                            onTap: () {
+                              if (state.address.isNotEmpty) {
+                                SharePlus.instance.share(
+                                  ShareParams(text: state.address),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         );
@@ -217,8 +224,7 @@ class ReceiveScreenView extends StatelessWidget {
           ),
           content: TextField(
             controller: cubit.amountController,
-            keyboardType:
-                const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: GoogleFonts.poppins(color: context.colors.onSurface),
             decoration: InputDecoration(
               hintText: '0.00',

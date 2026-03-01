@@ -55,42 +55,46 @@ class TokenDetailScreenView extends StatelessWidget {
             ),
             centerTitle: true,
           ),
-          body: RefreshIndicator(
-            color: context.colors.primary,
-            onRefresh: () => context
-                .read<TokenDetailCubit>()
-                .refreshBalance(walletAddress),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  TokenDetailHeader(
-                    iconUrl: args.iconUrl,
-                    name: args.displayName,
-                    symbol: args.symbol,
-                  ),
-                  const SizedBox(height: 24),
-                  TokenDetailBalanceCard(
-                    balance: args.balanceFormatted,
-                    symbol: args.symbol,
-                    usdValue: args.usdValue,
-                    price: args.price,
-                    isRefreshing: state.isRefreshing,
-                  ),
-                  const SizedBox(height: 24),
-                  TokenDetailInfoSection(
-                    networkName: args.network.shortName,
-                    networkIconUrl: args.network.iconUrl,
-                    contractAddress: args.contractAddress,
-                  ),
-                  const SizedBox(height: 24),
-                  TokenDetailActions(
-                    onSend: () => context.push(AppRoutes.send),
-                    onReceive: () => context.push(AppRoutes.receive),
-                    explorerUrl: explorerUrl,
-                  ),
-                ],
+          body: SafeArea(
+            top: false,
+            child: RefreshIndicator(
+              color: context.colors.primary,
+              onRefresh: () => context
+                  .read<TokenDetailCubit>()
+                  .refreshBalance(walletAddress),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+                child: Column(
+                  children: [
+                    TokenDetailHeader(
+                      iconUrl: args.iconUrl,
+                      name: args.displayName,
+                      symbol: args.symbol,
+                    ),
+                    const SizedBox(height: 24),
+                    TokenDetailBalanceCard(
+                      balance: args.balanceFormatted,
+                      symbol: args.symbol,
+                      usdValue: args.usdValue,
+                      price: args.price,
+                      isRefreshing: state.isRefreshing,
+                    ),
+                    const SizedBox(height: 24),
+                    TokenDetailInfoSection(
+                      networkName: args.network.shortName,
+                      networkIconUrl: args.network.iconUrl,
+                      walletAddress: walletAddress,
+                      contractAddress: args.contractAddress,
+                    ),
+                    const SizedBox(height: 24),
+                    TokenDetailActions(
+                      onSend: () => context.push(AppRoutes.send),
+                      onReceive: () => context.push(AppRoutes.receive),
+                      explorerUrl: explorerUrl,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

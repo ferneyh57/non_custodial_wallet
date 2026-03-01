@@ -1,4 +1,4 @@
-.PHONY: clean get l10n build watch analyze format test run-dev run-prod
+.PHONY: clean get l10n build watch analyze format test run-dev run-prod apk-dev apk-prod
 
 clean:
 	flutter clean
@@ -25,7 +25,13 @@ test:
 	flutter test
 
 run-dev:
-	flutter run --dart-define=ENV=testnet --dart-define=ALCHEMY_API_KEY=$(ALCHEMY_API_KEY)
+	flutter run --dart-define-from-file=.env
 
 run-prod:
-	flutter run --dart-define=ENV=mainnet --dart-define=ALCHEMY_API_KEY=$(ALCHEMY_API_KEY)
+	flutter run --dart-define-from-file=.env
+
+apk-dev:
+	flutter build apk --dart-define-from-file=.env
+
+apk-prod:
+	flutter build apk --dart-define-from-file=.env

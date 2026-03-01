@@ -6,12 +6,14 @@ import '../../../core/extensions/context_extension.dart';
 class TokenDetailInfoSection extends StatelessWidget {
   final String networkName;
   final String networkIconUrl;
+  final String walletAddress;
   final String? contractAddress;
 
   const TokenDetailInfoSection({
     super.key,
     required this.networkName,
     required this.networkIconUrl,
+    required this.walletAddress,
     this.contractAddress,
   });
 
@@ -52,6 +54,44 @@ class TokenDetailInfoSection extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
                   ),
+                ),
+              ],
+            ),
+          ),
+          // Wallet address row
+          Divider(color: context.appColors.dividerColor, height: 24),
+          _InfoRow(
+            label: context.l10n.addressLabel,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    _truncateAddress(walletAddress),
+                    style: GoogleFonts.poppins(
+                      color: context.colors.onSurface,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.copy_rounded,
+                    color: context.colors.primary,
+                    size: 18,
+                  ),
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () {
+                    Clipboard.setData(
+                      ClipboardData(text: walletAddress),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(context.l10n.copiedToClipboard),
+                        backgroundColor: context.colors.primary,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

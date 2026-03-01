@@ -60,133 +60,136 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
               style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.l10n.importWalletInstructions,
-                  style: GoogleFonts.poppins(
-                    color: context.appColors.subtitleText,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Mnemonic Input Card
-                Container(
-                  decoration: BoxDecoration(
-                    color: context.appColors.cardColor,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: context.appColors.cardBorder),
-                  ),
-                  child: TextField(
-                    controller: _controller,
-                    maxLines: 4,
+          body: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.l10n.importWalletInstructions,
                     style: GoogleFonts.poppins(
-                      color: context.colors.onSurface,
-                      fontSize: 15,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: context.l10n.mnemonicHint,
-                      filled: false,
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.all(16),
+                      color: context.appColors.subtitleText,
+                      fontSize: 14,
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                // Word count indicator
-                Row(
-                  children: [
-                    Icon(
-                      isValidCount
-                          ? Icons.check_circle_rounded
-                          : Icons.info_outline_rounded,
-                      size: 16,
-                      color: isValidCount
-                          ? context.colors.secondary
-                          : context.appColors.hintText,
+                  const SizedBox(height: 20),
+                  // Mnemonic Input Card
+                  Container(
+                    decoration: BoxDecoration(
+                      color: context.appColors.cardColor,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: context.appColors.cardBorder),
                     ),
-                    const SizedBox(width: 6),
-                    Text(
-                      '$_wordCount/12 words',
+                    child: TextField(
+                      controller: _controller,
+                      maxLines: 4,
                       style: GoogleFonts.poppins(
+                        color: context.colors.onSurface,
+                        fontSize: 15,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: context.l10n.mnemonicHint,
+                        filled: false,
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Word count indicator
+                  Row(
+                    children: [
+                      Icon(
+                        isValidCount
+                            ? Icons.check_circle_rounded
+                            : Icons.info_outline_rounded,
+                        size: 16,
                         color: isValidCount
                             ? context.colors.secondary
                             : context.appColors.hintText,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                if (state.isLoading)
-                  const Center(child: CircularProgressIndicator())
-                else
-                  // Import Button (gradient)
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: isValidCount
-                            ? LinearGradient(
-                                colors: [
-                                  context.appColors.balanceCardGradientStart,
-                                  context.appColors.balanceCardGradientEnd,
-                                ],
-                              )
-                            : null,
-                        color: isValidCount
-                            ? null
-                            : context.appColors.containerFill,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: isValidCount
-                            ? [
-                                BoxShadow(
-                                  color: context.colors.primary
-                                      .withValues(alpha: 0.3),
-                                  blurRadius: 12,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ]
-                            : null,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: isValidCount
-                            ? () {
-                                final mnemonic = _controller.text.trim();
-                                context
-                                    .read<WalletCubit>()
-                                    .importWallet(mnemonic);
-                              }
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          foregroundColor: Colors.white,
-                          disabledForegroundColor:
-                              context.appColors.hintText,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        child: Text(
-                          context.l10n.importButton,
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '$_wordCount/12 words',
+                        style: GoogleFonts.poppins(
+                          color: isValidCount
+                              ? context.colors.secondary
+                              : context.appColors.hintText,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(delay: 200.ms, duration: 400.ms)
-                      .slideY(begin: 0.2, delay: 200.ms, duration: 400.ms),
-              ],
+                    ],
+                  ),
+                  const Spacer(),
+                  if (state.isLoading)
+                    const Center(child: CircularProgressIndicator())
+                  else
+                    // Import Button (gradient)
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: isValidCount
+                              ? LinearGradient(
+                                  colors: [
+                                    context.appColors.balanceCardGradientStart,
+                                    context.appColors.balanceCardGradientEnd,
+                                  ],
+                                )
+                              : null,
+                          color: isValidCount
+                              ? null
+                              : context.appColors.containerFill,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: isValidCount
+                              ? [
+                                  BoxShadow(
+                                    color: context.colors.primary
+                                        .withValues(alpha: 0.3),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: ElevatedButton(
+                          onPressed: isValidCount
+                              ? () {
+                                  final mnemonic = _controller.text.trim();
+                                  context
+                                      .read<WalletCubit>()
+                                      .importWallet(mnemonic);
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            foregroundColor: Colors.white,
+                            disabledForegroundColor:
+                                context.appColors.hintText,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Text(
+                            context.l10n.importButton,
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                        .animate()
+                        .fadeIn(delay: 200.ms, duration: 400.ms)
+                        .slideY(begin: 0.2, delay: 200.ms, duration: 400.ms),
+                ],
+              ),
             ),
           ),
         );
