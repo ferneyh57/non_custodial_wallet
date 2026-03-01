@@ -14,6 +14,8 @@ import '../../widgets/shimmer_loading.dart';
 import '../../widgets/home_tab_toggle.dart';
 import '../../widgets/home_assets_list.dart';
 import '../../widgets/home_tokens_list.dart';
+import '../../widgets/home_activity_list.dart';
+import '../../cubits/transfer_history/transfer_history_cubit.dart';
 import '../../../core/constants/app_networks.dart';
 import '../../../core/constants/app_faucets.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -39,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context.read<WalletCubit>().state.wallet?.ethAddress;
       if (address != null && address.isNotEmpty) {
         context.read<TokenCubit>().fetchTokenBalances(address);
+        context.read<TransferHistoryCubit>().loadAll(address);
       }
     });
   }
@@ -52,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final address = state.wallet?.ethAddress;
         if (address != null && address.isNotEmpty) {
           context.read<TokenCubit>().fetchTokenBalances(address);
+          context.read<TransferHistoryCubit>().loadAll(address);
         }
       },
       child: BlocBuilder<WalletCubit, WalletState>(
@@ -96,10 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           context.read<WalletCubit>().fetchBalance(),
                           context.read<MarketCubit>().loadCoins(),
                           if (state.wallet?.ethAddress case final address?
-                              when address.isNotEmpty)
+                              when address.isNotEmpty) ...[
                             context
                                 .read<TokenCubit>()
                                 .fetchTokenBalances(address),
+                            context
+                                .read<TransferHistoryCubit>()
+                                .loadAll(address),
+                          ],
                         ]);
                       },
                       child: SingleChildScrollView(
@@ -183,10 +191,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           priceBySymbol: priceBySymbol,
                                           networks: AppNetworks.all,
                                         )
-                                      else
+                                      else if (_selectedTab == 1)
                                         HomeTokensList(
                                           tokenState: tokenState,
                                           priceBySymbol: priceBySymbol,
+                                          networks: AppNetworks.all,
+                                        )
+                                      else
+                                        HomeActivityList(
                                           networks: AppNetworks.all,
                                         ),
                                     ],

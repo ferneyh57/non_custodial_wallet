@@ -184,4 +184,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get confirmButton => 'Confirmar';
+
+  @override
+  String get activityTab => 'Actividad';
+
+  @override
+  String get noTransactionsFound => 'No se encontraron transacciones';
 }

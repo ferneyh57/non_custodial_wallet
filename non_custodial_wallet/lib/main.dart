@@ -11,6 +11,8 @@ import 'ui/features/cubits/market/market_cubit.dart';
 import 'ui/features/cubits/theme/theme_cubit.dart';
 import 'ui/features/cubits/theme/theme_state.dart';
 import 'ui/features/cubits/token/token_cubit.dart';
+import 'ui/features/cubits/transfer_history/transfer_history_cubit.dart';
+import 'ui/core/constants/app_networks.dart';
 import 'ui/core/theme/app_theme.dart';
 import 'ui/core/routes/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -45,6 +47,12 @@ void main() async {
             BlocProvider(create: (context) => sl<MarketCubit>()..loadCoins()),
             BlocProvider(create: (context) => sl<ThemeCubit>()..loadTheme()),
             BlocProvider(create: (context) => sl<TokenCubit>()),
+            BlocProvider(
+              create: (context) => TransferHistoryCubit(
+                getTransferHistoryUseCase: sl(),
+                networks: AppNetworks.all,
+              ),
+            ),
           ],
           child: const MyApp(),
         ),

@@ -61,6 +61,12 @@ class SendCubit extends Cubit<SendState> {
     ));
   }
 
+  /// Pre-selects network and token before loading wallet data.
+  /// Used when navigating from token detail screen.
+  void preselectNetwork(NetworkEntity network, {TokenEntity? token}) {
+    emit(state.copyWith(selectedNetwork: network, selectedToken: token));
+  }
+
   /// Clears gas estimation state (called when confirmation modal closes).
   void stopGasEstimation() {
     emit(state.copyWith(gasEstimate: null, isEstimatingGas: false));

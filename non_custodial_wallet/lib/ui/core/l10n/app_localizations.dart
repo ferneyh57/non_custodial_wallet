@@ -439,6 +439,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm'**
   String get confirmButton;
+
+  /// No description provided for @activityTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activityTab;
+
+  /// No description provided for @noTransactionsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions found'**
+  String get noTransactionsFound;
 }
 
 class _AppLocalizationsDelegate

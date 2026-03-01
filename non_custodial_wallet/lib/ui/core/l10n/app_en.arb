@@ -62,5 +62,7 @@
   "estimatingFee": "Estimating fee...",
   "confirmSendTitle": "Confirm Transaction",
   "cancelButton": "Cancel",
-  "confirmButton": "Confirm"
+  "confirmButton": "Confirm",
+  "activityTab": "Activity",
+  "noTransactionsFound": "No transactions found"
 }

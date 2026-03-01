@@ -62,5 +62,7 @@
   "estimatingFee": "Estimando comisión...",
   "confirmSendTitle": "Confirmar Transacción",
   "cancelButton": "Cancelar",
-  "confirmButton": "Confirmar"
+  "confirmButton": "Confirmar",
+  "activityTab": "Actividad",
+  "noTransactionsFound": "No se encontraron transacciones"
 }

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../ui/core/extensions/context_extension.dart';
 import '../../../../ui/core/di.dart';
 import '../../cubits/receive/receive_cubit.dart';
@@ -11,12 +12,21 @@ import '../../cubits/receive/receive_state.dart';
 import '../../widgets/network_dropdown.dart';
 
 class ReceiveScreen extends StatelessWidget {
-  const ReceiveScreen({super.key});
+  final NetworkEntity? initialNetwork;
+
+  const ReceiveScreen({super.key, this.initialNetwork});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<ReceiveCubit>()..loadAddress(),
+      create: (_) {
+        final cubit = sl<ReceiveCubit>();
+        if (initialNetwork != null) {
+          cubit.updateNetwork(initialNetwork!);
+        }
+        cubit.loadAddress();
+        return cubit;
+      },
       child: const ReceiveScreenView(),
     );
   }

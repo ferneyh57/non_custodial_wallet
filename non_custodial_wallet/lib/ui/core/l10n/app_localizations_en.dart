@@ -182,4 +182,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmButton => 'Confirm';
+
+  @override
+  String get activityTab => 'Activity';
+
+  @override
+  String get noTransactionsFound => 'No transactions found';
 }

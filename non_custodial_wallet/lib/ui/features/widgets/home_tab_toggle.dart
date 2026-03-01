@@ -30,6 +30,13 @@ class HomeTabToggle extends StatelessWidget {
             onTap: () => onTabChanged(1),
           ),
         ),
+        Expanded(
+          child: _TabButton(
+            label: context.l10n.activityTab,
+            isSelected: selectedIndex == 2,
+            onTap: () => onTabChanged(2),
+          ),
+        ),
       ],
     );
   }

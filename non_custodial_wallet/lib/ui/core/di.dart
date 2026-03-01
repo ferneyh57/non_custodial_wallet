@@ -6,7 +6,10 @@ import 'package:web3dart/web3dart.dart';
 import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource.dart';
 import 'package:non_custodial_wallet/data/datasources/auth/auth_datasource_impl.dart';
 import 'package:non_custodial_wallet/data/datasources/transaction/transaction_datasource.dart';
+import 'package:non_custodial_wallet/data/datasources/transaction/transfer_history_datasource.dart';
 import 'package:non_custodial_wallet/data/datasources/wallet/wallet_datasource.dart';
+import 'package:non_custodial_wallet/domain/usecases/transaction/get_transfer_history_use_case.dart';
+import '../features/cubits/transfer_history/transfer_history_cubit.dart';
 import 'package:non_custodial_wallet/data/datasources/token/token_datasource.dart';
 import 'package:non_custodial_wallet/data/datasources/market/alchemy_prices_datasource.dart';
 import 'package:non_custodial_wallet/data/repositories/auth/auth_repository_impl.dart';
@@ -89,6 +92,12 @@ void _initCubits() {
       getTokenBalancesUseCase: sl<GetTokenBalancesUseCase>(),
     ),
   );
+  sl.registerFactory<TransferHistoryCubit>(
+    () => TransferHistoryCubit(
+      getTransferHistoryUseCase: sl<GetTransferHistoryUseCase>(),
+      networks: AppNetworks.all,
+    ),
+  );
 }
 
 void _initUseCases() {
@@ -128,6 +137,9 @@ void _initUseCases() {
   sl.registerLazySingleton<GetTokenBalancesUseCase>(
     () => GetTokenBalancesUseCase(sl<ITokenRepository>()),
   );
+  sl.registerLazySingleton<GetTransferHistoryUseCase>(
+    () => GetTransferHistoryUseCase(sl<ITransactionRepository>()),
+  );
 }
 
 void _initRepositories() {
@@ -141,7 +153,10 @@ void _initRepositories() {
     () => MarketRepositoryImpl(sl<AlchemyPricesDatasource>()),
   );
   sl.registerLazySingleton<ITransactionRepository>(
-    () => TransactionRepositoryImpl(dataSource: sl<ITransactionDataSource>()),
+    () => TransactionRepositoryImpl(
+      dataSource: sl<ITransactionDataSource>(),
+      historyDataSource: sl<TransferHistoryDataSource>(),
+    ),
   );
   sl.registerLazySingleton<ITokenRepository>(
     () => TokenRepositoryImpl(tokenDataSource: sl<TokenDataSource>()),
@@ -189,5 +204,9 @@ void _initDataSources() {
 
   sl.registerLazySingleton<TokenDataSource>(
     () => TokenDataSourceImpl(httpClient: httpClient),
+  );
+
+  sl.registerLazySingleton<TransferHistoryDataSource>(
+    () => TransferHistoryDataSourceImpl(httpClient: httpClient),
   );
 }

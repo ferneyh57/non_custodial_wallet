@@ -8,11 +8,14 @@ import '../../../core/extensions/context_extension.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../cubits/token_detail/token_detail_cubit.dart';
 import '../../cubits/token_detail/token_detail_state.dart';
+import '../../cubits/transfer_history/transfer_history_cubit.dart';
+import '../../cubits/transfer_history/transfer_history_state.dart';
 import '../../cubits/wallet/wallet_cubit.dart';
 import '../../widgets/token_detail/token_detail_header.dart';
 import '../../widgets/token_detail/token_detail_balance_card.dart';
 import '../../widgets/token_detail/token_detail_info_section.dart';
 import '../../widgets/token_detail/token_detail_actions.dart';
+import '../../widgets/transaction/transaction_list.dart';
 
 class TokenDetailScreen extends StatelessWidget {
   final TokenDetailArgs args;
@@ -21,12 +24,27 @@ class TokenDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => TokenDetailCubit(
-        args: args,
-        getBalanceUseCase: sl(),
-        getTokenBalancesUseCase: sl(),
-      ),
+    final walletAddress =
+        context.read<WalletCubit>().state.wallet?.ethAddress ?? '';
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => TokenDetailCubit(
+            args: args,
+            getBalanceUseCase: sl(),
+            getTokenBalancesUseCase: sl(),
+          ),
+        ),
+        BlocProvider(
+          create: (_) => sl<TransferHistoryCubit>()
+            ..loadForAsset(
+              walletAddress,
+              args.network,
+              contractAddress: args.contractAddress,
+            ),
+        ),
+      ],
       child: const TokenDetailScreenView(),
     );
   }
@@ -89,9 +107,42 @@ class TokenDetailScreenView extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     TokenDetailActions(
-                      onSend: () => context.push(AppRoutes.send),
-                      onReceive: () => context.push(AppRoutes.receive),
+                      onSend: () => context.push(
+                        AppRoutes.send,
+                        extra: {
+                          'network': args.network,
+                          'token': args.tokenBalance?.token,
+                        },
+                      ),
+                      onReceive: () => context.push(
+                        AppRoutes.receive,
+                        extra: {'network': args.network},
+                      ),
                       explorerUrl: explorerUrl,
+                    ),
+                    const SizedBox(height: 24),
+                    // Transaction history
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        context.l10n.activityTab,
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: context.colors.onSurface,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    BlocBuilder<TransferHistoryCubit, TransferHistoryState>(
+                      builder: (context, historyState) {
+                        return TransactionList(
+                          transfers: historyState.transfers,
+                          isLoading: historyState.isLoading,
+                          emptyMessage: context.l10n.noTransactionsFound,
+                          networks: [args.network],
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/token/token_entity.dart';
 import '../../../../ui/core/extensions/context_extension.dart';
 import '../../../../ui/core/di.dart';
@@ -11,12 +12,22 @@ import '../../widgets/network_dropdown.dart';
 import '../../widgets/send/send_confirmation_sheet.dart';
 
 class SendScreen extends StatelessWidget {
-  const SendScreen({super.key});
+  final NetworkEntity? initialNetwork;
+  final TokenEntity? initialToken;
+
+  const SendScreen({super.key, this.initialNetwork, this.initialToken});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<SendCubit>()..loadWalletData(),
+      create: (_) {
+        final cubit = sl<SendCubit>();
+        if (initialNetwork != null) {
+          cubit.preselectNetwork(initialNetwork!, token: initialToken);
+        }
+        cubit.loadWalletData();
+        return cubit;
+      },
       child: const SendScreenView(),
     );
   }
