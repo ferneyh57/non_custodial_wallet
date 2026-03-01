@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 
 import '../../core/extensions/context_extension.dart';
 import '../../commons/cubits/pin/pin_cubit.dart';
@@ -72,7 +72,7 @@ class PinScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     Text(
                       errorText,
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         color: context.colors.error,
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
@@ -91,7 +91,7 @@ class PinScreen extends StatelessWidget {
                       onPressed: () => _showResetDialog(context),
                       child: Text(
                         context.l10n.pinForgotButton,
-                        style: GoogleFonts.spaceGrotesk(
+                        style: AppFonts.style(
                           color: context.appColors.subtitleText,
                           fontSize: 14,
                         ),
@@ -114,18 +114,18 @@ class PinScreen extends StatelessWidget {
       builder: (dialogContext) => AlertDialog(
         title: Text(
           context.l10n.pinForgotTitle,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+          style: AppFonts.style(fontWeight: FontWeight.w600),
         ),
         content: Text(
           context.l10n.pinForgotMessage,
-          style: GoogleFonts.spaceGrotesk(),
+          style: AppFonts.style(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(
               context.l10n.cancelButton,
-              style: GoogleFonts.spaceGrotesk(),
+              style: AppFonts.style(),
             ),
           ),
           TextButton(
@@ -136,7 +136,7 @@ class PinScreen extends StatelessWidget {
             },
             child: Text(
               context.l10n.pinResetButton,
-              style: GoogleFonts.spaceGrotesk(color: context.colors.error),
+              style: AppFonts.style(color: context.colors.error),
             ),
           ),
         ],

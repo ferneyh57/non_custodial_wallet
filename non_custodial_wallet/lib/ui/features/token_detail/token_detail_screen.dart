@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../domain/entities/token_detail/token_detail_args.dart';
 import '../../core/extensions/context_extension.dart';
 import '../../core/routes/app_routes.dart';
@@ -32,7 +32,7 @@ class TokenDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           context.l10n.tokenDetailTitle,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+          style: AppFonts.style(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -90,7 +90,7 @@ class TokenDetailScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   context.l10n.activityTab,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: context.colors.onSurface,

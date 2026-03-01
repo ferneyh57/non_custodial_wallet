@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'app_fonts.dart';
 
 class AppTheme {
   static ThemeData dark() {
@@ -20,11 +20,12 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colorScheme,
+      textTheme: AppFonts.textTheme(ThemeData.dark().textTheme),
       scaffoldBackgroundColor: const Color(0xFF0F2027),
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        titleTextStyle: GoogleFonts.spaceGrotesk(
+        titleTextStyle: AppFonts.style(
           fontWeight: FontWeight.bold,
           fontSize: 20,
           color: Colors.white,
@@ -49,7 +50,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
-        hintStyle: GoogleFonts.spaceGrotesk(color: const Color(0x61FFFFFF)),
+        hintStyle: AppFonts.style(color: const Color(0x61FFFFFF)),
       ),
       extensions: const <ThemeExtension<dynamic>>[
         AppThemeExtension.dark,
@@ -75,11 +76,12 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: colorScheme,
+      textTheme: AppFonts.textTheme(ThemeData.light().textTheme),
       scaffoldBackgroundColor: const Color(0xFFF5F7FA),
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        titleTextStyle: GoogleFonts.spaceGrotesk(
+        titleTextStyle: AppFonts.style(
           fontWeight: FontWeight.bold,
           fontSize: 20,
           color: const Color(0xFF1A1A2E),
@@ -104,7 +106,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
-        hintStyle: GoogleFonts.spaceGrotesk(color: const Color(0xFF9CA3AF)),
+        hintStyle: AppFonts.style(color: const Color(0xFF9CA3AF)),
       ),
       extensions: const <ThemeExtension<dynamic>>[
         AppThemeExtension.light,

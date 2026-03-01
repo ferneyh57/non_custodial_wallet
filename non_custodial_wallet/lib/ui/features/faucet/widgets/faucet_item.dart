@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../core/constants/app_faucets.dart';
 import '../../../core/extensions/context_extension.dart';
 
@@ -44,7 +44,7 @@ class FaucetItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   faucet.name,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.colors.onSurface,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,

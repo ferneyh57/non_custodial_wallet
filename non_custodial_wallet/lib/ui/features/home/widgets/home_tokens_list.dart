@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/token_detail/token_detail_args.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -59,7 +59,7 @@ class _HomeTokensListState extends State<HomeTokensList> {
         child: Center(
           child: Text(
             context.l10n.noStableFound,
-            style: GoogleFonts.spaceGrotesk(
+            style: AppFonts.style(
               color: context.appColors.subtitleText,
               fontSize: 14,
             ),
@@ -152,13 +152,13 @@ class TokenSearchField extends StatelessWidget {
     return TextField(
       controller: controller,
       onChanged: onChanged,
-      style: GoogleFonts.spaceGrotesk(
+      style: AppFonts.style(
         color: context.colors.onSurface,
         fontSize: 14,
       ),
       decoration: InputDecoration(
         hintText: context.l10n.searchTokenHint,
-        hintStyle: GoogleFonts.spaceGrotesk(
+        hintStyle: AppFonts.style(
           color: context.appColors.subtitleText,
           fontSize: 14,
         ),

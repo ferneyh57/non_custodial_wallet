@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../core/extensions/context_extension.dart';
 
 class QuickActionButton extends StatelessWidget {
@@ -66,7 +66,7 @@ class QuickActionButton extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             label,
-            style: GoogleFonts.spaceGrotesk(
+            style: AppFonts.style(
               color: context.colors.onSurface,
               fontSize: 12,
               fontWeight: FontWeight.w600,

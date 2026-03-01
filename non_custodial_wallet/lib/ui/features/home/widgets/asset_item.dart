@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -45,7 +45,7 @@ class AssetItem extends StatelessWidget {
                 child: network.iconUrl.isEmpty
                     ? Text(
                         network.nativeSymbol[0],
-                        style: GoogleFonts.spaceGrotesk(
+                        style: AppFonts.style(
                           color: context.colors.primary,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -61,7 +61,7 @@ class AssetItem extends StatelessWidget {
                   children: [
                     Text(
                       network.shortName,
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         color: context.colors.onSurface,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
@@ -70,7 +70,7 @@ class AssetItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       NumberFormat.currency(symbol: '\$').format(price ?? 0),
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         color: context.appColors.subtitleText,
                         fontSize: 13,
                       ),
@@ -84,7 +84,7 @@ class AssetItem extends StatelessWidget {
                 children: [
                   Text(
                     balance?.toStringAsFixed(4) ?? '0.00',
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: context.colors.onSurface,
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
@@ -93,7 +93,7 @@ class AssetItem extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     NumberFormat.currency(symbol: '\$').format(usdValue),
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: context.appColors.subtitleText,
                       fontSize: 13,
                     ),

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../core/extensions/context_extension.dart';
 
@@ -51,7 +51,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         foregroundColor: Colors.white,
         title: Text(
           context.l10n.qrScannerTitle,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+          style: AppFonts.style(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -82,7 +82,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   child: Text(
                     context.l10n.cameraPermissionDenied,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: Colors.white70,
                       fontSize: 16,
                     ),

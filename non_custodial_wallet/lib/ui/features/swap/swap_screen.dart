@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
@@ -114,7 +114,7 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
           appBar: AppBar(
             title: Text(
               context.l10n.swapTitle,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+              style: AppFonts.style(fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
           ),
@@ -147,7 +147,7 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
                           Expanded(
                             child: Text(
                               context.l10n.swapTestnetDisclaimer,
-                              style: GoogleFonts.spaceGrotesk(
+                              style: AppFonts.style(
                                 color: Colors.orange,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
@@ -247,7 +247,7 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                         SingleDotFormatter(),
                       ],
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         color: context.colors.onSurface,
                       ),
                       decoration: InputDecoration(
@@ -277,7 +277,7 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
                                           horizontal: 8, vertical: 4),
                                       child: Text(
                                         context.l10n.maxButton,
-                                        style: GoogleFonts.spaceGrotesk(
+                                        style: AppFonts.style(
                                           color: context.colors.primary,
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600,

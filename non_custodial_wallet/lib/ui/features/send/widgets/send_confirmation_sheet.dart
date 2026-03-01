@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../cubits/send_cubit.dart';
 import '../cubits/send_state.dart';
@@ -87,7 +87,7 @@ class _SendConfirmationSheetState extends State<SendConfirmationSheet>
               // Title
               Text(
                 context.l10n.confirmSendTitle,
-                style: GoogleFonts.spaceGrotesk(
+                style: AppFonts.style(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: context.colors.onSurface,
@@ -150,7 +150,7 @@ class _SendConfirmationSheetState extends State<SendConfirmationSheet>
                               const SizedBox(width: 6),
                               Text(
                                 context.l10n.estimatedFeeLabel,
-                                style: GoogleFonts.spaceGrotesk(
+                                style: AppFonts.style(
                                   color: context.appColors.subtitleText,
                                   fontSize: 14,
                                 ),
@@ -171,7 +171,7 @@ class _SendConfirmationSheetState extends State<SendConfirmationSheet>
                               children: [
                                 Text(
                                   '${state.gasEstimate!.formattedFee} $nativeSymbol',
-                                  style: GoogleFonts.spaceGrotesk(
+                                  style: AppFonts.style(
                                     color: context.colors.onSurface,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -216,7 +216,7 @@ class _SendConfirmationSheetState extends State<SendConfirmationSheet>
                           ),
                           child: Text(
                             context.l10n.cancelButton,
-                            style: GoogleFonts.spaceGrotesk(
+                            style: AppFonts.style(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -274,7 +274,7 @@ class _SendConfirmationSheetState extends State<SendConfirmationSheet>
                                   )
                                 : Text(
                                     context.l10n.confirmButton,
-                                    style: GoogleFonts.spaceGrotesk(
+                                    style: AppFonts.style(
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -340,7 +340,7 @@ class _DetailRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.spaceGrotesk(
+          style: AppFonts.style(
             color: context.appColors.subtitleText,
             fontSize: 14,
           ),
@@ -348,7 +348,7 @@ class _DetailRow extends StatelessWidget {
         Flexible(
           child: Text(
             value,
-            style: GoogleFonts.spaceGrotesk(
+            style: AppFonts.style(
               color: context.colors.onSurface,
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -381,7 +381,7 @@ class _DetailRowWithIcon extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.spaceGrotesk(
+          style: AppFonts.style(
             color: context.appColors.subtitleText,
             fontSize: 14,
           ),
@@ -399,7 +399,7 @@ class _DetailRowWithIcon extends StatelessWidget {
               child: iconUrl.isEmpty
                   ? Text(
                       fallbackLetter,
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         color: context.colors.primary,
                         fontSize: 9,
                         fontWeight: FontWeight.bold,
@@ -410,7 +410,7 @@ class _DetailRowWithIcon extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               value,
-              style: GoogleFonts.spaceGrotesk(
+              style: AppFonts.style(
                 color: context.colors.onSurface,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

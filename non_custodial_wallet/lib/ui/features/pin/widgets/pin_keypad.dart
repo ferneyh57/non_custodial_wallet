@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 
 import '../../../core/extensions/context_extension.dart';
 
@@ -47,7 +47,7 @@ class PinKeypad extends StatelessWidget {
                     onTap: () => onDigit(key),
                     child: Text(
                       key,
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         color: context.colors.onSurface,

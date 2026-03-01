@@ -324,4 +324,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get swapTestnetDisclaimer =>
       'Swap is not available on testnet. Switch to Mainnet in Settings to use this feature.';
+
+  @override
+  String get phraseDisclaimerTitle => 'Did you save your phrase?';
+
+  @override
+  String get phraseDisclaimerMessage =>
+      'If you lose your recovery phrase, you will permanently lose access to your funds. Make sure you saved it in a safe place.';
+
+  @override
+  String get phraseDisclaimerConfirm => 'Yes, I saved it';
+
+  @override
+  String get cancel => 'Cancel';
 }

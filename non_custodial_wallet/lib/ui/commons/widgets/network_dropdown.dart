@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../domain/entities/network/network_entity.dart';
 import '../../core/extensions/context_extension.dart';
 
@@ -47,7 +47,7 @@ class NetworkDropdown extends StatelessWidget {
                     child: network.iconUrl.isEmpty
                         ? Text(
                             network.nativeSymbol[0],
-                            style: GoogleFonts.spaceGrotesk(
+                            style: AppFonts.style(
                               color: context.colors.primary,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class NetworkDropdown extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     network.shortName,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: context.colors.onSurface,
                       fontWeight: FontWeight.w500,
                     ),

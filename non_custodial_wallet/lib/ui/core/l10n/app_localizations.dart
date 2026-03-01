@@ -709,6 +709,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Swap is not available on testnet. Switch to Mainnet in Settings to use this feature.'**
   String get swapTestnetDisclaimer;
+
+  /// No description provided for @phraseDisclaimerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you save your phrase?'**
+  String get phraseDisclaimerTitle;
+
+  /// No description provided for @phraseDisclaimerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'If you lose your recovery phrase, you will permanently lose access to your funds. Make sure you saved it in a safe place.'**
+  String get phraseDisclaimerMessage;
+
+  /// No description provided for @phraseDisclaimerConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, I saved it'**
+  String get phraseDisclaimerConfirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
 }
 
 class _AppLocalizationsDelegate

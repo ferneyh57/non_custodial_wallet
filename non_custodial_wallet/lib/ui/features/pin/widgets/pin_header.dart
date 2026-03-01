@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 
 import '../../../core/extensions/context_extension.dart';
 
@@ -29,7 +29,7 @@ class PinHeader extends StatelessWidget {
         const SizedBox(height: 24),
         Text(
           title,
-          style: GoogleFonts.spaceGrotesk(
+          style: AppFonts.style(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: context.colors.onSurface,
@@ -41,7 +41,7 @@ class PinHeader extends StatelessWidget {
           child: Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: GoogleFonts.spaceGrotesk(
+            style: AppFonts.style(
               fontSize: 14,
               color: context.appColors.subtitleText,
             ),

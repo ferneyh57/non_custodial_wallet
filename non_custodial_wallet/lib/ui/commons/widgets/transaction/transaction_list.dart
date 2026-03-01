@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/transaction/transfer_entity.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -42,7 +42,7 @@ class TransactionList extends StatelessWidget {
         child: Center(
           child: Text(
             emptyMessage,
-            style: GoogleFonts.spaceGrotesk(
+            style: AppFonts.style(
               color: context.appColors.subtitleText,
               fontSize: 14,
             ),
@@ -94,7 +94,7 @@ class TransactionList extends StatelessWidget {
             child: Center(
               child: Text(
                 context.l10n.loadMore,
-                style: GoogleFonts.spaceGrotesk(
+                style: AppFonts.style(
                   color: context.colors.primary,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,

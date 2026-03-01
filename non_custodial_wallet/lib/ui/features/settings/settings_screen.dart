@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../core/extensions/context_extension.dart';
 import '../../commons/cubits/network_mode/network_mode_cubit.dart';
 import '../../commons/cubits/network_mode/network_mode_state.dart';
@@ -21,7 +21,7 @@ class SettingsScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           context.l10n.settingsTitle,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+          style: AppFonts.style(fontWeight: FontWeight.bold),
         ),
       ),
       body: ListView(
@@ -49,13 +49,13 @@ class _NetworkModeSection extends StatelessWidget {
           ),
           title: Text(
             context.l10n.settingsNetworkMode,
-            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w500),
+            style: AppFonts.style(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(
             state.isMainnet
                 ? context.l10n.settingsNetworkModeMainnet
                 : context.l10n.settingsNetworkModeTestnet,
-            style: GoogleFonts.spaceGrotesk(
+            style: AppFonts.style(
               color: context.appColors.subtitleText,
               fontSize: 13,
             ),
@@ -82,13 +82,13 @@ class _ThemeSection extends StatelessWidget {
           ),
           title: Text(
             context.l10n.settingsTheme,
-            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w500),
+            style: AppFonts.style(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(
             isDark
                 ? context.l10n.settingsThemeDark
                 : context.l10n.settingsThemeLight,
-            style: GoogleFonts.spaceGrotesk(
+            style: AppFonts.style(
               color: context.appColors.subtitleText,
               fontSize: 13,
             ),
@@ -108,11 +108,11 @@ class _CopySeedSection extends StatelessWidget {
       leading: Icon(Icons.key_rounded, color: context.appColors.subtitleText),
       title: Text(
         context.l10n.settingsCopySeed,
-        style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w500),
+        style: AppFonts.style(fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         context.l10n.settingsCopySeedSubtitle,
-        style: GoogleFonts.spaceGrotesk(
+        style: AppFonts.style(
           color: context.appColors.subtitleText,
           fontSize: 13,
         ),
@@ -139,14 +139,14 @@ class _LogoutSection extends StatelessWidget {
       leading: const Icon(Icons.logout_rounded, color: Colors.red),
       title: Text(
         context.l10n.settingsLogout,
-        style: GoogleFonts.spaceGrotesk(
+        style: AppFonts.style(
           fontWeight: FontWeight.w500,
           color: Colors.red,
         ),
       ),
       subtitle: Text(
         context.l10n.settingsLogoutSubtitle,
-        style: GoogleFonts.spaceGrotesk(
+        style: AppFonts.style(
           color: context.appColors.subtitleText,
           fontSize: 13,
         ),
@@ -161,11 +161,11 @@ class _LogoutSection extends StatelessWidget {
       builder: (dialogContext) => AlertDialog(
         title: Text(
           context.l10n.settingsLogoutConfirmTitle,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+          style: AppFonts.style(fontWeight: FontWeight.w600),
         ),
         content: Text(
           context.l10n.settingsLogoutConfirmMessage,
-          style: GoogleFonts.spaceGrotesk(),
+          style: AppFonts.style(),
         ),
         actions: [
           TextButton(

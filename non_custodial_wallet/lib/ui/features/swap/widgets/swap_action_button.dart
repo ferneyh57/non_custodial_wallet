@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../cubits/swap_cubit.dart';
 import '../cubits/swap_state.dart';
@@ -80,7 +80,7 @@ class SwapActionButton extends StatelessWidget {
                 hasQuote
                     ? context.l10n.swapAction
                     : context.l10n.getQuoteButton,
-                style: GoogleFonts.spaceGrotesk(
+                style: AppFonts.style(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),

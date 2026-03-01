@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../commons/widgets/quick_action_button.dart';
@@ -67,7 +67,7 @@ class TokenDetailActions extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   context.l10n.viewOnExplorer,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.colors.primary,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,

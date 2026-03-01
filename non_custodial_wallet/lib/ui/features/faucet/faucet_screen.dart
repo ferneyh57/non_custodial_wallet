@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../commons/cubits/wallet/wallet_cubit.dart';
 import '../../core/constants/app_faucets.dart';
@@ -18,7 +18,7 @@ class FaucetScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           context.l10n.faucetTitle,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+          style: AppFonts.style(fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -30,7 +30,7 @@ class FaucetScreen extends StatelessWidget {
             children: [
               Text(
                 context.l10n.faucetSubtitle,
-                style: GoogleFonts.spaceGrotesk(
+                style: AppFonts.style(
                   color: context.appColors.subtitleText,
                   fontSize: 14,
                 ),

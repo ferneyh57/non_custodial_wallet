@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../core/extensions/context_extension.dart';
 
 class SwapSponsoredWarning extends StatelessWidget {
@@ -24,7 +24,7 @@ class SwapSponsoredWarning extends StatelessWidget {
           Expanded(
             child: Text(
               context.l10n.swapSponsoredRequired,
-              style: GoogleFonts.spaceGrotesk(
+              style: AppFonts.style(
                 color: context.colors.error,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,

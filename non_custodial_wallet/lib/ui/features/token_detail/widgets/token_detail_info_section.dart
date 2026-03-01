@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../core/extensions/context_extension.dart';
 
 class TokenDetailInfoSection extends StatelessWidget {
@@ -49,7 +49,7 @@ class TokenDetailInfoSection extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   networkName,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.colors.onSurface,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
@@ -67,7 +67,7 @@ class TokenDetailInfoSection extends StatelessWidget {
                 Expanded(
                   child: Text(
                     _truncateAddress(walletAddress),
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: context.colors.onSurface,
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
@@ -106,7 +106,7 @@ class TokenDetailInfoSection extends StatelessWidget {
                   Expanded(
                     child: Text(
                       _truncateAddress(contractAddress!),
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         color: context.colors.onSurface,
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
@@ -160,7 +160,7 @@ class _InfoRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.spaceGrotesk(
+          style: AppFonts.style(
             color: context.appColors.subtitleText,
             fontSize: 12,
             fontWeight: FontWeight.w500,

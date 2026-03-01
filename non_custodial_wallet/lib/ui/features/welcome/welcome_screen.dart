@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/extensions/context_extension.dart';
@@ -52,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                   // App Name
                   Text(
                     context.l10n.appName,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: context.colors.onSurface,
@@ -66,7 +66,7 @@ class WelcomeScreen extends StatelessWidget {
                   Text(
                     context.l10n.welcomeSubtitle,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       fontSize: 16,
                       color: context.appColors.subtitleText,
                     ),
@@ -109,7 +109,7 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                         child: Text(
                           context.l10n.createWalletButton,
-                          style: GoogleFonts.spaceGrotesk(
+                          style: AppFonts.style(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -137,7 +137,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       child: Text(
                         context.l10n.importWalletButton,
-                        style: GoogleFonts.spaceGrotesk(
+                        style: AppFonts.style(
                           color: context.colors.primary,
                           fontWeight: FontWeight.w600,
                         ),

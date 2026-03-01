@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../../domain/entities/token/token_balance_entity.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -60,7 +60,7 @@ class TokenItem extends StatelessWidget {
                     child: tokenBalance.token.logoUrl.isEmpty
                         ? Text(
                             tokenBalance.token.symbol[0],
-                            style: GoogleFonts.spaceGrotesk(
+                            style: AppFonts.style(
                               color: context.colors.primary,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -102,7 +102,7 @@ class TokenItem extends StatelessWidget {
                 children: [
                   Text(
                     tokenBalance.token.symbol,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: context.colors.onSurface,
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
@@ -111,7 +111,7 @@ class TokenItem extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     NumberFormat.currency(symbol: '\$').format(price ?? 0),
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: context.appColors.subtitleText,
                       fontSize: 13,
                     ),
@@ -125,7 +125,7 @@ class TokenItem extends StatelessWidget {
               children: [
                 Text(
                   balance.toStringAsFixed(2),
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.colors.onSurface,
                     fontWeight: FontWeight.w600,
                     fontSize: 15,
@@ -134,7 +134,7 @@ class TokenItem extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   NumberFormat.currency(symbol: '\$').format(usdValue),
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.appColors.subtitleText,
                     fontSize: 13,
                   ),

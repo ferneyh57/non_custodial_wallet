@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import '../../../core/extensions/context_extension.dart';
 
 class TokenDetailHeader extends StatelessWidget {
@@ -28,7 +28,7 @@ class TokenDetailHeader extends StatelessWidget {
           child: iconUrl.isEmpty
               ? Text(
                   symbol[0],
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.colors.primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 28,
@@ -39,7 +39,7 @@ class TokenDetailHeader extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           name,
-          style: GoogleFonts.spaceGrotesk(
+          style: AppFonts.style(
             color: context.colors.onSurface,
             fontWeight: FontWeight.w600,
             fontSize: 20,
@@ -48,7 +48,7 @@ class TokenDetailHeader extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           symbol,
-          style: GoogleFonts.spaceGrotesk(
+          style: AppFonts.style(
             color: context.appColors.subtitleText,
             fontSize: 14,
           ),

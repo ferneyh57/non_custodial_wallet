@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../commons/cubits/wallet/wallet_cubit.dart';
@@ -58,7 +58,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
             centerTitle: true,
             title: Text(
               context.l10n.importWalletTitle,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+              style: AppFonts.style(fontWeight: FontWeight.bold),
             ),
           ),
           body: SafeArea(
@@ -70,7 +70,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                 children: [
                   Text(
                     context.l10n.importWalletInstructions,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: context.appColors.subtitleText,
                       fontSize: 14,
                     ),
@@ -86,7 +86,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                     child: TextField(
                       controller: _controller,
                       maxLines: 4,
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         color: context.colors.onSurface,
                         fontSize: 15,
                       ),
@@ -114,7 +114,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                       const SizedBox(width: 6),
                       Text(
                         '$_wordCount/12 words',
-                        style: GoogleFonts.spaceGrotesk(
+                        style: AppFonts.style(
                           color: isValidCount
                               ? context.colors.secondary
                               : context.appColors.hintText,
@@ -178,7 +178,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
                           ),
                           child: Text(
                             context.l10n.importButton,
-                            style: GoogleFonts.spaceGrotesk(
+                            style: AppFonts.style(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),

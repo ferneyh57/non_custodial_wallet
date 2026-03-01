@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/token/token_entity.dart';
@@ -67,7 +67,7 @@ class SendScreenView extends StatelessWidget {
           appBar: AppBar(
             title: Text(
               context.l10n.sendTitle,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+              style: AppFonts.style(fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
           ),
@@ -81,7 +81,7 @@ class SendScreenView extends StatelessWidget {
                 // Network Selector
                 Text(
                   context.l10n.networkLabel,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.appColors.subtitleText,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -100,7 +100,7 @@ class SendScreenView extends StatelessWidget {
                 // Asset Selector
                 Text(
                   context.l10n.assetLabel,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.appColors.subtitleText,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -120,7 +120,7 @@ class SendScreenView extends StatelessWidget {
                 // Address Input Card
                 Text(
                   context.l10n.addressHint,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.appColors.subtitleText,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -142,7 +142,7 @@ class SendScreenView extends StatelessWidget {
                       ),
                     ],
                     style:
-                        GoogleFonts.spaceGrotesk(color: context.colors.onSurface),
+                        AppFonts.style(color: context.colors.onSurface),
                     decoration: InputDecoration(
                       hintText: '0x...',
                       filled: false,
@@ -195,7 +195,7 @@ class SendScreenView extends StatelessWidget {
                 // Amount Input Card
                 Text(
                   context.l10n.amountHint,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: AppFonts.style(
                     color: context.appColors.subtitleText,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -221,7 +221,7 @@ class SendScreenView extends StatelessWidget {
                       _SingleDotFormatter(),
                     ],
                     style:
-                        GoogleFonts.spaceGrotesk(color: context.colors.onSurface),
+                        AppFonts.style(color: context.colors.onSurface),
                     decoration: InputDecoration(
                       hintText: '0.00',
                       filled: false,
@@ -244,7 +244,7 @@ class SendScreenView extends StatelessWidget {
                           ),
                           child: Text(
                             context.l10n.maxButton,
-                            style: GoogleFonts.spaceGrotesk(
+                            style: AppFonts.style(
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
                             ),
@@ -321,7 +321,7 @@ class SendScreenView extends StatelessWidget {
                       ),
                       child: Text(
                         context.l10n.sendAction,
-                        style: GoogleFonts.spaceGrotesk(
+                        style: AppFonts.style(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -394,7 +394,7 @@ class AssetDropdown extends StatelessWidget {
                     child: nativeIconUrl.isEmpty
                         ? Text(
                             nativeSymbol[0],
-                            style: GoogleFonts.spaceGrotesk(
+                            style: AppFonts.style(
                               color: context.colors.primary,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -405,7 +405,7 @@ class AssetDropdown extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     '$nativeSymbol ($nativeLabel)',
-                    style: GoogleFonts.spaceGrotesk(
+                    style: AppFonts.style(
                       color: context.colors.onSurface,
                       fontWeight: FontWeight.w500,
                     ),
@@ -432,7 +432,7 @@ class AssetDropdown extends StatelessWidget {
                       child: token.logoUrl.isEmpty
                           ? Text(
                               token.symbol[0],
-                              style: GoogleFonts.spaceGrotesk(
+                              style: AppFonts.style(
                                 color: context.colors.primary,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -443,7 +443,7 @@ class AssetDropdown extends StatelessWidget {
                     const SizedBox(width: 12),
                     Text(
                       token.symbol,
-                      style: GoogleFonts.spaceGrotesk(
+                      style: AppFonts.style(
                         color: context.colors.onSurface,
                         fontWeight: FontWeight.w500,
                       ),

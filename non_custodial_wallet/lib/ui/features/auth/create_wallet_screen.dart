@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:non_custodial_wallet/ui/core/theme/app_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../commons/cubits/wallet/wallet_cubit.dart';
@@ -26,6 +26,50 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
 
   Future<void> _onDonePressed() async {
     if (_isSaving) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        icon: Icon(
+          Icons.shield_outlined,
+          size: 40,
+          color: Colors.amber.shade700,
+        ),
+        title: Text(
+          context.l10n.phraseDisclaimerTitle,
+          style: AppFonts.style(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          context.l10n.phraseDisclaimerMessage,
+          style: AppFonts.style(height: 1.5),
+          textAlign: TextAlign.center,
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(
+              context.l10n.cancel,
+              style: AppFonts.style(fontWeight: FontWeight.w600),
+            ),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              context.l10n.phraseDisclaimerConfirm,
+              style: AppFonts.style(fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
     setState(() => _isSaving = true);
     await context.read<WalletCubit>().saveAndAuthorize();
     if (mounted) setState(() => _isSaving = false);
@@ -40,7 +84,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
             centerTitle: true,
             title: Text(
               context.l10n.secretPhraseTitle,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+              style: AppFonts.style(fontWeight: FontWeight.bold),
             ),
           ),
           body: SafeArea(
@@ -70,7 +114,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                         Expanded(
                           child: Text(
                             context.l10n.secretPhraseInstructions,
-                            style: GoogleFonts.spaceGrotesk(
+                            style: AppFonts.style(
                               color: context.colors.onSurface,
                               fontSize: 13,
                               height: 1.4,
@@ -134,7 +178,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                                     ),
                                     child: Text(
                                       '${index + 1}',
-                                      style: GoogleFonts.spaceGrotesk(
+                                      style: AppFonts.style(
                                         color: context.colors.primary,
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,
@@ -145,7 +189,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                                     child: Center(
                                       child: Text(
                                         word,
-                                        style: GoogleFonts.spaceGrotesk(
+                                        style: AppFonts.style(
                                           color: context.colors.onSurface,
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600,
@@ -204,7 +248,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                         _copied
                             ? context.l10n.mnemonicCopied
                             : context.l10n.copyMnemonic,
-                        style: GoogleFonts.spaceGrotesk(
+                        style: AppFonts.style(
                           color: _copied
                               ? context.colors.secondary
                               : context.colors.primary,
@@ -274,7 +318,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                               )
                             : Text(
                                 context.l10n.doneButton,
-                                style: GoogleFonts.spaceGrotesk(
+                                style: AppFonts.style(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
