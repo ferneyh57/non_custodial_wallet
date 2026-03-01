@@ -68,6 +68,9 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
             displayMessage = context.l10n.errorInvalidAmount;
           } else if (state.errorMessage == SwapErrorCode.quoteExpired) {
             displayMessage = context.l10n.swapQuoteExpired;
+          } else if (state.errorMessage ==
+              SwapErrorCode.insufficientBalance) {
+            displayMessage = context.l10n.errorInsufficientBalance;
           } else {
             displayMessage = state.errorMessage!;
           }
@@ -267,36 +270,59 @@ class _SwapScreenViewState extends State<_SwapScreenView> {
                           horizontal: 16,
                           vertical: 14,
                         ),
-                        suffixIcon: fromBalance != null && fromBalance > 0
-                            ? Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-                                      final maxStr =
-                                          fromBalance.toStringAsFixed(8);
-                                      _amountController.text = maxStr;
-                                      cubit.updateAmount(maxStr);
-                                    },
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
-                                      child: Text(
-                                        context.l10n.maxButton,
-                                        style: AppFonts.style(
-                                          color: context.colors.primary,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : null,
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: TextButton(
+                            onPressed: () {
+                              cubit.setMaxAmount();
+                              _amountController.text = cubit.state.amount;
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: context.colors.primary,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12),
+                              minimumSize: Size.zero,
+                              tapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(
+                              context.l10n.maxButton,
+                              style: AppFonts.style(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Row(
+                      children: [
+                        Text(
+                          '${context.l10n.totalBalanceLabel}: ${cubit.currentBalanceFormatted} ${cubit.currentSymbol}',
+                          style: AppFonts.style(
+                            color: cubit.exceedsBalance
+                                ? context.colors.error
+                                : context.appColors.subtitleText,
+                            fontSize: 12,
+                          ),
+                        ),
+                        if (cubit.exceedsBalance) ...[
+                          const SizedBox(width: 8),
+                          Text(
+                            context.l10n.errorInsufficientBalance,
+                            style: AppFonts.style(
+                              color: context.colors.error,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
 

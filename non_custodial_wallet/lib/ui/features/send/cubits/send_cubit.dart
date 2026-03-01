@@ -152,6 +152,30 @@ class SendCubit extends Cubit<SendState> {
     return state.selectedToken?.decimals ?? 18;
   }
 
+  String get currentBalanceFormatted {
+    final balance = _currentBalance();
+    final decimals = _currentDecimals();
+    final divisor = Decimal.fromBigInt(BigInt.from(10).pow(decimals));
+    return (Decimal.fromBigInt(balance) / divisor)
+        .toDecimal(scaleOnInfinitePrecision: decimals)
+        .toString();
+  }
+
+  String get currentSymbol {
+    return state.selectedToken?.symbol ??
+        state.selectedNetwork?.nativeSymbol ??
+        '';
+  }
+
+  bool get exceedsBalance {
+    final amountStr = amountController.text.trim();
+    if (amountStr.isEmpty) return false;
+    final decimals = _currentDecimals();
+    final amountRaw = _parseAmountToRaw(amountStr, decimals);
+    if (amountRaw <= BigInt.zero) return false;
+    return amountRaw > _currentBalance();
+  }
+
   void setMaxAmount() {
     final balance = _currentBalance();
     final decimals = _currentDecimals();

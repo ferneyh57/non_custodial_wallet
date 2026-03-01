@@ -15,7 +15,9 @@ class SwapActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<SwapCubit>();
     final hasQuote = state.quote != null;
-    final isEnabled = hasQuote ? state.canExecute : state.canRequestQuote;
+    final isEnabled =
+        (hasQuote ? state.canExecute : state.canRequestQuote) &&
+            !cubit.exceedsBalance;
     final isLoading = state.isLoadingQuote;
 
     return DecoratedBox(

@@ -120,6 +120,7 @@ void _initCubits() {
       executeSwapUseCase: sl<ExecuteSwapUseCase>(),
       getSwapStatusUseCase: sl<GetSwapStatusUseCase>(),
       walletCubit: sl<WalletCubit>(),
+      tokenCubit: sl<TokenCubit>(),
       networks: sl<NetworkModeCubit>().state.networks,
     ),
   );

@@ -254,7 +254,35 @@ class SendScreenView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 6),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${context.l10n.totalBalanceLabel}: ${cubit.currentBalanceFormatted} ${cubit.currentSymbol}',
+                        style: AppFonts.style(
+                          color: cubit.exceedsBalance
+                              ? context.colors.error
+                              : context.appColors.subtitleText,
+                          fontSize: 12,
+                        ),
+                      ),
+                      if (cubit.exceedsBalance) ...[
+                        const SizedBox(width: 8),
+                        Text(
+                          context.l10n.errorInsufficientBalance,
+                          style: AppFonts.style(
+                            color: context.colors.error,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
 
                 // Send Button — opens confirmation modal
                 SizedBox(
@@ -262,7 +290,7 @@ class SendScreenView extends StatelessWidget {
                   height: 54,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      gradient: state.isFormValid
+                      gradient: state.isFormValid && !cubit.exceedsBalance
                           ? LinearGradient(
                               colors: [
                                 context.appColors.balanceCardGradientStart,
@@ -270,11 +298,11 @@ class SendScreenView extends StatelessWidget {
                               ],
                             )
                           : null,
-                      color: !state.isFormValid
+                      color: !(state.isFormValid && !cubit.exceedsBalance)
                           ? context.appColors.containerFill
                           : null,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: state.isFormValid
+                      boxShadow: state.isFormValid && !cubit.exceedsBalance
                           ? [
                               BoxShadow(
                                 color: context.colors.primary
@@ -286,7 +314,7 @@ class SendScreenView extends StatelessWidget {
                           : null,
                     ),
                     child: ElevatedButton(
-                      onPressed: state.isFormValid
+                      onPressed: state.isFormValid && !cubit.exceedsBalance
                           ? () {
                               final error = cubit.validateForm();
                               if (error != null) {

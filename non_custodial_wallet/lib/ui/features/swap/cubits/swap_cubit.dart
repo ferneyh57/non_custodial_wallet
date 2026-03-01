@@ -9,11 +9,13 @@ import '../../../../domain/usecases/swap/get_swap_status_use_case.dart';
 import '../../../core/constants/app_tokens.dart';
 import '../../../core/constants/crypto_constants.dart';
 import '../../../commons/cubits/wallet/wallet_cubit.dart';
+import '../../../commons/cubits/token/token_cubit.dart';
 import 'swap_state.dart';
 
 abstract class SwapErrorCode {
   static const invalidAmount = 'invalid_amount';
   static const quoteExpired = 'quote_expired';
+  static const insufficientBalance = 'insufficient_balance';
 }
 
 /// Represents a selectable asset (native or ERC-20) on a specific network.
@@ -35,6 +37,7 @@ class SwapCubit extends Cubit<SwapState> {
   final ExecuteSwapUseCase executeSwapUseCase;
   final GetSwapStatusUseCase getSwapStatusUseCase;
   final WalletCubit walletCubit;
+  final TokenCubit tokenCubit;
   final List<NetworkEntity> networks;
 
   Timer? _statusTimer;
@@ -45,6 +48,7 @@ class SwapCubit extends Cubit<SwapState> {
     required this.executeSwapUseCase,
     required this.getSwapStatusUseCase,
     required this.walletCubit,
+    required this.tokenCubit,
     required this.networks,
   }) : super(SwapState(fromNetwork: networks.first));
 
@@ -138,6 +142,56 @@ class SwapCubit extends Cubit<SwapState> {
     return token?.decimals ?? 18;
   }
 
+  BigInt _currentFromBalance() {
+    final network = state.fromNetwork;
+    if (network == null) return BigInt.zero;
+
+    final token = state.fromToken;
+    if (token != null) {
+      final match = tokenCubit.state.tokenBalances.where(
+        (tb) =>
+            tb.chainId == network.chainId &&
+            tb.token.contractAddress.toLowerCase() ==
+                token.contractAddress.toLowerCase(),
+      );
+      return match.isNotEmpty ? match.first.balanceRaw : BigInt.zero;
+    }
+    return walletCubit.state.wallet?.balancesInWei[network.chainId] ??
+        BigInt.zero;
+  }
+
+  int _fromDecimals() => _tokenDecimals(state.fromToken);
+
+  String get currentBalanceFormatted {
+    final balance = _currentFromBalance();
+    final decimals = _fromDecimals();
+    final divisor = Decimal.fromBigInt(BigInt.from(10).pow(decimals));
+    return (Decimal.fromBigInt(balance) / divisor)
+        .toDecimal(scaleOnInfinitePrecision: decimals)
+        .toString();
+  }
+
+  String get currentSymbol =>
+      state.fromToken?.symbol ?? state.fromNetwork?.nativeSymbol ?? '';
+
+  bool get exceedsBalance {
+    if (state.amount.isEmpty) return false;
+    final decimals = _fromDecimals();
+    final amountRaw = _parseAmountToRaw(state.amount, decimals);
+    if (amountRaw <= BigInt.zero) return false;
+    return amountRaw > _currentFromBalance();
+  }
+
+  void setMaxAmount() {
+    final balance = _currentFromBalance();
+    final decimals = _fromDecimals();
+    final divisor = Decimal.fromBigInt(BigInt.from(10).pow(decimals));
+    final display = (Decimal.fromBigInt(balance) / divisor)
+        .toDecimal(scaleOnInfinitePrecision: decimals)
+        .toString();
+    emit(state.copyWith(amount: display, quote: null, errorMessage: null));
+  }
+
   BigInt _parseAmountToRaw(String amountStr, int decimals) {
     final amount = Decimal.tryParse(amountStr);
     if (amount == null || amount <= Decimal.zero) return BigInt.zero;
@@ -161,6 +215,14 @@ class SwapCubit extends Cubit<SwapState> {
       emit(state.copyWith(
         isLoadingQuote: false,
         errorMessage: SwapErrorCode.invalidAmount,
+      ));
+      return;
+    }
+
+    if (amountRaw > _currentFromBalance()) {
+      emit(state.copyWith(
+        isLoadingQuote: false,
+        errorMessage: SwapErrorCode.insufficientBalance,
       ));
       return;
     }
