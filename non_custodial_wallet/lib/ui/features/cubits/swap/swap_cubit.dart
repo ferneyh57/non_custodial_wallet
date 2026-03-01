@@ -71,7 +71,9 @@ class SwapCubit extends Cubit<SwapState> {
       // Native token
       result.add(SwapAsset(network: network, token: null));
       // ERC-20 tokens
-      final tokens = AppTokens.tokensByChain[network.chainId] ?? [];
+      final tokens = AppTokens.testnetTokensByChain[network.chainId] ??
+          AppTokens.mainnetTokensByChain[network.chainId] ??
+          [];
       for (final token in tokens) {
         result.add(SwapAsset(network: network, token: token));
       }

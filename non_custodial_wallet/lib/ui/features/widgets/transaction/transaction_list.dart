@@ -51,32 +51,47 @@ class TransactionList extends StatelessWidget {
       );
     }
 
-    return Column(
-      children: [
-        for (int i = 0; i < transfers.length; i++) ...[
-          TransactionItem(
-            transfer: transfers[i],
-            network: _networkForChainId(transfers[i].chainId),
-          ),
-          if (i < transfers.length - 1) const SizedBox(height: 8),
-        ],
-        if (isLoadingMore)
-          Padding(
+    final networkByChainId = <int, NetworkEntity>{
+      for (final n in networks) n.chainId: n,
+    };
+
+    final footerCount = (isLoadingMore || (hasMore && onLoadMore != null)) ? 1 : 0;
+
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: transfers.length + footerCount,
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemBuilder: (context, index) {
+        if (index < transfers.length) {
+          final transfer = transfers[index];
+          return TransactionItem(
+            transfer: transfer,
+            network: networkByChainId[transfer.chainId],
+          );
+        }
+
+        if (isLoadingMore) {
+          return Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
-            child: SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: context.colors.primary,
+            child: Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: context.colors.primary,
+                ),
               ),
             ),
-          )
-        else if (hasMore && onLoadMore != null)
-          GestureDetector(
-            onTap: onLoadMore,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+          );
+        }
+
+        return GestureDetector(
+          onTap: onLoadMore,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Center(
               child: Text(
                 context.l10n.loadMore,
                 style: GoogleFonts.poppins(
@@ -87,14 +102,8 @@ class TransactionList extends StatelessWidget {
               ),
             ),
           ),
-      ],
+        );
+      },
     );
-  }
-
-  NetworkEntity? _networkForChainId(int chainId) {
-    for (final network in networks) {
-      if (network.chainId == chainId) return network;
-    }
-    return null;
   }
 }

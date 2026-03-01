@@ -90,10 +90,8 @@ void _initCubits() {
       sendTransactionUseCase: sl<SendTransactionUseCase>(),
       sendTokenTransactionUseCase: sl<SendTokenTransactionUseCase>(),
       estimateGasUseCase: sl<EstimateGasUseCase>(),
-      getKeyUseCase: sl<GetKeyUseCase>(),
-      getBalanceUseCase: sl<GetBalanceUseCase>(),
-      getEthAddressUseCase: sl<GetEthAddressUseCase>(),
-      getTokenBalancesUseCase: sl<GetTokenBalancesUseCase>(),
+      walletCubit: sl<WalletCubit>(),
+      tokenCubit: sl<TokenCubit>(),
       networks: sl<NetworkModeCubit>().state.networks,
     ),
   );

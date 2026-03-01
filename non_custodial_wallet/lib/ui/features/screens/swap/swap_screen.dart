@@ -27,12 +27,6 @@ class SwapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Ensure token balances are loaded for the swap cards
-    final address = context.read<WalletCubit>().state.wallet?.ethAddress;
-    if (address != null && address.isNotEmpty) {
-      context.read<TokenCubit>().fetchTokenBalances(address);
-    }
-
     return BlocProvider(
       create: (_) {
         final cubit = sl<SwapCubit>();

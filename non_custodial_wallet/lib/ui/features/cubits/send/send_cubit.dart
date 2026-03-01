@@ -6,29 +6,19 @@ import '../../../../domain/entities/token/token_entity.dart';
 import '../../../../domain/usecases/transaction/send_transaction_use_case.dart';
 import '../../../../domain/usecases/transaction/send_token_transaction_use_case.dart';
 import '../../../../domain/usecases/transaction/estimate_gas_use_case.dart';
-import '../../../../domain/usecases/auth/get_key_use_case.dart';
-import '../../../../domain/usecases/wallet/get_balance_use_case.dart';
-import '../../../../domain/usecases/wallet/get_eth_address_use_case.dart';
-import '../../../../domain/usecases/token/get_token_balances_use_case.dart';
 import '../../../core/constants/app_tokens.dart';
 import '../../../core/util/result.dart';
+import '../wallet/wallet_cubit.dart';
+import '../token/token_cubit.dart';
 import 'send_state.dart';
 
 class SendCubit extends Cubit<SendState> {
   final SendTransactionUseCase sendTransactionUseCase;
   final SendTokenTransactionUseCase sendTokenTransactionUseCase;
   final EstimateGasUseCase estimateGasUseCase;
-  final GetKeyUseCase getKeyUseCase;
-  final GetBalanceUseCase getBalanceUseCase;
-  final GetEthAddressUseCase getEthAddressUseCase;
-  final GetTokenBalancesUseCase getTokenBalancesUseCase;
+  final WalletCubit walletCubit;
+  final TokenCubit tokenCubit;
   final List<NetworkEntity> networks;
-
-  String _mnemonic = '';
-  String _address = '';
-  final Map<int, BigInt> _nativeBalances = {};
-  // key: "chainId_contractAddress"
-  final Map<String, BigInt> _tokenBalances = {};
 
   final TextEditingController addressController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
@@ -37,15 +27,16 @@ class SendCubit extends Cubit<SendState> {
     required this.sendTransactionUseCase,
     required this.sendTokenTransactionUseCase,
     required this.estimateGasUseCase,
-    required this.getKeyUseCase,
-    required this.getBalanceUseCase,
-    required this.getEthAddressUseCase,
-    required this.getTokenBalancesUseCase,
+    required this.walletCubit,
+    required this.tokenCubit,
     required this.networks,
   }) : super(SendState(selectedNetwork: networks.first)) {
     addressController.addListener(_onAddressChanged);
     amountController.addListener(_onAmountChanged);
   }
+
+  String get _mnemonic => walletCubit.state.wallet?.mnemonic ?? '';
+  String get _address => walletCubit.state.wallet?.ethAddress ?? '';
 
   void _onAddressChanged() {
     emit(state.copyWith(
@@ -61,7 +52,7 @@ class SendCubit extends Cubit<SendState> {
     ));
   }
 
-  /// Pre-selects network and token before loading wallet data.
+  /// Pre-selects network and token.
   /// Used when navigating from token detail screen.
   void preselectNetwork(NetworkEntity network, {TokenEntity? token}) {
     emit(state.copyWith(selectedNetwork: network, selectedToken: token));
@@ -109,60 +100,12 @@ class SendCubit extends Cubit<SendState> {
   List<TokenEntity> get availableTokens {
     final chainId = state.selectedNetwork?.chainId;
     if (chainId == null) return [];
-    return AppTokens.tokensByChain[chainId] ?? [];
+    return AppTokens.testnetTokensByChain[chainId] ??
+        AppTokens.mainnetTokensByChain[chainId] ??
+        [];
   }
 
-  Future<void> loadWalletData() async {
-    emit(state.copyWith(isLoading: true));
-
-    final keyResult = await getKeyUseCase();
-    if (keyResult.isFailure || keyResult.data == null) {
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: 'Failed to load wallet',
-      ));
-      return;
-    }
-
-    _mnemonic = keyResult.data!;
-
-    final addressResult = await getEthAddressUseCase(_mnemonic);
-    if (addressResult.isSuccess && addressResult.data != null) {
-      _address = addressResult.data!;
-      final selected = state.selectedNetwork ?? networks.first;
-      await _loadBalancesForNetwork(selected);
-    }
-
-    emit(state.copyWith(isLoading: false));
-  }
-
-  Future<void> _loadBalancesForNetwork(NetworkEntity network) async {
-    // Load native balance
-    if (!_nativeBalances.containsKey(network.chainId)) {
-      final result = await getBalanceUseCase(_address, network);
-      if (result.isSuccess && result.data != null) {
-        _nativeBalances[network.chainId] = result.data!;
-      }
-    }
-
-    // Load token balances
-    final tokens = AppTokens.tokensByChain[network.chainId] ?? [];
-    if (tokens.isNotEmpty) {
-      final result = await getTokenBalancesUseCase(
-        walletAddress: _address,
-        tokens: tokens,
-        network: network,
-      );
-      if (result.isSuccess && result.data != null) {
-        for (final tb in result.data!) {
-          final key = '${network.chainId}_${tb.token.contractAddress}';
-          _tokenBalances[key] = tb.balanceRaw;
-        }
-      }
-    }
-  }
-
-  Future<void> updateNetwork(NetworkEntity network) async {
+  void updateNetwork(NetworkEntity network) {
     emit(state.copyWith(
       selectedNetwork: network,
       selectedToken: null,
@@ -171,10 +114,6 @@ class SendCubit extends Cubit<SendState> {
       isEstimatingGas: false,
     ));
     amountController.clear();
-    if (_address.isNotEmpty) {
-      await _loadBalancesForNetwork(network);
-      emit(state.copyWith());
-    }
   }
 
   void selectToken(TokenEntity? token) {
@@ -193,10 +132,16 @@ class SendCubit extends Cubit<SendState> {
 
     final token = state.selectedToken;
     if (token != null) {
-      final key = '${network.chainId}_${token.contractAddress}';
-      return _tokenBalances[key] ?? BigInt.zero;
+      final match = tokenCubit.state.tokenBalances.where(
+        (tb) =>
+            tb.chainId == network.chainId &&
+            tb.token.contractAddress.toLowerCase() ==
+                token.contractAddress.toLowerCase(),
+      );
+      return match.isNotEmpty ? match.first.balanceRaw : BigInt.zero;
     }
-    return _nativeBalances[network.chainId] ?? BigInt.zero;
+    return walletCubit.state.wallet?.balancesInWei[network.chainId] ??
+        BigInt.zero;
   }
 
   int _currentDecimals() {

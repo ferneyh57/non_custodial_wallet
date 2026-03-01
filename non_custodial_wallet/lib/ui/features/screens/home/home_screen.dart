@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,8 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final address = context.read<WalletCubit>().state.wallet?.ethAddress;
     if (address == null || address.isEmpty) return;
 
-    context.read<WalletCubit>().fetchBalance();
-    context.read<MarketCubit>().loadCoins();
+    // fetchBalance() and loadCoins() are already called at startup
+    // (loadWallet → fetchBalance in main.dart, MarketCubit..loadCoins in main.dart)
     context.read<TokenCubit>().fetchTokenBalances(address);
     context.read<TransferHistoryCubit>().loadAll(address);
   }
@@ -58,26 +59,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onRefresh() async {
-    final walletCubit = context.read<WalletCubit>();
-    final address = walletCubit.state.wallet?.ethAddress;
+    final address =
+        context.read<WalletCubit>().state.wallet?.ethAddress ?? '';
+    if (address.isEmpty) return;
 
-    final futures = <Future>[
-      walletCubit.fetchBalance(force: true),
+    await Future.wait([
+      context.read<WalletCubit>().fetchBalance(force: true),
       context.read<MarketCubit>().loadCoins(force: true),
-    ];
-
-    if (address != null && address.isNotEmpty) {
-      futures.add(
-        context.read<TokenCubit>().fetchTokenBalances(address, force: true),
-      );
-      if (_selectedTab == 2) {
-        futures.add(
-          context.read<TransferHistoryCubit>().loadAll(address, force: true),
-        );
-      }
-    }
-
-    await Future.wait(futures);
+      context.read<TokenCubit>().fetchTokenBalances(address, force: true),
+      context.read<TransferHistoryCubit>().loadAll(address, force: true),
+    ]);
   }
 
   @override
@@ -129,6 +120,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           actions: [
+            if (defaultTargetPlatform == TargetPlatform.macOS)
+              IconButton(
+                onPressed: _onRefresh,
+                icon: Icon(
+                  Icons.refresh_rounded,
+                  color: context.appColors.subtitleText,
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.only(right: 4),
               child: IconButton(

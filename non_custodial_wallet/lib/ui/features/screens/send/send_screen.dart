@@ -26,7 +26,6 @@ class SendScreen extends StatelessWidget {
         if (initialNetwork != null) {
           cubit.preselectNetwork(initialNetwork!, token: initialToken);
         }
-        cubit.loadWalletData();
         return cubit;
       },
       child: const SendScreenView(),
