@@ -157,4 +157,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get txSentSuccess => '¡Transacción enviada!';
+
+  @override
+  String get tokenDetailTitle => 'Detalles del Token';
+
+  @override
+  String get contractAddressLabel => 'Dirección del Contrato';
+
+  @override
+  String get viewOnExplorer => 'Ver en Explorador';
+
+  @override
+  String get contractCopied => 'Dirección del contrato copiada';
 }

@@ -385,6 +385,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transaction Sent!'**
   String get txSentSuccess;
+
+  /// No description provided for @tokenDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Details'**
+  String get tokenDetailTitle;
+
+  /// No description provided for @contractAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract Address'**
+  String get contractAddressLabel;
+
+  /// No description provided for @viewOnExplorer.
+  ///
+  /// In en, this message translates to:
+  /// **'View on Explorer'**
+  String get viewOnExplorer;
+
+  /// No description provided for @contractCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract address copied'**
+  String get contractCopied;
 }
 
 class _AppLocalizationsDelegate

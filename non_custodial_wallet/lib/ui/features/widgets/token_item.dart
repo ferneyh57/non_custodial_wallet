@@ -9,6 +9,7 @@ class TokenItem extends StatelessWidget {
   final String networkName;
   final String networkIconUrl;
   final double? price;
+  final VoidCallback? onTap;
 
   const TokenItem({
     super.key,
@@ -16,6 +17,7 @@ class TokenItem extends StatelessWidget {
     required this.networkName,
     required this.networkIconUrl,
     this.price,
+    this.onTap,
   });
 
   @override
@@ -26,7 +28,10 @@ class TokenItem extends StatelessWidget {
     return Material(
       color: context.appColors.cardColor,
       borderRadius: BorderRadius.circular(16),
-      child: Container(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -138,6 +143,7 @@ class TokenItem extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

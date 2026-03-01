@@ -53,5 +53,9 @@
   "errorInvalidAmount": "Amount must be greater than zero",
   "errorInsufficientBalance": "Insufficient balance",
   "errorLoadWallet": "Failed to load wallet",
-  "txSentSuccess": "Transaction Sent!"
+  "txSentSuccess": "Transaction Sent!",
+  "tokenDetailTitle": "Token Details",
+  "contractAddressLabel": "Contract Address",
+  "viewOnExplorer": "View on Explorer",
+  "contractCopied": "Contract address copied"
 }

@@ -155,4 +155,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get txSentSuccess => 'Transaction Sent!';
+
+  @override
+  String get tokenDetailTitle => 'Token Details';
+
+  @override
+  String get contractAddressLabel => 'Contract Address';
+
+  @override
+  String get viewOnExplorer => 'View on Explorer';
+
+  @override
+  String get contractCopied => 'Contract address copied';
 }

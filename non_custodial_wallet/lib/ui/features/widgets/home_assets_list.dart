@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import '../../../domain/entities/network/network_entity.dart';
+import '../../../domain/entities/token_detail/token_detail_args.dart';
+import '../../core/routes/app_routes.dart';
 import '../cubits/wallet/wallet_state.dart';
 import 'asset_item.dart';
 
@@ -28,6 +31,15 @@ class HomeAssetsList extends StatelessWidget {
             network: network,
             balance: walletState.wallet?.balanceInEth(network.chainId),
             price: priceBySymbol[network.nativeSymbol],
+            onTap: () => context.push(
+              AppRoutes.tokenDetail,
+              extra: TokenDetailArgs(
+                network: network,
+                nativeBalance:
+                    walletState.wallet?.balanceInEth(network.chainId),
+                price: priceBySymbol[network.nativeSymbol],
+              ),
+            ),
           )
               .animate()
               .fadeIn(

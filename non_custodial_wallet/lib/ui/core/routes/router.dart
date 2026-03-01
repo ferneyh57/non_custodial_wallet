@@ -8,7 +8,9 @@ import '../../features/screens/auth/import_wallet_screen.dart';
 import '../../features/screens/send/send_screen.dart';
 import '../../features/screens/receive/receive_screen.dart';
 import '../../features/screens/faucet/faucet_screen.dart';
+import '../../features/screens/token_detail/token_detail_screen.dart';
 import '../../features/screens/splash/splash_screen.dart';
+import '../../../domain/entities/token_detail/token_detail_args.dart';
 import '../../features/cubits/wallet/wallet_cubit.dart';
 import 'app_routes.dart';
 
@@ -83,6 +85,11 @@ GoRouter createRouter(WalletCubit walletCubit) => GoRouter(
     GoRoute(
       path: AppRoutes.faucet,
       builder: (context, state) => const FaucetScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.tokenDetail,
+      builder: (context, state) =>
+          TokenDetailScreen(args: state.extra! as TokenDetailArgs),
     ),
   ],
 );

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../domain/entities/network/network_entity.dart';
+import '../../../domain/entities/token_detail/token_detail_args.dart';
 import '../../core/extensions/context_extension.dart';
+import '../../core/routes/app_routes.dart';
 import '../cubits/token/token_state.dart';
 import 'token_item.dart';
 
@@ -96,6 +99,20 @@ class _HomeTokensListState extends State<HomeTokensList> {
               networkIconUrl: networkIcons[tb.chainId] ?? '',
               price:
                   widget.priceBySymbol[tb.token.symbol.toUpperCase()],
+              onTap: () {
+                final network = widget.networks.firstWhere(
+                  (n) => n.chainId == tb.chainId,
+                );
+                context.push(
+                  AppRoutes.tokenDetail,
+                  extra: TokenDetailArgs(
+                    network: network,
+                    tokenBalance: tb,
+                    price: widget
+                        .priceBySymbol[tb.token.symbol.toUpperCase()],
+                  ),
+                );
+              },
             )
                 .animate()
                 .fadeIn(

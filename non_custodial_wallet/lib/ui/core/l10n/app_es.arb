@@ -53,5 +53,9 @@
   "errorInvalidAmount": "El monto debe ser mayor a cero",
   "errorInsufficientBalance": "Saldo insuficiente",
   "errorLoadWallet": "Error al cargar la billetera",
-  "txSentSuccess": "¡Transacción enviada!"
+  "txSentSuccess": "¡Transacción enviada!",
+  "tokenDetailTitle": "Detalles del Token",
+  "contractAddressLabel": "Dirección del Contrato",
+  "viewOnExplorer": "Ver en Explorador",
+  "contractCopied": "Dirección del contrato copiada"
 }

@@ -7,4 +7,5 @@ class AppRoutes {
   static const String send = '/send';
   static const String receive = '/receive';
   static const String faucet = '/faucet';
+  static const String tokenDetail = '/token-detail';
 }
