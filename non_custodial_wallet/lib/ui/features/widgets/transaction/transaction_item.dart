@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/transaction/transfer_entity.dart';
+import '../../../core/constants/app_tokens.dart';
 import '../../../core/extensions/context_extension.dart';
 
 class TransactionItem extends StatelessWidget {
@@ -40,15 +41,55 @@ class TransactionItem extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // Direction icon
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: iconColor.withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
+              // Asset icon with direction badge
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    CircleAvatar(
+                      radius: 22,
+                      backgroundColor:
+                          context.colors.primary.withValues(alpha: 0.12),
+                      backgroundImage: _assetIconUrl.isNotEmpty
+                          ? NetworkImage(_assetIconUrl)
+                          : null,
+                      onBackgroundImageError: _assetIconUrl.isNotEmpty
+                          ? (_, _) {}
+                          : null,
+                      child: _assetIconUrl.isEmpty
+                          ? Text(
+                              transfer.asset.isNotEmpty
+                                  ? transfer.asset[0]
+                                  : '?',
+                              style: GoogleFonts.poppins(
+                                color: context.colors.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            )
+                          : null,
+                    ),
+                    Positioned(
+                      right: -2,
+                      bottom: -2,
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: iconColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: context.appColors.cardColor,
+                            width: 2,
+                          ),
+                        ),
+                        child: Icon(icon, color: Colors.white, size: 12),
+                      ),
+                    ),
+                  ],
                 ),
-                child: Icon(icon, color: iconColor, size: 20),
               ),
               const SizedBox(width: 12),
               // Asset + address
@@ -128,6 +169,18 @@ class TransactionItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String get _assetIconUrl {
+    if (network == null) return '';
+    if (transfer.category == 'external') return network!.iconUrl;
+    final tokens = AppTokens.tokensByChain[transfer.chainId] ?? [];
+    for (final token in tokens) {
+      if (token.symbol.toUpperCase() == transfer.asset.toUpperCase()) {
+        return token.logoUrl;
+      }
+    }
+    return network!.iconUrl;
   }
 
   String _shortenAddress(String address) {

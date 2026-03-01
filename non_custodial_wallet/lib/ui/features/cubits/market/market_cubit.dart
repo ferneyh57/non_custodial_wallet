@@ -5,10 +5,18 @@ import 'market_state.dart';
 class MarketCubit extends Cubit<MarketState> {
   final GetCoinsMarketUseCase getCoinsMarketUseCase;
 
+  DateTime? _lastFetched;
+  static const _ttl = Duration(minutes: 5);
+
   MarketCubit({required this.getCoinsMarketUseCase})
     : super(const MarketState());
 
-  Future<void> loadCoins() async {
+  Future<void> loadCoins({bool force = false}) async {
+    if (!force && _lastFetched != null &&
+        DateTime.now().difference(_lastFetched!) < _ttl) {
+      return;
+    }
+
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
     final result = await getCoinsMarketUseCase.execute();
@@ -21,5 +29,6 @@ class MarketCubit extends Cubit<MarketState> {
         emit(state.copyWith(isLoading: false, errorMessage: failure.message));
       },
     );
+    _lastFetched = DateTime.now();
   }
 }

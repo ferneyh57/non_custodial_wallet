@@ -8,20 +8,33 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
   final GetTransferHistoryUseCase getTransferHistoryUseCase;
   final List<NetworkEntity> networks;
 
+  DateTime? _lastFetched;
+  String? _lastAddress;
+  static const _ttl = Duration(seconds: 30);
+
   TransferHistoryCubit({
     required this.getTransferHistoryUseCase,
     required this.networks,
   }) : super(const TransferHistoryState());
 
   /// Loads recent transfers from ALL networks, merges and sorts by timestamp.
-  Future<void> loadAll(String walletAddress, {int maxCount = 5}) async {
+  Future<void> loadAll(String walletAddress,
+      {int maxCount = 5, bool force = false}) async {
+    final addressChanged = _lastAddress != walletAddress;
+    _lastAddress = walletAddress;
+
+    if (!force && !addressChanged && _lastFetched != null &&
+        DateTime.now().difference(_lastFetched!) < _ttl) {
+      return;
+    }
+
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
     final results = await Future.wait(
       networks.map((network) => getTransferHistoryUseCase(
             walletAddress: walletAddress,
             network: network,
-            maxCount: maxCount,
+            maxCount: 2,
           )),
     );
 
@@ -37,6 +50,7 @@ class TransferHistoryCubit extends Cubit<TransferHistoryState> {
     final limited = all.length > maxCount ? all.sublist(0, maxCount) : all;
 
     emit(state.copyWith(isLoading: false, transfers: limited));
+    _lastFetched = DateTime.now();
   }
 
   /// Loads transfers for a specific asset on a specific network.

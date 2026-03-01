@@ -36,14 +36,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final address =
-          context.read<WalletCubit>().state.wallet?.ethAddress;
-      if (address != null && address.isNotEmpty) {
-        context.read<TokenCubit>().fetchTokenBalances(address);
-        context.read<TransferHistoryCubit>().loadAll(address);
-      }
-    });
+  }
+
+  void _lazyLoadTab(int index) {
+    final address =
+        context.read<WalletCubit>().state.wallet?.ethAddress;
+    if (address == null || address.isEmpty) return;
+
+    if (index == 1) {
+      context.read<TokenCubit>().fetchTokenBalances(address);
+    } else if (index == 2) {
+      context.read<TransferHistoryCubit>().loadAll(address);
+    }
   }
 
   @override
@@ -51,13 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocListener<WalletCubit, WalletState>(
       listenWhen: (prev, curr) =>
           prev.wallet?.ethAddress != curr.wallet?.ethAddress,
-      listener: (context, state) {
-        final address = state.wallet?.ethAddress;
-        if (address != null && address.isNotEmpty) {
-          context.read<TokenCubit>().fetchTokenBalances(address);
-          context.read<TransferHistoryCubit>().loadAll(address);
-        }
-      },
+      listener: (context, state) {},
       child: BlocBuilder<WalletCubit, WalletState>(
         builder: (context, state) {
           return SafeArea(
@@ -96,19 +94,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   : RefreshIndicator(
                       color: context.colors.primary,
                       onRefresh: () async {
-                        await Future.wait([
-                          context.read<WalletCubit>().fetchBalance(),
-                          context.read<MarketCubit>().loadCoins(),
-                          if (state.wallet?.ethAddress case final address?
-                              when address.isNotEmpty) ...[
-                            context
+                        final futures = <Future>[
+                          context.read<WalletCubit>().fetchBalance(force: true),
+                          context.read<MarketCubit>().loadCoins(force: true),
+                        ];
+                        final address = state.wallet?.ethAddress;
+                        if (address != null && address.isNotEmpty) {
+                          if (_selectedTab == 1) {
+                            futures.add(context
                                 .read<TokenCubit>()
-                                .fetchTokenBalances(address),
-                            context
+                                .fetchTokenBalances(address, force: true));
+                          } else if (_selectedTab == 2) {
+                            futures.add(context
                                 .read<TransferHistoryCubit>()
-                                .loadAll(address),
-                          ],
-                        ]);
+                                .loadAll(address, force: true));
+                          }
+                        }
+                        await Future.wait(futures);
                       },
                       child: SingleChildScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),
@@ -182,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           setState(
                                             () => _selectedTab = index,
                                           );
+                                          _lazyLoadTab(index);
                                         },
                                       ),
                                       const SizedBox(height: 14),

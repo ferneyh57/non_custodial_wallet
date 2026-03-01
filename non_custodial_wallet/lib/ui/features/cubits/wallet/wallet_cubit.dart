@@ -17,6 +17,9 @@ class WalletCubit extends Cubit<WalletState> {
   final GetEthAddressUseCase getEthAddressUseCase;
   final GetBalanceUseCase getBalanceUseCase;
 
+  DateTime? _lastBalanceFetched;
+  static const _balanceTtl = Duration(seconds: 30);
+
   WalletCubit({
     required this.generateKeyUseCase,
     required this.saveKeyUseCase,
@@ -124,9 +127,14 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future<void> fetchBalance() async {
+  Future<void> fetchBalance({bool force = false}) async {
     final address = state.wallet?.ethAddress;
     if (address == null) return;
+
+    if (!force && _lastBalanceFetched != null &&
+        DateTime.now().difference(_lastBalanceFetched!) < _balanceTtl) {
+      return;
+    }
 
     final results = await Future.wait(
       AppNetworks.all.map(
@@ -147,6 +155,7 @@ class WalletCubit extends Cubit<WalletState> {
     emit(state.copyWith(
       wallet: state.wallet?.copyWith(balancesInWei: newBalances),
     ));
+    _lastBalanceFetched = DateTime.now();
   }
 
   Future<void> logout() async {

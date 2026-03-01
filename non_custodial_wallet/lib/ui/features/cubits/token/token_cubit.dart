@@ -8,10 +8,23 @@ import 'token_state.dart';
 class TokenCubit extends Cubit<TokenState> {
   final GetTokenBalancesUseCase getTokenBalancesUseCase;
 
+  DateTime? _lastFetched;
+  String? _lastAddress;
+  static const _ttl = Duration(seconds: 30);
+
   TokenCubit({required this.getTokenBalancesUseCase})
       : super(const TokenState());
 
-  Future<void> fetchTokenBalances(String walletAddress) async {
+  Future<void> fetchTokenBalances(String walletAddress,
+      {bool force = false}) async {
+    final addressChanged = _lastAddress != walletAddress;
+    _lastAddress = walletAddress;
+
+    if (!force && !addressChanged && _lastFetched != null &&
+        DateTime.now().difference(_lastFetched!) < _ttl) {
+      return;
+    }
+
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
     final allBalances = <TokenBalanceEntity>[];
@@ -50,5 +63,6 @@ class TokenCubit extends Cubit<TokenState> {
       isLoading: false,
       tokenBalances: allBalances,
     ));
+    _lastFetched = DateTime.now();
   }
 }
