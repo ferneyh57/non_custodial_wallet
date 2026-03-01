@@ -8,15 +8,21 @@ import 'transaction_item.dart';
 class TransactionList extends StatelessWidget {
   final List<TransferEntity> transfers;
   final bool isLoading;
+  final bool isLoadingMore;
+  final bool hasMore;
   final String emptyMessage;
   final List<NetworkEntity> networks;
+  final VoidCallback? onLoadMore;
 
   const TransactionList({
     super.key,
     required this.transfers,
     required this.isLoading,
+    this.isLoadingMore = false,
+    this.hasMore = false,
     required this.emptyMessage,
     required this.networks,
+    this.onLoadMore,
   });
 
   @override
@@ -54,6 +60,33 @@ class TransactionList extends StatelessWidget {
           ),
           if (i < transfers.length - 1) const SizedBox(height: 8),
         ],
+        if (isLoadingMore)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: context.colors.primary,
+              ),
+            ),
+          )
+        else if (hasMore && onLoadMore != null)
+          GestureDetector(
+            onTap: onLoadMore,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Text(
+                context.l10n.loadMore,
+                style: GoogleFonts.poppins(
+                  color: context.colors.primary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

@@ -1,17 +1,20 @@
 import '../../../domain/entities/network/network_entity.dart';
 import '../../../domain/entities/transaction/transfer_entity.dart';
+import '../../../domain/entities/transaction/transfer_page_result.dart';
 import '../../../ui/core/error/failures.dart';
 import '../../../ui/core/util/result.dart';
 import '../../../ui/core/util/app_logger.dart';
 import '../shared/alchemy_rpc_client.dart';
 
 abstract class TransferHistoryDataSource {
-  Future<Result<List<TransferEntity>>> getTransfers({
+  Future<Result<TransferPageResult>> getTransfers({
     required String walletAddress,
     required NetworkEntity network,
     String? contractAddress,
     int maxCount,
     List<String> categories,
+    String? sentPageKey,
+    String? receivedPageKey,
   });
 }
 
@@ -21,12 +24,14 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
   TransferHistoryDataSourceImpl({required this.rpcClient});
 
   @override
-  Future<Result<List<TransferEntity>>> getTransfers({
+  Future<Result<TransferPageResult>> getTransfers({
     required String walletAddress,
     required NetworkEntity network,
     String? contractAddress,
     int maxCount = 10,
     List<String> categories = const ['external', 'erc20'],
+    String? sentPageKey,
+    String? receivedPageKey,
   }) async {
     try {
       final maxCountHex = '0x${maxCount.toRadixString(16)}';
@@ -38,6 +43,7 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
         categories: categories,
         contractAddress: contractAddress,
         maxCount: maxCountHex,
+        pageKey: sentPageKey,
       );
 
       final receivedFuture = _fetchTransfers(
@@ -47,14 +53,18 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
         categories: categories,
         contractAddress: contractAddress,
         maxCount: maxCountHex,
+        pageKey: receivedPageKey,
       );
 
       final results = await Future.wait([sentFuture, receivedFuture]);
 
-      final sent = results[0]
+      final (sentTransfers, nextSentPageKey) = results[0];
+      final (receivedTransfers, nextReceivedPageKey) = results[1];
+
+      final sent = sentTransfers
           .map((t) => _toEntity(t, isSent: true, chainId: network.chainId))
           .toList();
-      final received = results[1]
+      final received = receivedTransfers
           .map((t) => _toEntity(t, isSent: false, chainId: network.chainId))
           .toList();
 
@@ -71,7 +81,11 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
 
       unique.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
-      return Result.success(unique);
+      return Result.success(TransferPageResult(
+        transfers: unique,
+        sentPageKey: nextSentPageKey,
+        receivedPageKey: nextReceivedPageKey,
+      ));
     } catch (e, stackTrace) {
       AppLogger.error(
         'Error fetching transfer history on ${network.shortName}',
@@ -86,13 +100,14 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
     }
   }
 
-  Future<List<Map<String, dynamic>>> _fetchTransfers({
+  Future<(List<Map<String, dynamic>>, String?)> _fetchTransfers({
     required String rpcUrl,
     required String walletAddress,
     required String direction,
     required List<String> categories,
     String? contractAddress,
     required String maxCount,
+    String? pageKey,
   }) async {
     final params = <String, dynamic>{
       'fromBlock': '0x0',
@@ -109,6 +124,10 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
       params['contractAddresses'] = [contractAddress];
     }
 
+    if (pageKey != null) {
+      params['pageKey'] = pageKey;
+    }
+
     try {
       final result = await rpcClient.call(
         method: 'alchemy_getAssetTransfers',
@@ -116,9 +135,10 @@ class TransferHistoryDataSourceImpl implements TransferHistoryDataSource {
         url: rpcUrl,
       );
       final transfers = result['transfers'] as List<dynamic>?;
-      return transfers?.cast<Map<String, dynamic>>() ?? [];
+      final nextPageKey = result['pageKey'] as String?;
+      return (transfers?.cast<Map<String, dynamic>>() ?? [], nextPageKey);
     } catch (_) {
-      return [];
+      return (<Map<String, dynamic>>[], null);
     }
   }
 

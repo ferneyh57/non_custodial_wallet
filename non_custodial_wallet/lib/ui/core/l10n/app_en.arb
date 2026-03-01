@@ -77,5 +77,6 @@
   "swapFeeLabel": "Fee",
   "swapSponsored": "Sponsored",
   "swapNotSponsored": "Standard",
-  "swapSponsoredRequired": "This network does not support swaps yet. Try a different network."
+  "swapSponsoredRequired": "This network does not support swaps yet. Try a different network.",
+  "loadMore": "Load more"
 }

@@ -7,6 +7,8 @@ part 'transfer_history_state.freezed.dart';
 abstract class TransferHistoryState with _$TransferHistoryState {
   const factory TransferHistoryState({
     @Default(false) bool isLoading,
+    @Default(false) bool isLoadingMore,
+    @Default(true) bool hasMore,
     @Default([]) List<TransferEntity> transfers,
     String? errorMessage,
   }) = _TransferHistoryState;

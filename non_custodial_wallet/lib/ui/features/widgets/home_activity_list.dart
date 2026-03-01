@@ -18,8 +18,12 @@ class HomeActivityList extends StatelessWidget {
         return TransactionList(
           transfers: state.transfers,
           isLoading: state.isLoading,
+          isLoadingMore: state.isLoadingMore,
+          hasMore: state.hasMore,
           emptyMessage: context.l10n.noTransactionsFound,
           networks: networks,
+          onLoadMore: () =>
+              context.read<TransferHistoryCubit>().loadMore(),
         );
       },
     );

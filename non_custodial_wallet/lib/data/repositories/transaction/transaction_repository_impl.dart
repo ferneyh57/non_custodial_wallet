@@ -3,7 +3,7 @@ import 'package:non_custodial_wallet/data/datasources/transaction/transfer_histo
 import 'package:non_custodial_wallet/domain/entities/network/network_entity.dart';
 import 'package:non_custodial_wallet/domain/entities/token/token_entity.dart';
 import 'package:non_custodial_wallet/domain/entities/transaction/gas_estimate_entity.dart';
-import 'package:non_custodial_wallet/domain/entities/transaction/transfer_entity.dart';
+import 'package:non_custodial_wallet/domain/entities/transaction/transfer_page_result.dart';
 import 'package:non_custodial_wallet/ui/core/util/result.dart';
 import '../../../domain/repositories/transaction/i_transaction_repository.dart';
 
@@ -66,12 +66,14 @@ class TransactionRepositoryImpl implements ITransactionRepository {
   }
 
   @override
-  Future<Result<List<TransferEntity>>> getTransferHistory({
+  Future<Result<TransferPageResult>> getTransferHistory({
     required String walletAddress,
     required NetworkEntity network,
     String? contractAddress,
     int maxCount = 10,
     List<String> categories = const ['external', 'erc20'],
+    String? sentPageKey,
+    String? receivedPageKey,
   }) {
     return historyDataSource.getTransfers(
       walletAddress: walletAddress,
@@ -79,6 +81,8 @@ class TransactionRepositoryImpl implements ITransactionRepository {
       contractAddress: contractAddress,
       maxCount: maxCount,
       categories: categories,
+      sentPageKey: sentPageKey,
+      receivedPageKey: receivedPageKey,
     );
   }
 }

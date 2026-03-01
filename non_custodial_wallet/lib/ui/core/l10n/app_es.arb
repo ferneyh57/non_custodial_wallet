@@ -77,5 +77,6 @@
   "swapFeeLabel": "Comisión",
   "swapSponsored": "Patrocinado",
   "swapNotSponsored": "Estándar",
-  "swapSponsoredRequired": "Esta red aún no soporta intercambios. Prueba con otra red."
+  "swapSponsoredRequired": "Esta red aún no soporta intercambios. Prueba con otra red.",
+  "loadMore": "Cargar más"
 }

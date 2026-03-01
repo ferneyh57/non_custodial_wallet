@@ -58,6 +58,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  bool _onScroll(ScrollNotification notification) {
+    if (_selectedTab != 2) return false;
+    if (notification is! ScrollUpdateNotification) return false;
+
+    final metrics = notification.metrics;
+    if (metrics.pixels >= metrics.maxScrollExtent - 200) {
+      context.read<TransferHistoryCubit>().loadMore();
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<WalletCubit, WalletState>(
@@ -125,7 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                         await Future.wait(futures);
                       },
-                      child: SingleChildScrollView(
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: _onScroll,
+                        child: SingleChildScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
@@ -226,6 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+                    ),
                     ),
               ),
             ),

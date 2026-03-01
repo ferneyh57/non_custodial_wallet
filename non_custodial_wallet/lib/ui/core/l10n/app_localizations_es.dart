@@ -230,4 +230,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get swapSponsoredRequired =>
       'Esta red aún no soporta intercambios. Prueba con otra red.';
+
+  @override
+  String get loadMore => 'Cargar más';
 }

@@ -1,7 +1,7 @@
 import '../../entities/network/network_entity.dart';
 import '../../entities/token/token_entity.dart';
 import '../../entities/transaction/gas_estimate_entity.dart';
-import '../../entities/transaction/transfer_entity.dart';
+import '../../entities/transaction/transfer_page_result.dart';
 import '../../../ui/core/util/result.dart';
 
 abstract class ITransactionRepository {
@@ -28,11 +28,13 @@ abstract class ITransactionRepository {
     TokenEntity? token,
   });
 
-  Future<Result<List<TransferEntity>>> getTransferHistory({
+  Future<Result<TransferPageResult>> getTransferHistory({
     required String walletAddress,
     required NetworkEntity network,
     String? contractAddress,
     int maxCount = 10,
     List<String> categories = const ['external', 'erc20'],
+    String? sentPageKey,
+    String? receivedPageKey,
   });
 }

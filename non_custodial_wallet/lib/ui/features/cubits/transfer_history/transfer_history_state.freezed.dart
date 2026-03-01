@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransferHistoryState {
 
- bool get isLoading; List<TransferEntity> get transfers; String? get errorMessage;
+ bool get isLoading; bool get isLoadingMore; bool get hasMore; List<TransferEntity> get transfers; String? get errorMessage;
 /// Create a copy of TransferHistoryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TransferHistoryStateCopyWith<TransferHistoryState> get copyWith => _$TransferHi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransferHistoryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.transfers, transfers)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransferHistoryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other.transfers, transfers)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(transfers),errorMessage);
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingMore,hasMore,const DeepCollectionEquality().hash(transfers),errorMessage);
 
 @override
 String toString() {
-  return 'TransferHistoryState(isLoading: $isLoading, transfers: $transfers, errorMessage: $errorMessage)';
+  return 'TransferHistoryState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, hasMore: $hasMore, transfers: $transfers, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TransferHistoryStateCopyWith<$Res>  {
   factory $TransferHistoryStateCopyWith(TransferHistoryState value, $Res Function(TransferHistoryState) _then) = _$TransferHistoryStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, List<TransferEntity> transfers, String? errorMessage
+ bool isLoading, bool isLoadingMore, bool hasMore, List<TransferEntity> transfers, String? errorMessage
 });
 
 
@@ -62,9 +62,11 @@ class _$TransferHistoryStateCopyWithImpl<$Res>
 
 /// Create a copy of TransferHistoryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? transfers = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isLoadingMore = null,Object? hasMore = null,Object? transfers = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as bool,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
 as bool,transfers: null == transfers ? _self.transfers : transfers // ignore: cast_nullable_to_non_nullable
 as List<TransferEntity>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  List<TransferEntity> transfers,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  bool isLoadingMore,  bool hasMore,  List<TransferEntity> transfers,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TransferHistoryState() when $default != null:
-return $default(_that.isLoading,_that.transfers,_that.errorMessage);case _:
+return $default(_that.isLoading,_that.isLoadingMore,_that.hasMore,_that.transfers,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -173,10 +175,10 @@ return $default(_that.isLoading,_that.transfers,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  List<TransferEntity> transfers,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  bool isLoadingMore,  bool hasMore,  List<TransferEntity> transfers,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _TransferHistoryState():
-return $default(_that.isLoading,_that.transfers,_that.errorMessage);case _:
+return $default(_that.isLoading,_that.isLoadingMore,_that.hasMore,_that.transfers,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +195,10 @@ return $default(_that.isLoading,_that.transfers,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  List<TransferEntity> transfers,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  bool isLoadingMore,  bool hasMore,  List<TransferEntity> transfers,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _TransferHistoryState() when $default != null:
-return $default(_that.isLoading,_that.transfers,_that.errorMessage);case _:
+return $default(_that.isLoading,_that.isLoadingMore,_that.hasMore,_that.transfers,_that.errorMessage);case _:
   return null;
 
 }
@@ -208,10 +210,12 @@ return $default(_that.isLoading,_that.transfers,_that.errorMessage);case _:
 
 
 class _TransferHistoryState implements TransferHistoryState {
-  const _TransferHistoryState({this.isLoading = false, final  List<TransferEntity> transfers = const [], this.errorMessage}): _transfers = transfers;
+  const _TransferHistoryState({this.isLoading = false, this.isLoadingMore = false, this.hasMore = true, final  List<TransferEntity> transfers = const [], this.errorMessage}): _transfers = transfers;
   
 
 @override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isLoadingMore;
+@override@JsonKey() final  bool hasMore;
  final  List<TransferEntity> _transfers;
 @override@JsonKey() List<TransferEntity> get transfers {
   if (_transfers is EqualUnmodifiableListView) return _transfers;
@@ -231,16 +235,16 @@ _$TransferHistoryStateCopyWith<_TransferHistoryState> get copyWith => __$Transfe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransferHistoryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._transfers, _transfers)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransferHistoryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._transfers, _transfers)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_transfers),errorMessage);
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingMore,hasMore,const DeepCollectionEquality().hash(_transfers),errorMessage);
 
 @override
 String toString() {
-  return 'TransferHistoryState(isLoading: $isLoading, transfers: $transfers, errorMessage: $errorMessage)';
+  return 'TransferHistoryState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, hasMore: $hasMore, transfers: $transfers, errorMessage: $errorMessage)';
 }
 
 
@@ -251,7 +255,7 @@ abstract mixin class _$TransferHistoryStateCopyWith<$Res> implements $TransferHi
   factory _$TransferHistoryStateCopyWith(_TransferHistoryState value, $Res Function(_TransferHistoryState) _then) = __$TransferHistoryStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, List<TransferEntity> transfers, String? errorMessage
+ bool isLoading, bool isLoadingMore, bool hasMore, List<TransferEntity> transfers, String? errorMessage
 });
 
 
@@ -268,9 +272,11 @@ class __$TransferHistoryStateCopyWithImpl<$Res>
 
 /// Create a copy of TransferHistoryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? transfers = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isLoadingMore = null,Object? hasMore = null,Object? transfers = null,Object? errorMessage = freezed,}) {
   return _then(_TransferHistoryState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as bool,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
 as bool,transfers: null == transfers ? _self._transfers : transfers // ignore: cast_nullable_to_non_nullable
 as List<TransferEntity>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
