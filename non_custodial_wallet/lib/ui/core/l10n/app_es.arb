@@ -57,5 +57,10 @@
   "tokenDetailTitle": "Detalles del Token",
   "contractAddressLabel": "Dirección del Contrato",
   "viewOnExplorer": "Ver en Explorador",
-  "contractCopied": "Dirección del contrato copiada"
+  "contractCopied": "Dirección del contrato copiada",
+  "estimatedFeeLabel": "Comisión estimada",
+  "estimatingFee": "Estimando comisión...",
+  "confirmSendTitle": "Confirmar Transacción",
+  "cancelButton": "Cancelar",
+  "confirmButton": "Confirmar"
 }

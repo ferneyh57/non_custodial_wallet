@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/token/token_entity.dart';
+import '../../../../domain/entities/transaction/gas_estimate_entity.dart';
 
 part 'send_state.freezed.dart';
 
@@ -14,6 +15,8 @@ abstract class SendState with _$SendState {
     @Default('') String address,
     @Default('') String amount,
     @Default(false) bool isLoading,
+    @Default(false) bool isEstimatingGas,
+    GasEstimateEntity? gasEstimate,
     String? txHash,
     String? errorMessage,
   }) = _SendState;

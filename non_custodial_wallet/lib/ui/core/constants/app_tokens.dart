@@ -4,37 +4,37 @@ import 'network_constants.dart';
 class AppTokens {
   // Logo URLs
   static const _usdcLogo =
-      'https://assets.coingecko.com/coins/images/6319/small/usdc.png';
+      'https://assets.coingecko.com/coins/images/6319/large/usdc.png';
   static const _usdtLogo =
-      'https://assets.coingecko.com/coins/images/325/small/Tether.png';
+      'https://assets.coingecko.com/coins/images/325/large/Tether.png';
   static const _linkLogo =
-      'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png';
+      'https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png';
   static const _wethLogo =
-      'https://assets.coingecko.com/coins/images/2518/small/weth.png';
+      'https://assets.coingecko.com/coins/images/2518/large/weth.png';
   static const _eurcLogo =
-      'https://assets.coingecko.com/coins/images/26045/small/euro-coin.png';
+      'https://assets.coingecko.com/coins/images/26045/large/euro-coin.png';
   static const _daiLogo =
-      'https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png';
+      'https://assets.coingecko.com/coins/images/9956/large/Badge_Dai.png';
   static const _wbtcLogo =
-      'https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png';
+      'https://assets.coingecko.com/coins/images/7598/large/wrapped_bitcoin_wbtc.png';
   static const _stethLogo =
-      'https://assets.coingecko.com/coins/images/13442/small/steth_logo.png';
+      'https://assets.coingecko.com/coins/images/13442/large/steth_logo.png';
   static const _uniLogo =
-      'https://assets.coingecko.com/coins/images/12504/small/uni.jpg';
+      'https://assets.coingecko.com/coins/images/12504/large/uni.jpg';
   static const _aaveLogo =
-      'https://assets.coingecko.com/coins/images/12645/small/AAVE.png';
+      'https://assets.coingecko.com/coins/images/12645/large/AAVE.png';
   static const _cbethLogo =
-      'https://assets.coingecko.com/coins/images/27008/small/cbeth.png';
+      'https://assets.coingecko.com/coins/images/27008/large/cbeth.png';
   static const _arbLogo =
-      'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg';
+      'https://assets.coingecko.com/coins/images/16547/large/photo_2023-03-29_21.47.00.jpeg';
   static const _gmxLogo =
-      'https://assets.coingecko.com/coins/images/18323/small/arbit.png';
+      'https://assets.coingecko.com/coins/images/18323/large/arbit.png';
   static const _opLogo =
-      'https://assets.coingecko.com/coins/images/25244/small/Optimism.png';
+      'https://assets.coingecko.com/coins/images/25244/large/Optimism.png';
   static const _wmaticLogo =
-      'https://assets.coingecko.com/coins/images/14073/small/matic.png';
+      'https://assets.coingecko.com/coins/images/14073/large/matic.png';
   static const _wstethLogo =
-      'https://assets.coingecko.com/coins/images/18834/small/wstETH.png';
+      'https://assets.coingecko.com/coins/images/18834/large/wstETH.png';
 
   static Map<int, List<TokenEntity>> get tokensByChain =>
       AppEnvironment.isMainnet ? _mainnetTokensByChain : _testnetTokensByChain;

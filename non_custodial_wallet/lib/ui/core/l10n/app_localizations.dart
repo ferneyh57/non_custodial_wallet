@@ -409,6 +409,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Contract address copied'**
   String get contractCopied;
+
+  /// No description provided for @estimatedFeeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated fee'**
+  String get estimatedFeeLabel;
+
+  /// No description provided for @estimatingFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimating fee...'**
+  String get estimatingFee;
+
+  /// No description provided for @confirmSendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Transaction'**
+  String get confirmSendTitle;
+
+  /// No description provided for @cancelButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButton;
+
+  /// No description provided for @confirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirmButton;
 }
 
 class _AppLocalizationsDelegate

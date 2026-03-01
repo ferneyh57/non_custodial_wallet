@@ -8,6 +8,7 @@ import '../../../../ui/core/di.dart';
 import '../../cubits/send/send_cubit.dart';
 import '../../cubits/send/send_state.dart';
 import '../../widgets/network_dropdown.dart';
+import '../../widgets/send/send_confirmation_sheet.dart';
 
 class SendScreen extends StatelessWidget {
   const SendScreen({super.key});
@@ -31,9 +32,10 @@ class SendScreenView extends StatelessWidget {
     return BlocConsumer<SendCubit, SendState>(
       listener: (context, state) {
         if (state.txHash != null) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Transaction Sent! Hash: ${state.txHash}'),
+              content: Text(context.l10n.txSentSuccess),
               backgroundColor: Colors.green,
             ),
           );
@@ -238,7 +240,7 @@ class SendScreenView extends StatelessWidget {
                 ),
                 const SizedBox(height: 48),
 
-                // Send Button with gradient
+                // Send Button — opens confirmation modal
                 SizedBox(
                   width: double.infinity,
                   height: 54,
@@ -269,7 +271,27 @@ class SendScreenView extends StatelessWidget {
                     ),
                     child: ElevatedButton(
                       onPressed: state.isFormValid
-                          ? () => cubit.sendTransaction()
+                          ? () {
+                              final error = cubit.validateForm();
+                              if (error != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(error),
+                                    backgroundColor: context.colors.error,
+                                  ),
+                                );
+                                return;
+                              }
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => BlocProvider.value(
+                                  value: cubit,
+                                  child: const SendConfirmationSheet(),
+                                ),
+                              );
+                            }
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
@@ -281,22 +303,13 @@ class SendScreenView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: state.isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : Text(
-                              context.l10n.sendAction,
-                              style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                      child: Text(
+                        context.l10n.sendAction,
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 ),

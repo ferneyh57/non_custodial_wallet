@@ -167,4 +167,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contractCopied => 'Contract address copied';
+
+  @override
+  String get estimatedFeeLabel => 'Estimated fee';
+
+  @override
+  String get estimatingFee => 'Estimating fee...';
+
+  @override
+  String get confirmSendTitle => 'Confirm Transaction';
+
+  @override
+  String get cancelButton => 'Cancel';
+
+  @override
+  String get confirmButton => 'Confirm';
 }

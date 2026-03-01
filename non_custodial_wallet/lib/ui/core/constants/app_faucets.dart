@@ -19,19 +19,19 @@ class AppFaucets {
       AppEnvironment.isTestnet ? sepolia : const [];
 
   static const _ethIcon =
-      'https://assets.coingecko.com/coins/images/279/small/ethereum.png';
+      'https://assets.coingecko.com/coins/images/279/large/ethereum.png';
   static const _usdcIcon =
-      'https://assets.coingecko.com/coins/images/6319/small/usdc.png';
+      'https://assets.coingecko.com/coins/images/6319/large/usdc.png';
   static const _linkIcon =
-      'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png';
+      'https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png';
   static const _opIcon =
-      'https://assets.coingecko.com/coins/images/25244/small/Optimism.png';
+      'https://assets.coingecko.com/coins/images/25244/large/Optimism.png';
   static const _arbIcon =
-      'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg';
+      'https://assets.coingecko.com/coins/images/16547/large/photo_2023-03-29_21.47.00.jpeg';
   static const _baseIcon =
-      'https://assets.coingecko.com/coins/images/279/small/ethereum.png';
+      'https://assets.coingecko.com/coins/images/279/large/ethereum.png';
   static const _polIcon =
-      'https://assets.coingecko.com/coins/images/14073/small/matic.png';
+      'https://assets.coingecko.com/coins/images/14073/large/matic.png';
 
   static const List<FaucetLink> sepolia = [
     // ETH Sepolia

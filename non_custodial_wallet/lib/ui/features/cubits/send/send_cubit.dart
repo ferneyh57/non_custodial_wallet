@@ -5,6 +5,7 @@ import '../../../../domain/entities/network/network_entity.dart';
 import '../../../../domain/entities/token/token_entity.dart';
 import '../../../../domain/usecases/transaction/send_transaction_use_case.dart';
 import '../../../../domain/usecases/transaction/send_token_transaction_use_case.dart';
+import '../../../../domain/usecases/transaction/estimate_gas_use_case.dart';
 import '../../../../domain/usecases/auth/get_key_use_case.dart';
 import '../../../../domain/usecases/wallet/get_balance_use_case.dart';
 import '../../../../domain/usecases/wallet/get_eth_address_use_case.dart';
@@ -16,6 +17,7 @@ import 'send_state.dart';
 class SendCubit extends Cubit<SendState> {
   final SendTransactionUseCase sendTransactionUseCase;
   final SendTokenTransactionUseCase sendTokenTransactionUseCase;
+  final EstimateGasUseCase estimateGasUseCase;
   final GetKeyUseCase getKeyUseCase;
   final GetBalanceUseCase getBalanceUseCase;
   final GetEthAddressUseCase getEthAddressUseCase;
@@ -34,6 +36,7 @@ class SendCubit extends Cubit<SendState> {
   SendCubit({
     required this.sendTransactionUseCase,
     required this.sendTokenTransactionUseCase,
+    required this.estimateGasUseCase,
     required this.getKeyUseCase,
     required this.getBalanceUseCase,
     required this.getEthAddressUseCase,
@@ -56,6 +59,45 @@ class SendCubit extends Cubit<SendState> {
       amount: amountController.text.trim(),
       errorMessage: null,
     ));
+  }
+
+  /// Clears gas estimation state (called when confirmation modal closes).
+  void stopGasEstimation() {
+    emit(state.copyWith(gasEstimate: null, isEstimatingGas: false));
+  }
+
+  Future<void> estimateGas() async {
+    final network = state.selectedNetwork;
+    if (network == null || _address.isEmpty) return;
+
+    final address = addressController.text.trim();
+    if (!address.startsWith('0x') || address.length != 42) return;
+
+    final amountStr = amountController.text.trim();
+    final decimals = _currentDecimals();
+    final amountRaw = _parseAmountToRaw(amountStr, decimals);
+    if (amountRaw <= BigInt.zero) return;
+
+    emit(state.copyWith(isEstimatingGas: true));
+
+    final result = await estimateGasUseCase(
+      fromAddress: _address,
+      toAddress: address,
+      amount: amountRaw,
+      network: network,
+      token: state.selectedToken,
+    );
+
+    if (isClosed) return;
+
+    result.fold(
+      (estimate) {
+        emit(state.copyWith(isEstimatingGas: false, gasEstimate: estimate));
+      },
+      (_) {
+        emit(state.copyWith(isEstimatingGas: false, gasEstimate: null));
+      },
+    );
   }
 
   List<TokenEntity> get availableTokens {
@@ -119,6 +161,8 @@ class SendCubit extends Cubit<SendState> {
       selectedNetwork: network,
       selectedToken: null,
       errorMessage: null,
+      gasEstimate: null,
+      isEstimatingGas: false,
     ));
     amountController.clear();
     if (_address.isNotEmpty) {
@@ -128,7 +172,12 @@ class SendCubit extends Cubit<SendState> {
   }
 
   void selectToken(TokenEntity? token) {
-    emit(state.copyWith(selectedToken: token, errorMessage: null));
+    emit(state.copyWith(
+      selectedToken: token,
+      errorMessage: null,
+      gasEstimate: null,
+      isEstimatingGas: false,
+    ));
     amountController.clear();
   }
 
@@ -165,35 +214,37 @@ class SendCubit extends Cubit<SendState> {
     return (amount * multiplier).toBigInt();
   }
 
-  Future<void> sendTransaction() async {
+  /// Validates form before opening the confirmation modal.
+  /// Returns null if valid, or an error message string.
+  String? validateForm() {
     final network = state.selectedNetwork;
-    if (network == null) return;
+    if (network == null) return 'No network selected';
 
     final address = addressController.text.trim();
-    if (address.isEmpty) {
-      emit(state.copyWith(errorMessage: "Address cannot be empty"));
-      return;
-    }
-
+    if (address.isEmpty) return state.errorMessage ?? 'Address cannot be empty';
     if (!address.startsWith('0x') || address.length != 42) {
-      emit(state.copyWith(errorMessage: "Invalid address"));
-      return;
+      return 'Invalid address';
     }
 
     final amountStr = amountController.text;
     final decimals = _currentDecimals();
     final amountRaw = _parseAmountToRaw(amountStr, decimals);
-
-    if (amountRaw <= BigInt.zero) {
-      emit(state.copyWith(errorMessage: "Amount must be greater than zero"));
-      return;
-    }
+    if (amountRaw <= BigInt.zero) return 'Amount must be greater than zero';
 
     final currentBalance = _currentBalance();
-    if (amountRaw > currentBalance) {
-      emit(state.copyWith(errorMessage: "Insufficient balance"));
-      return;
-    }
+    if (amountRaw > currentBalance) return 'Insufficient balance';
+
+    return null;
+  }
+
+  Future<void> sendTransaction() async {
+    final network = state.selectedNetwork;
+    if (network == null) return;
+
+    final address = addressController.text.trim();
+    final amountStr = amountController.text;
+    final decimals = _currentDecimals();
+    final amountRaw = _parseAmountToRaw(amountStr, decimals);
 
     try {
       emit(state.copyWith(isLoading: true, errorMessage: null, txHash: null));

@@ -7,6 +7,7 @@ import 'package:non_custodial_wallet/domain/entities/network/network_entity.dart
 import 'package:non_custodial_wallet/domain/entities/token/token_entity.dart';
 import 'package:non_custodial_wallet/ui/core/error/failures.dart';
 import 'package:non_custodial_wallet/ui/core/util/app_logger.dart';
+import 'package:non_custodial_wallet/domain/entities/transaction/gas_estimate_entity.dart';
 import 'package:non_custodial_wallet/ui/core/util/result.dart';
 
 abstract class ITransactionDataSource {
@@ -23,6 +24,14 @@ abstract class ITransactionDataSource {
     required BigInt amount,
     required NetworkEntity network,
     required TokenEntity token,
+  });
+
+  Future<Result<GasEstimateEntity>> estimateGas({
+    required String fromAddress,
+    required String toAddress,
+    required BigInt amount,
+    required NetworkEntity network,
+    TokenEntity? token,
   });
 }
 
@@ -128,6 +137,65 @@ class TransactionDataSourceImpl implements ITransactionDataSource {
       );
       return Result.failure(
         ServerFailure('Token transfer failed: ${e.toString()}'),
+      );
+    }
+  }
+
+  @override
+  Future<Result<GasEstimateEntity>> estimateGas({
+    required String fromAddress,
+    required String toAddress,
+    required BigInt amount,
+    required NetworkEntity network,
+    TokenEntity? token,
+  }) async {
+    final client = clients[network.chainId];
+    if (client == null) {
+      return Result.failure(
+        ServerFailure('No client for ${network.shortName}'),
+      );
+    }
+    try {
+      final from = EthereumAddress.fromHex(fromAddress);
+      final to = EthereumAddress.fromHex(toAddress);
+
+      BigInt gasUnits;
+
+      if (token != null) {
+        final contract = DeployedContract(
+          _erc20Abi,
+          EthereumAddress.fromHex(token.contractAddress),
+        );
+        final transfer = contract.function('transfer');
+        final data = transfer.encodeCall([to, amount]);
+
+        gasUnits = await client.estimateGas(
+          sender: from,
+          to: contract.address,
+          data: data,
+        );
+      } else {
+        gasUnits = await client.estimateGas(
+          sender: from,
+          to: to,
+          value: EtherAmount.inWei(amount),
+        );
+      }
+
+      final gasPrice = await client.getGasPrice();
+
+      return Result.success(GasEstimateEntity(
+        estimatedGas: gasUnits,
+        gasPrice: gasPrice.getInWei,
+      ));
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'Error estimating gas on ${network.shortName}',
+        e,
+        stackTrace,
+      );
+      return Result.failure(
+        ServerFailure('Gas estimation failed: ${e.toString()}'),
       );
     }
   }

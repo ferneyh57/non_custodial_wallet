@@ -11,7 +11,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('eth-sepolia'),
         explorerBaseUrl: 'https://sepolia.etherscan.io/address/',
         alchemyRpcPrefix: 'eth-sepolia',
-        iconUrl: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png',
+        iconUrl: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
       );
 
   static NetworkEntity get optSepolia => NetworkEntity(
@@ -22,7 +22,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('opt-sepolia'),
         explorerBaseUrl: 'https://sepolia-optimism.etherscan.io/address/',
         alchemyRpcPrefix: 'opt-sepolia',
-        iconUrl: 'https://assets.coingecko.com/coins/images/25244/small/Optimism.png',
+        iconUrl: 'https://assets.coingecko.com/coins/images/25244/large/Optimism.png',
       );
 
   static NetworkEntity get polygonAmoy => NetworkEntity(
@@ -33,7 +33,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('polygon-amoy'),
         explorerBaseUrl: 'https://amoy.polygonscan.com/address/',
         alchemyRpcPrefix: 'polygon-amoy',
-        iconUrl: 'https://assets.coingecko.com/coins/images/4713/small/polygon.png',
+        iconUrl: 'https://assets.coingecko.com/coins/images/4713/large/polygon.png',
       );
 
   static NetworkEntity get arbSepolia => NetworkEntity(
@@ -44,7 +44,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('arb-sepolia'),
         explorerBaseUrl: 'https://sepolia.arbiscan.io/address/',
         alchemyRpcPrefix: 'arb-sepolia',
-        iconUrl: 'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg',
+        iconUrl: 'https://assets.coingecko.com/coins/images/16547/large/photo_2023-03-29_21.47.00.jpeg',
       );
 
   static NetworkEntity get baseSepolia => NetworkEntity(
@@ -55,7 +55,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('base-sepolia'),
         explorerBaseUrl: 'https://sepolia.basescan.org/address/',
         alchemyRpcPrefix: 'base-sepolia',
-        iconUrl: 'https://assets.coingecko.com/asset_platforms/images/131/small/base.jpeg',
+        iconUrl: 'https://assets.coingecko.com/asset_platforms/images/131/large/base.jpeg',
       );
 
   // --- Mainnet ---
@@ -67,7 +67,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('eth-mainnet'),
         explorerBaseUrl: 'https://etherscan.io/address/',
         alchemyRpcPrefix: 'eth-mainnet',
-        iconUrl: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png',
+        iconUrl: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
       );
 
   static NetworkEntity get optMainnet => NetworkEntity(
@@ -78,7 +78,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('opt-mainnet'),
         explorerBaseUrl: 'https://optimistic.etherscan.io/address/',
         alchemyRpcPrefix: 'opt-mainnet',
-        iconUrl: 'https://assets.coingecko.com/coins/images/25244/small/Optimism.png',
+        iconUrl: 'https://assets.coingecko.com/coins/images/25244/large/Optimism.png',
       );
 
   static NetworkEntity get polygonMainnet => NetworkEntity(
@@ -89,7 +89,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('polygon-mainnet'),
         explorerBaseUrl: 'https://polygonscan.com/address/',
         alchemyRpcPrefix: 'polygon-mainnet',
-        iconUrl: 'https://assets.coingecko.com/coins/images/4713/small/polygon.png',
+        iconUrl: 'https://assets.coingecko.com/coins/images/4713/large/polygon.png',
       );
 
   static NetworkEntity get arbMainnet => NetworkEntity(
@@ -100,7 +100,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('arb-mainnet'),
         explorerBaseUrl: 'https://arbiscan.io/address/',
         alchemyRpcPrefix: 'arb-mainnet',
-        iconUrl: 'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg',
+        iconUrl: 'https://assets.coingecko.com/coins/images/16547/large/photo_2023-03-29_21.47.00.jpeg',
       );
 
   static NetworkEntity get baseMainnet => NetworkEntity(
@@ -111,7 +111,7 @@ class AppNetworks {
         rpcUrl: NetworkConstants.rpcUrl('base-mainnet'),
         explorerBaseUrl: 'https://basescan.org/address/',
         alchemyRpcPrefix: 'base-mainnet',
-        iconUrl: 'https://assets.coingecko.com/asset_platforms/images/131/small/base.jpeg',
+        iconUrl: 'https://assets.coingecko.com/asset_platforms/images/131/large/base.jpeg',
       );
 
   // --- Environment-aware getters ---
