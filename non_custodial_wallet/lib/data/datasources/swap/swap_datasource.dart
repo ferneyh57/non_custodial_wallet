@@ -87,6 +87,8 @@ class SwapDataSourceImpl implements ISwapDataSource {
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
 
+    AppLogger.info('RPC [$method] response body: ${response.body}');
+
     if (json.containsKey('error')) {
       final error = json['error'] as Map<String, dynamic>;
       final message = error['message'] as String? ?? 'Unknown error';
@@ -121,7 +123,28 @@ class SwapDataSourceImpl implements ISwapDataSource {
       ]);
 
       final quote = result['quote'] as Map<String, dynamic>?;
-      final dataArray = result['data'] as List<dynamic>?;
+      final rawData = result['data'];
+
+      // data can be a List (array type) or a Map (single user-operation fields)
+      List<dynamic>? dataArray;
+      if (rawData is List) {
+        dataArray = rawData;
+      } else if (rawData is Map) {
+        // Non-array: data contains the operation fields directly.
+        // Reconstruct a complete item with type/data/chainId from top-level.
+        final wrappedItem = <String, dynamic>{
+          'type': result['type'] as String,
+          'data': rawData,
+          'chainId': result['chainId'] as String,
+        };
+        if (result.containsKey('signatureRequest')) {
+          wrappedItem['signatureRequest'] = result['signatureRequest'];
+        }
+        if (result.containsKey('feePayment')) {
+          wrappedItem['feePayment'] = result['feePayment'];
+        }
+        dataArray = [wrappedItem];
+      }
 
       if (quote == null || dataArray == null) {
         throw Exception('Invalid quote response: missing quote or data');
@@ -195,7 +218,8 @@ class SwapDataSourceImpl implements ISwapDataSource {
       sigBytes.setRange(0, 32, r);
       sigBytes.setRange(32, 64, s);
       sigBytes[64] = v;
-      return {'type': 'eip7702Auth', 'data': _bytesToHex(sigBytes)};
+      // SDK uses "secp256k1" type for all signatures, including eip7702Auth
+      return {'type': 'secp256k1', 'data': _bytesToHex(sigBytes)};
     }
 
     throw Exception('Unknown signature type: ${sigReq.type}');
@@ -218,9 +242,8 @@ class SwapDataSourceImpl implements ISwapDataSource {
         final itemMap = Map<String, dynamic>.from(item as Map);
         final hasSigReq = itemMap.containsKey('signatureRequest');
 
-        // Strip quote-only fields
+        // Remove signatureRequest (replaced by signature), keep feePayment
         itemMap.remove('signatureRequest');
-        itemMap.remove('feePayment');
 
         // Add signature for items that had a signatureRequest
         if (hasSigReq && sigIndex < quote.signatureRequests.length) {
@@ -232,13 +255,18 @@ class SwapDataSourceImpl implements ISwapDataSource {
         signedItems.add(itemMap);
       }
 
-      // For "array" type, no top-level chainId or signature — just type + data.
-      final result = await _rpcCall('wallet_sendPreparedCalls', [
+      // Always send as array type
+      final requestParams = [
         {
-          'type': quote.type,
+          'type': 'array',
           'data': signedItems,
         },
-      ]);
+      ];
+
+      AppLogger.info(
+          'sendPreparedCalls request: ${jsonEncode(requestParams)}');
+
+      final result = await _rpcCall('wallet_sendPreparedCalls', requestParams);
 
       final callId = result['id'] as String;
       return Result.success(callId);
@@ -253,9 +281,7 @@ class SwapDataSourceImpl implements ISwapDataSource {
   @override
   Future<Result<SwapStatusEntity>> getSwapStatus(String callId) async {
     try {
-      final result = await _rpcCall('wallet_getCallsStatus', [
-        [callId],
-      ]);
+      final result = await _rpcCall('wallet_getCallsStatus', [callId]);
 
       final status = result['status'] as int;
       final receipts = result['receipts'] as List<dynamic>?;
